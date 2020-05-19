@@ -5,8 +5,6 @@ const { error401, error404, error422 } = require("../../helper/dbErrorHandler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken"); // to generate signed token
 
-const expressjwt = require("express-jwt"); // for authorization check
-
 exports.register = async (req, res, next) => {
   const {
     firstName,
