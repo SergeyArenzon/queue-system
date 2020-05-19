@@ -7,12 +7,10 @@ const morgan = require("morgan");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const expressValidator = require("express-validator");
 
 // Connect to the client side that run on diffrent port
 const cors = require("cors");
 // import routes
-const businessRoutes = require("./routes/business/service.business-route");
 
 // init express
 const app = express();
@@ -34,12 +32,9 @@ mongoose.connection.on("error", (err) => {
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cors());
-
+require("./routes/index.route")(app);
 // used to save users credentials
 app.use(cookieParser());
-
-// Routes
-app.use("/business", businessRoutes);
 
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;

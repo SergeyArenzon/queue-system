@@ -29,7 +29,7 @@ exports.register = async (req, res, next) => {
     error422(req);
 
     const hashedPw = await bcrypt.hash(password, 12);
-    console.log("dd");
+
     const employee = new Employee({
       firstName,
       lastName,
