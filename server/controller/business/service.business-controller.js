@@ -17,7 +17,6 @@ exports.postService = async (req, res, next) => {
       title: title,
       price: price,
       duration: duration,
-      businessId: req.employee.employeeDetails.businessId,
     });
 
     await service.save();

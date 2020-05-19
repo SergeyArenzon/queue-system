@@ -2,6 +2,36 @@ const mongoose = require("mongoose");
 
 const businessSchema = new mongoose.Schema(
   {
+    manegerDetails: {
+      firstName: {
+        type: String,
+        trim: true,
+        required: true, // remove whitespace characters
+        maxlength: 32,
+      },
+      lastName: {
+        type: String,
+        trim: true,
+        required: true,
+        maxlength: 32,
+      },
+      phone: {
+        type: String,
+        trim: true,
+        required: true,
+        maxlength: 11,
+      },
+      email: {
+        type: String,
+        trim: true,
+        required: true,
+        unique: true,
+      },
+      password: {
+        type: String,
+        required: true,
+      },
+    },
     businessDetails: {
       businessName: {
         type: String,
@@ -48,6 +78,25 @@ const businessSchema = new mongoose.Schema(
         require: false,
         default: [],
       },
+    },
+    schedule: {
+      type: [
+        {
+          day: {
+            type: String,
+            required: true,
+          },
+          startTime: {
+            type: Date,
+            required: true,
+          },
+          endTime: {
+            type: Date,
+            required: true,
+          },
+        },
+      ],
+      required: true,
     },
   },
   { timestamps: true }

@@ -50,7 +50,7 @@ exports.error422 = (req) => {
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed ");
     error.statusCode = 422;
-    error.data = errors.array();
+    error.data = errors.array()[0];
     console.log(error.data);
 
     throw error;
