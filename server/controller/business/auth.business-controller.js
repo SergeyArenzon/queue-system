@@ -48,6 +48,8 @@ exports.register = async (req, res, next) => {
 
 exports.employeeLogin = async (req, res, next) => {
   try {
+    console.log(req.body);
+
     const { phone, password } = req.body;
     const employee = await Employee.findOne({ phone: phone });
     error404(employee);

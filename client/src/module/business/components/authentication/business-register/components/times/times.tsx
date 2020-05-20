@@ -1,23 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ManagerRegistrationStyle from '../manager-registration/manager-registration.module.scss';
 import BusinessRegistrationStyle from '../business-registration/business-registration.module.scss';
 import TimesStyle from './times.module.scss';
 import Button from '../../../../../../../models/ui/button/button';
+import { registerManager } from '../../../../../../../store/auth/auth.actions';
+import { getLoading, getError } from '../../../../../../../store/auth/auth.selectors';
+import { connect } from 'react-redux';
 
-interface Props {
+interface OwnProps {
     step: (step: 'decrement' | 'increment') => void,
     onChange: (e: any, name: string, value?: any) => void,
     values: any
 }
 
-const hebDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+interface StateProps {
+    loading: boolean;
+    error: Error
+}
+
+interface DispatchProps {
+    registerManager: typeof registerManager
+}
+
+// Become true when user click on next in the first time
+let nextPage = false;
+const FullHebDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+const mobileHebDays = ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ש'"];
 const hours = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
     "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
 
-
+type Props = DispatchProps & StateProps & OwnProps;
 const Times: React.FC<Props> = (props) => {
-
     const [CurDay, setCurDay] = useState<number>(0)
+    const [IsMobile, setIsMobile] = useState<any>(false);
+
+    // Component did mount
+    useEffect(() => {
+        const resize = () => { // Check if the device witdh <= 600px
+            let currentHideNav = (window.innerWidth <= 600);
+            if (currentHideNav !== IsMobile) {
+                setIsMobile(currentHideNav);
+            }
+        }
+        resize();
+    }, [IsMobile]);
+
+    let hebDays: string[] = IsMobile ? mobileHebDays : FullHebDays;
+
+
 
     const onClickDay = (e: any, i: number) => {
         const workdays = [...props.values.workDays];
@@ -109,7 +139,7 @@ const Times: React.FC<Props> = (props) => {
                     </div>
                 }
             </div>
-            <div className={BusinessRegistrationStyle.Buttons} style={{marginTop: '30px'}}>
+            <div className={BusinessRegistrationStyle.Buttons} style={{ marginTop: '30px' }}>
                 <Button onClick={() => props.step('decrement')} color='orange'>חזור</Button>
                 <Button onClick={() => props.step('increment')} color='purple-register'>המשך</Button>
             </div>
@@ -117,4 +147,14 @@ const Times: React.FC<Props> = (props) => {
     )
 }
 
-export default Times;
+const mapStateToProps = (state: any) => ({
+    loading: getLoading(state),
+    error: getError(state)
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+    registerManager: (form: any) => dispatch(registerManager(form))
+
+});
+
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Times);

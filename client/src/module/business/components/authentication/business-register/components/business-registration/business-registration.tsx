@@ -4,13 +4,27 @@ import ManagerRegistrationStyle from "../manager-registration/manager-registrati
 import Button from "../../../../../../../models/ui/button/button";
 import { AiOutlineLink } from "react-icons/ai";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import { getError, getLoading } from "../../../../../../../store/auth/auth.selectors";
+import { connect } from "react-redux";
 
-interface Props {
-  step: (step: "decrement" | "increment") => void;
-  onChange: (e: any, name: string, value?: any) => void;
-  values: any;
+interface OwnProps {
+  step: (step: 'decrement' | 'increment') => void,
+  onChange: (e: any, name: string, value?: any) => void,
+  values: any
 }
 
+interface StateProps {
+  loading: boolean;
+  error: Error
+}
+
+interface DispatchProps {
+}
+
+// Become true when user click on next in the first time
+let nextPage = false;
+
+type Props = DispatchProps & StateProps & OwnProps;
 const BusinessRegistration: React.FC<Props> = (props) => {
   const [Errors, setErrors] = useState<any[]>(new Array(7));
   const links = props.values.socialMediaLinks;
@@ -227,4 +241,14 @@ const BusinessRegistration: React.FC<Props> = (props) => {
   );
 };
 
-export default BusinessRegistration;
+
+const mapStateToProps = (state: any) => ({
+  loading: getLoading(state),
+  error: getError(state)
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+
+});
+
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(BusinessRegistration);

@@ -1,6 +1,8 @@
 @import "../../../../../../../models/style/main.scss";
 
 .Times {
+  animation: fade .5s ease-in-out;
+
   & .Body {
     & .Days {
       display: flex;
@@ -87,4 +89,9 @@
   font-weight: 400;
   padding-bottom: 7px;
   padding-top: 12px;
+}
+
+@keyframes fade {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }

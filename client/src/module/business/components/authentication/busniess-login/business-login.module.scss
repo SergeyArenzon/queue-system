@@ -1,0 +1,13 @@
+@import "../../../../../models/style/main.scss";
+
+.Button {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.Form {
+    height: 40vh !important;
+    @include respond(phone) {
+      height: 60vh !important;
+    }
+}

@@ -15,7 +15,7 @@
     width: 40vw;
 
     @include respond(phone) {
-      left: 60%;
+      left: 55%;
       width: 100vw;
     }
   }
@@ -37,7 +37,9 @@
     overflow-y: auto;
 
     @include respond(phone) {
+      top: 55%;
       width: 100vw;
+      height: 60vh;
     }
   }
 }

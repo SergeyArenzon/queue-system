@@ -5,7 +5,7 @@ import Home from "../../module/business/components/home/home.business";
 import Customers from "../../module/business/components/customers/customers.business";
 import CalendarUser from "../../module/business/components/calendar/calendar.business";
 import BusinessRegister from "../../module/business/components/authentication/business-register/business-register.business";
-
+import BusinessLogin from "../../module/business/components/authentication/busniess-login/business-login.business";
 
 const Routing = () => {
   return (
@@ -15,6 +15,7 @@ const Routing = () => {
       <Route path="/business/calander" component={CalendarUser} />
       <Route path="/business/register" component={BusinessRegister} />
 
+      <Route path="/business/login" component={BusinessLogin} />
     </Switch>
   );
 };

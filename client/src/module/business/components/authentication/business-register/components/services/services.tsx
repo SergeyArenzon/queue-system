@@ -1,8 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import ServicesStyle from './services.module.scss';
 import ManagerRegistrationStyle from '../manager-registration/manager-registration.module.scss';
 import BusinessRegistrationStyle from '../business-registration/business-registration.module.scss';
-
 import Button from '../../../../../../../models/ui/button/button';
+import { Service } from '../../../../../../../models/system/service';
+import { uniqueId, cloneDeep } from 'lodash';
+
+interface AutoCompleteState {
+    showOptions: boolean;
+    filteredOptions: string[];
+    activeOption: number;
+}
 
 interface Props {
     step: (step: 'decrement' | 'increment') => void,
@@ -10,106 +18,183 @@ interface Props {
     values: any
 }
 
+const initSerice: Service = { category: '', title: '', price: 0, duration: 0, available: true }
+
 const Services: React.FC<Props> = (props) => {
 
-    const [Errors, setErrors] = useState<any[]>(new Array(7));
+    const [Service, setService] = useState<Service>(initSerice); // Hold the cuurent service
+    const [Error, setError] = useState<string>('');
+    const [AutoComplete, setAutoComplete] = useState<AutoCompleteState>({
+        showOptions: false,
+        filteredOptions: [],
+        activeOption: 0
+    });
+    const [EditMode, setEditMode] = useState<boolean>(false);
 
+    // Initial filteredOptions array in options
+    const onCategoryChange = (e: any) => {
+        const options = Object.keys(props.values.services);
+        const userInput = e.currentTarget.value;
 
-    const onClickNext = () => {
-        props.step('increment'); //// Delete for validation
+        const filteredOptions = options.filter(
+            (optionName) =>
+                optionName.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+        );
+        setAutoComplete({
+            ...AutoComplete,
+            activeOption: 0,
+            filteredOptions: filteredOptions.slice(0, 5),
+            showOptions: true,
+        });
+        setService({ ...Service, 'category': userInput })
+    };
 
-        const temp = [...Errors];
-        const urlValidation = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-        if (props.values.businessName.length < 2) {
-            temp[0] = "שם חייב להכיל לפחות 2 אותיות";
-            setErrors(temp);
+    // Invoke when user click on category name in autocomplete
+    const onCategoryClick = (title: string) => {
+        setService({ ...Service, 'category': title })
+        setAutoComplete({
+            ...AutoComplete,
+            showOptions: false
+        });
+    };
+
+    // Show all the services that added
+    const AllServices = () => {
+        const serivcesList: JSX.Element[] = [];
+
+        for (var key in props.values.services) {
+            console.log(props.values.services);
+
+            if (!props.values.services[key]) continue;
+            props.values.services[key].forEach((s: Service) => {
+                serivcesList.push(<p onClick={() => editService(s)} key={s.price * s.duration}>{s.title}</p>)
+            });
         }
-        else if (props.values.businessAddress.length < 2) {
-            temp[1] = "כתובת חייבת להכיל לפחות 7 תווים";
-            setErrors(temp);
+        return serivcesList;
+    }
+
+    // Invoke when user click on existing service
+    const editService = (service: Service) => {
+        setService(service);
+        setEditMode(true)
+    }
+
+    // Add new service 
+    const addNewService = (e: any, service: Service) => {
+        if (!service.category) {
+            setError('כל שירות חייב להיות משוייך לקטגוריה')
         }
-        else if (!props.values.businessPhone.match(/\d/g)) {
-            temp[2] = "טלפון יכול להכיל רק מספרים";
-            setErrors(temp);
+        else if (!service.title) {
+            setError('כותרת ריקה')
         }
-        else if (!props.values.businessEmail.match(/\S+@\S+\.\S+/)) {
-            temp[3] = "אימייל לא תקין";
-            setErrors(temp);
+        else if (!service.price) {
+            setError('לא הוזן מחיר')
         }
-        else if (props.values.socialMediaLinks['website'] && !props.values.socialMediaLinks['website'].match(urlValidation) ||
-            props.values.socialMediaLinks['facebook'] && !props.values.socialMediaLinks['facebook'].match(urlValidation) ||
-            props.values.socialMediaLinks['instagram'] && !props.values.socialMediaLinks['instagram'].match(urlValidation)) {
-            temp[4] = "קישור לא תקין";
-            setErrors(temp);
+        else if (!service.duration) {
+            setError('לא הוזן זמן')
         }
         else {
-            props.step('increment');
-            return;
+            const services = props.values.services;
+            if (EditMode) {
+                const findService = (s: Service) => s.id === Service.id;
+                const i = services[Service.category].findIndex(findService);                
+                services[Service.category].splice(i, 1);
+            }
+            if (!services[service.category]) {
+                services[service.category] = [];
+            }
+            service.id = uniqueId();
+            services[service.category].push(service);
+            props.onChange(e, 'services', services);
+            setService(initSerice);
+            setError('');
+            setEditMode(false);
         }
-        setTimeout(() => {
-            setErrors(new Array(7))
-        }, 3000);
-    } 
+    }
+    console.log(cloneDeep(props.values.services));
+    
+
+    // AutoComplete Item
+    let optionList;
+    if (AutoComplete.showOptions && Service.category) {
+        if (AutoComplete.filteredOptions.length) {
+            optionList = (
+                <div className={ServicesStyle.List}>
+                    {AutoComplete.filteredOptions.map((optionName, index) => {
+                        return (
+                            <p
+                                onClick={() => onCategoryClick(optionName)}
+                                key={optionName}
+                            >
+                                {optionName + " "}
+                            </p>
+                        );
+                    })}
+                </div>
+            );
+        }
+    }
+
 
     return (
-        <div>
+        <div className={ServicesStyle.Services}>
             <div className={ManagerRegistrationStyle.Header}>
                 <p className={ManagerRegistrationStyle.Title}>הוספת שירותים</p>
                 <p className={ManagerRegistrationStyle.SubTitle}>הוסף את כל השירותים שהעסק שלך מציע.</p>
             </div>
 
+            {Error && <p className={ManagerRegistrationStyle.Error}>{Error}</p>}
+
+
             <div className={ManagerRegistrationStyle.Body}>
 
-                {/* Busniess Name */}
+                {/* Category Name */}
                 <div className={ManagerRegistrationStyle.Field}>
-                    <label htmlFor="businessname">קטגוריה *</label>
-
-                    <input id="businessname" name="businessname" required={true} type="text"
-                        value={props.values.businessName} placeholder="" onChange={(e) => props.onChange(e, 'businessName')} />
-                    <span className={ManagerRegistrationStyle.Error} style={Errors[0] ? {} : { display: 'none' }}>
-                        <i>{Errors[0]}</i>
-                    </span>
+                    <label htmlFor="category">קטגוריה *</label>
+                    <input id="category" name="category" required={true} type="text"
+                        value={Service.category} onChange={onCategoryChange} />
                 </div>
 
-                {/* Address */}
-                <div className={ManagerRegistrationStyle.Field}>
-                    <label htmlFor="businessAddress">שם השירות *</label>
+                {/* AutoComplete */}
+                <div className={ServicesStyle.Options}>{optionList}</div>
 
-                    <input id="businessAddress" name="businessAddress" required={true} type="text" value={props.values.businessAddress} placeholder=""
-                        onChange={(e) => props.onChange(e, 'businessAddress')} />
-                    <span className={ManagerRegistrationStyle.Error} style={Errors[1] ? {} : { display: 'none' }}>
-                        <i>{Errors[1]}</i>
-                    </span>
+                {/* Service Name */}
+                <div className={ManagerRegistrationStyle.Field}>
+                    <label htmlFor="title">שם השירות *</label>
+
+                    <input id="title" name="title" required={true} type="text" value={Service.title}
+                        onChange={(e) => setService({ ...Service, 'title': e.target.value })} />
                 </div>
 
-                {/* Business Phone */}
+                {/* Service Price */}
                 <div className={ManagerRegistrationStyle.Field}>
-                    <label htmlFor="businessPhone">מחיר*</label>
+                    <label htmlFor="price">מחיר*</label>
 
-                    <input id="businessPhone" name="businessPhone" required={true} type="tel" value={props.values.businessPhone} placeholder=""
-                        onChange={(e) => props.onChange(e, 'businessPhone')} />
-                    <span className={ManagerRegistrationStyle.Error} style={Errors[2] ? {} : { display: 'none' }}>
-                        <i>{Errors[2]}</i>
-                    </span>
+                    <input id="price" name="price" required={true} type="number" value={Service.price}
+                        onChange={(e) => setService({ ...Service, 'price': parseInt(e.target.value) })} />
                 </div>
 
-                {/* Email */}
+                {/* Service Duration */}
                 <div className={ManagerRegistrationStyle.Field}>
-                    <label htmlFor="businessEmail">משך זמן*</label>
+                    <label htmlFor="duration">משך זמן*</label>
 
-                    <input id="businessEmail" name="businessEmail" required={true} type="email" value={props.values.businessEmail} placeholder=""
-                        onChange={(e) => props.onChange(e, 'businessEmail')} />
-                    <span className={ManagerRegistrationStyle.Error} style={Errors[3] ? {} : { display: 'none' }}>
-                        <i>{Errors[3]}</i>
-                    </span>
+                    <input id="duration" name="duration" required={true} type="number" value={Service.duration}
+                        onChange={(e) => setService({ ...Service, 'duration': parseInt(e.target.value) })} />
                 </div>
-
             </div>
-            <Button color='purple-register'>הוסף שירות</Button>
+
+            <div className={ServicesStyle.ServicesList}>
+                {
+                    AllServices()
+                }
+            </div>
+            <div className={ServicesStyle.Button}>
+                <Button border={true} onClick={(e: any) => addNewService(e, Service)} color='purple-register'>הוסף שירות</Button>
+            </div>
 
             <div className={BusinessRegistrationStyle.Buttons} >
                 <Button onClick={() => props.step('decrement')} color='orange'>חזור</Button>
-                <Button onClick={onClickNext} color='purple-register'>המשך</Button>
+                <Button onClick={() => props.step('increment')} color='purple-register'>המשך</Button>
             </div>
 
         </div>

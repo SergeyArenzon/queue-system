@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-
+import React from "react";
 import { connect } from "react-redux";
-
 import ManagerRegistrationStyle from "./manager-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
-import { postBusiness } from "../../../../../../../store/auth/auth.actions";
+import { registerManager } from "../../../../../../../store/auth/auth.actions";
 import { getLoading, getError } from "../../../../../../../store/auth/auth.selectors";
 
 interface OwnProps {
@@ -19,13 +17,17 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  postBusiness: typeof postBusiness
+  registerManager: typeof registerManager
 }
+// Become true when user click on next in the first time
+let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const ManagerRegistration: React.FC<Props> = (props) => {
 
-  const onClickNextServer = () => {
+  // Checks the information in front of the server
+  const onClickNext = () => {
+    props.step('increment');
     const form = {
       firstName: props.values.managerFirstName,
       lastName: props.values.managerLastName,
@@ -33,11 +35,13 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       email: props.values.managerEmail,
       password: props.values.password,
     };
-
-    props.postBusiness(form);
+    props.registerManager(form);
+    nextPage = true;
   };
 
   if (props.loading) return <div>Loading...</div>;
+  if (!props.loading && !props.error && nextPage) props.step('increment');
+
 
   return (
     <div className={ManagerRegistrationStyle.Manager}>
@@ -48,7 +52,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
         </p>
       </div>
 
-      {props.error && props.error}
+      {props.error && <p className={ManagerRegistrationStyle.Error}>{props.error}</p>}
 
       <div className={ManagerRegistrationStyle.Body}>
         {/* First Name */}
@@ -112,6 +116,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
           />
         </div>
 
+        {/* Password */}
         <div className={ManagerRegistrationStyle.Field}>
           <label htmlFor="password">סיסמא *</label>
 
@@ -143,7 +148,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
         </div>
       </div>
 
-      <div className={ManagerRegistrationStyle.Buttons} onClick={onClickNextServer}>
+      <div className={ManagerRegistrationStyle.Buttons} onClick={onClickNext}>
         <Button color="purple-register">המשך</Button>
       </div>
     </div>
@@ -156,7 +161,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  postBusiness: (form: any) => dispatch(postBusiness(form))
+  registerManager: (form: any) => dispatch(registerManager(form))
 
 });
 

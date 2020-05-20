@@ -1,7 +1,8 @@
 export type Service = {
-    id?: number,
+	id?: string,
+	category: string,
 	title: string,
 	price: number,
 	duration: number,
-	available: boolean 
+	available?: boolean 
 }

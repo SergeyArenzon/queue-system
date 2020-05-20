@@ -48,3 +48,8 @@ export type newEmployeeForm = {
   email: string;
   password: string;
 };
+
+export type loginEmployeeForm = {
+  phone: string;
+  password: string;
+};
