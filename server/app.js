@@ -20,7 +20,7 @@ require("./routes/index.route")(app);
 
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
-  const msg = error.message || "error with statusCode" + status;
+  const msg =(error.data && error.data.msg )||error.message || "error with statusCode" + status;
   const data = error.data;
   res.status(status).json({ message: msg, data: data });
 });
