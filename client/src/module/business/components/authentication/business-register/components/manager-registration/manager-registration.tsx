@@ -1,54 +1,33 @@
-import React, { useState } from "react";
-
+import React from "react";
 import { connect } from "react-redux";
-
 import ManagerRegistrationStyle from "./manager-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
-import { postBusiness } from "../../../../../../../store/auth/auth.actions";
-import { newEmployeeForm } from "../../../../../../../store/auth/auth.types";
+import { registerManager } from "../../../../../../../store/auth/auth.actions";
+import { getLoading, getError } from "../../../../../../../store/auth/auth.selectors";
 
-interface Props {
+interface OwnProps {
   step: (step: "decrement" | "increment") => void;
   onChange: (e: any, name: string) => void;
-  onNextClick: (form: newEmployeeForm) => void;
   values: any;
 }
 
+interface StateProps {
+  loading: boolean;
+  error: Error
+}
+
+interface DispatchProps {
+  registerManager: typeof registerManager
+}
+// Become true when user click on next in the first time
+let nextPage = false;
+
+type Props = DispatchProps & StateProps & OwnProps;
 const ManagerRegistration: React.FC<Props> = (props) => {
-  const [Errors, setErrors] = useState<any[]>(new Array(7));
 
+  // Checks the information in front of the server
   const onClickNext = () => {
-    props.step("increment"); //// Delete for validation
-
-    const temp = [...Errors];
-
-    if (props.values.managerFirstName.length < 2) {
-      temp[0] = "שם חייב להכיל לפחות 2 אותיות";
-      setErrors(temp);
-    } else if (props.values.managerLastName.length < 2) {
-      temp[1] = "שם משפחה חייב להכיל לפחות 2 אותיות";
-      setErrors(temp);
-    } else if (!props.values.managerPhone.match(/\d/g)) {
-      temp[2] = "טלפון יכול להכיל רק מספרים";
-      setErrors(temp);
-    } else if (!props.values.managerEmail.match(/\S+@\S+\.\S+/)) {
-      temp[3] = "אימייל לא תקין";
-      setErrors(temp);
-    } else if (props.values.password.length < 6) {
-      temp[4] = "סיסמא חייבת להכיל לפחות 6 תווים";
-      setErrors(temp);
-    } else if (props.values.password !== props.values.validatePassword) {
-      temp[5] = "סיסמאות לא תואמות";
-      setErrors(temp);
-    } else {
-      props.step("increment");
-      return;
-    }
-    setTimeout(() => {
-      setErrors(new Array(7));
-    }, 3000);
-  };
-  const onClickNextServer = () => {
+    props.step('increment');
     const form = {
       firstName: props.values.managerFirstName,
       lastName: props.values.managerLastName,
@@ -56,9 +35,14 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       email: props.values.managerEmail,
       password: props.values.password,
     };
-
-    props.onNextClick(form);
+    props.registerManager(form);
+    nextPage = true;
   };
+
+  if (props.loading) return <div>Loading...</div>;
+  if (!props.loading && !props.error && nextPage) props.step('increment');
+
+
   return (
     <div className={ManagerRegistrationStyle.Manager}>
       <div className={ManagerRegistrationStyle.Header}>
@@ -68,11 +52,12 @@ const ManagerRegistration: React.FC<Props> = (props) => {
         </p>
       </div>
 
+      {props.error && <p className={ManagerRegistrationStyle.Error}>{props.error}</p>}
+
       <div className={ManagerRegistrationStyle.Body}>
         {/* First Name */}
         <div className={ManagerRegistrationStyle.Field}>
           <label htmlFor="firstname">שם פרטי *</label>
-
           <input
             pattern="[A-Za-z]{3}"
             id="firstname"
@@ -83,12 +68,6 @@ const ManagerRegistration: React.FC<Props> = (props) => {
             placeholder=""
             onChange={(e) => props.onChange(e, "managerFirstName")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[0] ? {} : { display: "none" }}
-          >
-            <i>{Errors[0]}</i>
-          </span>
         </div>
 
         {/* Last Name */}
@@ -104,12 +83,6 @@ const ManagerRegistration: React.FC<Props> = (props) => {
             placeholder=""
             onChange={(e) => props.onChange(e, "managerLastName")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[1] ? {} : { display: "none" }}
-          >
-            <i>{Errors[1]}</i>
-          </span>
         </div>
 
         {/* Phone */}
@@ -125,12 +98,6 @@ const ManagerRegistration: React.FC<Props> = (props) => {
             placeholder=""
             onChange={(e) => props.onChange(e, "managerPhone")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[2] ? {} : { display: "none" }}
-          >
-            <i>{Errors[2]}</i>
-          </span>
         </div>
 
         <div className={ManagerRegistrationStyle.Field}>
@@ -147,14 +114,9 @@ const ManagerRegistration: React.FC<Props> = (props) => {
               props.onChange(e, "managerEmail");
             }}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[3] ? {} : { display: "none" }}
-          >
-            <i>{Errors[3]}</i>
-          </span>
         </div>
 
+        {/* Password */}
         <div className={ManagerRegistrationStyle.Field}>
           <label htmlFor="password">סיסמא *</label>
 
@@ -167,12 +129,6 @@ const ManagerRegistration: React.FC<Props> = (props) => {
             placeholder=""
             onChange={(e) => props.onChange(e, "password")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[4] ? {} : { display: "none" }}
-          >
-            <i>{Errors[4]}</i>
-          </span>
         </div>
 
         <div className={ManagerRegistrationStyle.Field}>
@@ -189,32 +145,24 @@ const ManagerRegistration: React.FC<Props> = (props) => {
               props.onChange(e, "validatePassword");
             }}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[5] ? {} : { display: "none" }}
-          >
-            <i>{Errors[5]}</i>
-          </span>
         </div>
       </div>
 
       <div className={ManagerRegistrationStyle.Buttons} onClick={onClickNext}>
         <Button color="purple-register">המשך</Button>
       </div>
-      <div
-        className={ManagerRegistrationStyle.Buttons}
-        onClick={onClickNextServer}
-      >
-        <Button color="purple-register">send to server</Button>
-      </div>
     </div>
   );
 };
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    onNextClick: (form: newEmployeeForm) => dispatch(postBusiness(form)),
-  };
-};
+const mapStateToProps = (state: any) => ({
+  loading: getLoading(state),
+  error: getError(state)
+});
 
-export default connect(null, mapDispatchToProps)(ManagerRegistration);
+const mapDispatchToProps = (dispatch: any) => ({
+  registerManager: (form: any) => dispatch(registerManager(form))
+
+});
+
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(ManagerRegistration);

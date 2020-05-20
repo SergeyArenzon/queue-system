@@ -23,6 +23,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "install": "^0.13.0",
     "nodemon": "^2.0.4"
   }
 }

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import BusinessRegisterStyle from './business-register.module.scss'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { postBusiness } from '../../../../../store/auth/auth.actions';
 import { getLoading, getError } from '../../../../../store/auth/auth.selectors';
 import { Service } from '../../../../../models/system/service';
 import ManagerRegistration from './components/manager-registration/manager-registration';
@@ -36,7 +35,6 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    postBusiness: typeof postBusiness
 }
 
 type Props = DispatchProps & StateProps;
@@ -59,7 +57,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
         about: '',
         services: {},
         workDays: new Array(7),
-        workHours: new Array({ "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' },{ "start": '', "end": '' })
+        workHours: new Array({ "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' })
     });
 
     const [Step, setStep] = useState<number>(1);
@@ -107,14 +105,10 @@ const BusinessRegister: React.FC<Props> = (props) => {
 
                 {Step === 2 && <BusinessRegistration step={step} onChange={onChange} values={values} />}
 
-                {Step === 3 && <Services step={step} onChange={onChange} values={values} />}
+                {Step === 3 && <Times step={step} onChange={onChange} values={values} />}
 
-                {Step === 4 && <Times step={step} onChange={onChange} values={values} />}
-
-
+                {Step === 4 && <Services step={step} onChange={onChange} values={values} />}
             </div>
-
-
 
         </div>
     )
@@ -126,7 +120,6 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    postBusiness: (form: any) => dispatch(postBusiness(form))
 
 });
 

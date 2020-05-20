@@ -6,6 +6,10 @@
   & .Links {
     width: 40%;
     margin-top: 15px;
+    @include respond(phone) {
+      width: 80%;
+    }
+
     & .Link {
       display: flex;
       justify-content: center;
@@ -22,7 +26,7 @@
         font-size: 0.8rem;
         font-weight: 400;
         transition: all 0.3s linear 0s;
-
+        background: none;
         &:focus {
           color: $text-body;
           border-bottom: 1px solid $purple-register;
@@ -38,6 +42,9 @@
   .Buttons {
     display: flex;
     justify-content: space-around;
+    @include respond(phone) {
+      margin-top: 30px;
+    }
   }
 
 
