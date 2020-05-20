@@ -3,7 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 // HTTP request logger
 const morgan = require("morgan");
-
 const bodyParser = require("body-parser");
 
 // Connect to the client side that run on diffrent port

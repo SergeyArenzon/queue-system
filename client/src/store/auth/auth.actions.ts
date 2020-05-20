@@ -13,13 +13,15 @@ export const postBusiness = (form: newEmployeeForm) => {
     API.post("business/auth/register", form)
       .then((res) => {
         const token = res.data.token;
+        console.log(token, 'token');
         localStorage.setItem("token", JSON.stringify(token));
       })
       .then(() => {
         return dispatch({ type: AuthActionsEnum.SUCCESS_POST_BUSINESS });
       })
       .catch((error: any) => {
-        return dispatch({ type: AuthActionsEnum.FALID_POST_BUSINESS, error });
+        const msg = error.response.data.data.msg
+        return dispatch({ type: AuthActionsEnum.FALID_POST_BUSINESS, error: msg });
       });
   };
 };

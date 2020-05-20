@@ -37,19 +37,6 @@ exports.register = async (req, res, next) => {
       password: hashedPw,
     });
     await employee.save();
-    // const business = new Business({
-    //   businessDetails: {
-    //     businessName,
-    //     businessAddress,
-    //     businessPhone,
-    //     businessEmail,
-    //     logo,
-    //     socialMediaLinks,
-    //     about,
-    //     notifications,
-    //   },
-    // });
-    // await business.save();
     const token = createToken(employee);
     res.status(201).json({ message: "create new business", token: token });
   } catch (error) {
@@ -75,8 +62,7 @@ exports.employeeLogin = async (req, res, next) => {
 };
 
 const createToken = (employee) => {
-  return jwt.sign(
-    {
+  return jwt.sign({
       employeeId: employee._id.toString(),
     },
     process.env.JWT_SECRET
