@@ -17,29 +17,39 @@ const app = express();
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cors());
-require("./routes/index.route")(app);
 
-app.use((error, req, res, next) => {
-  const status = error.statusCode || 500;
-  const msg = error.message || "error with statusCode" + status;
-  const data = error.data;
-  res.status(status).json({ message: msg, data: data });
-});
+app.listen(process.env.PORT);
 
-// DB connection
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect(process.env.MONGO_URI + "gilad", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
   })
   .then((result) => {
+    con = result;
     console.log("DB Connected");
-
-    app.listen(process.env.PORT);
-    console.log("Server is running on port - " + process.env.PORT);
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch((err) => {});
+app.use("/:businessUrl", async (req, res, next) => {
+  console.log(req.params.businessUrl);
+  try {
+    await mongoose.connection.useDb(req.params.businessUrl);
+  } catch (error) {
+    return next(error);
+  }
+  console.log("sss", mongoose.connection.name);
+
+  next();
+});
+
+require("./routes/index.route")(app);
+
+app.use((error, req, res, next) => {
+  const status = error.statusCode || 500;
+  const msg = error.message || "error with statusCode" + status;
+  const data = error.data;
+
+  res.status(status).json({ message: msg, data });
+});

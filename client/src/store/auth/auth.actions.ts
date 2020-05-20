@@ -19,7 +19,7 @@ export const postBusiness = (form: newEmployeeForm) => {
         return dispatch({ type: AuthActionsEnum.SUCCESS_POST_BUSINESS });
       })
       .catch((error: any) => {
-        console.log(error.response.data.data.msg);
+        console.log(error.response.data);
 
         return dispatch({ type: AuthActionsEnum.FALID_POST_BUSINESS, error });
       });

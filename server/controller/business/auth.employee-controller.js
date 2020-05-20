@@ -6,22 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken"); // to generate signed token
 
 exports.register = async (req, res, next) => {
-  const {
-    firstName,
-    lastName,
-    phone,
-    email,
-    password,
-    isAdmin,
-    businessName,
-    businessAddress,
-    businessPhone,
-    businessEmail,
-    logo,
-    socialMediaLinks,
-    about,
-    notifications,
-  } = req.body;
+  const { firstName, lastName, phone, email, password, isAdmin } = req.body;
 
   try {
     error422(req);
@@ -61,10 +46,10 @@ exports.register = async (req, res, next) => {
 
 exports.employeeLogin = async (req, res, next) => {
   try {
-    console.log(req.body);
-
     const { phone, password } = req.body;
     const employee = await Employee.findOne({ phone: phone });
+    console.log(employee);
+
     error404(employee);
 
     const isEqual = await bcrypt.compare(password, employee.password);

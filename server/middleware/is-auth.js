@@ -6,13 +6,14 @@ const Client = require("../models/client.model");
 
 module.exports = (kind) => {
   return async (req, res, next) => {
-    const token = req.body.token;
+    const token = req.body.token.trim();
+    console.log(token);
 
     try {
-      error401auth(token);
-      const decodedToken = jwt.verify(token, process.env.SECRET);
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
       error401auth(decodedToken);
+
       switch (kind) {
         case "employee":
           req.employee = await Employee.findById(decodedToken.employeeId);
@@ -32,53 +33,3 @@ module.exports = (kind) => {
     return next();
   };
 };
-// exports.user = async (req, res, next) => {
-//   const token = req.body.token;
-
-//   if (!token) {
-//     const error = new Error("Not authenticated.");
-//     error.statusCode = 401;
-//     return next(error);
-//   }
-
-//   let decodedToken;
-//   try {
-//     decodedToken = jwt.verify(token, process.env.SECRET);
-
-//     if (!decodedToken) {
-//       const error = new Error("Not authenticated.");
-//       error.statusCode = 401;
-//       return next(error);
-//     }
-//     req.user = await User.findById(decodedToken.userId);
-//   } catch (err) {
-//     return next(err);
-//   }
-
-//   return next();
-// };
-// exports.client = async (req, res, next) => {
-//   const token = req.body.token;
-
-//   if (!token) {
-//     const error = new Error("Not authenticated.");
-//     error.statusCode = 401;
-//     return next(error);
-//   }
-
-//   let decodedToken;
-//   try {
-//     decodedToken = jwt.verify(token, process.env.SECRET);
-
-//     if (!decodedToken) {
-//       const error = new Error("Not authenticated.");
-//       error.statusCode = 401;
-//       return next(error);
-//     }
-//     req.client = await Client.findById(decodedToken.clientId);
-//   } catch (err) {
-//     return next(err);
-//   }
-
-//   return next();
-// };

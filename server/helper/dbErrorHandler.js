@@ -51,7 +51,6 @@ exports.error422 = (req) => {
     const error = new Error("Validation failed ");
     error.statusCode = 422;
     error.data = errors.array()[0];
-    console.log(error.data);
 
     throw error;
   }
@@ -82,7 +81,7 @@ exports.error401auth = (token) => {
 };
 
 exports.error403Admin = (req) => {
-  if (req.employee.isAdmin) {
+  if (!req.employee.isAdmin) {
     const error = new Error("not auth to do this");
     error.statusCode = 403;
     throw error;
