@@ -56,8 +56,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       email: props.values.managerEmail,
       password: props.values.password,
     };
-    console.log(form);
-    console.log(props);
+
     props.onNextClick(form);
   };
   return (

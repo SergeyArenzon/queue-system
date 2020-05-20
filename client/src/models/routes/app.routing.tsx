@@ -6,6 +6,7 @@ import Customers from "../../module/business/components/customers/customers.busi
 import CalendarUser from "../../module/business/components/calendar/calendar.business";
 import BusinessRegister from "../../module/business/components/authentication/business-register/business-register.business";
 
+import employeeLogin from "../../module/business/components/authentication/business-register/business-login.business";
 
 const Routing = () => {
   return (
@@ -15,6 +16,7 @@ const Routing = () => {
       <Route path="/business/calander" component={CalendarUser} />
       <Route path="/business/register" component={BusinessRegister} />
 
+      <Route path="/business/login" component={employeeLogin} />
     </Switch>
   );
 };
