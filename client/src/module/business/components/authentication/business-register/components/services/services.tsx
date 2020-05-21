@@ -97,7 +97,7 @@ const Services: React.FC<Props> = (props) => {
             const services = props.values.services;
             if (EditMode) {
                 const findService = (s: Service) => s.id === Service.id;
-                const i = services[Service.category].findIndex(findService);                
+                const i = services[Service.category].findIndex(findService);
                 services[Service.category].splice(i, 1);
             }
             if (!services[service.category]) {
@@ -112,7 +112,7 @@ const Services: React.FC<Props> = (props) => {
         }
     }
     console.log(cloneDeep(props.values.services));
-    
+
 
     // AutoComplete Item
     let optionList;

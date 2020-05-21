@@ -48,8 +48,9 @@ const businessSchema = new mongoose.Schema(
     },
 
     schedule: {
-      type:  {type:{   String,  String }} ,
-      required: true,
+      type: Map,
+      require: false,
+      default: {},
     },
   },
   { timestamps: true }

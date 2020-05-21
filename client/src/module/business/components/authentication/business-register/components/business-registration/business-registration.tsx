@@ -53,6 +53,8 @@ const BusinessRegistration: React.FC<Props> = (props) => {
   };
 
   if (!props.loading && !props.error && nextPage) props.step('increment');
+  if (props.loading) return <div>Loading...</div>;
+
 
   return (
     <div className={BusinessRegistrationStyle.Business}>

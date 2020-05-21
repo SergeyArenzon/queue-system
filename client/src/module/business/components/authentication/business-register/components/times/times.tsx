@@ -70,12 +70,13 @@ const Times: React.FC<Props> = (props) => {
     }
 
     const onClickNext = () => {
+        props.step('increment')
         let schdule: { [day: string]: { start: string, end: string }[] } = {};
         props.values.workDays.forEach((day: boolean, i: number) => {
             if (day) {
-                schdule[FullEngDays[i]] = [];
+                if (!schdule[FullEngDays[i]])
+                    schdule[FullEngDays[i]] = [];
                 schdule[FullEngDays[i]].push({ start: props.values.workHours[i].start, end: props.values.workHours[i].end })
-
             }
         });
         if (Object.keys(schdule).length === 0) {
@@ -83,8 +84,10 @@ const Times: React.FC<Props> = (props) => {
         }
         else {
             props.postBuisnessHours(schdule);
-        }
+        }        
     }
+    
+    if (props.loading) return <div>Loading...</div>;
 
     return (
         <div className={TimesStyle.Times}>

@@ -54,10 +54,10 @@ export const postBuisnessHours = (form: { [day: string]: { start: string, end: s
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
     const token = localStorage.getItem("token");
-    const send = { ...form, token };
+    const send = {schedule: {...form}, token };
     console.log(send);
 
-    API.post("gilad/business/details/defualthours", send)
+    API.post("gilad/business/details/hours", send)
       .then((res) => {
         console.log(res.data.msg, 'test');
       })

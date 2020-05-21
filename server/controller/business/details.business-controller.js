@@ -46,16 +46,16 @@ exports.postBuisnessDetails = async (req, res, next) => {
 };
 
 exports.postBuisnessHours = async (req, res, next) => {
-    console.log(req.body);
-    
+  
   try {
     // error422(req);
-
-      
+    
+    
     error403Admin(req);
-
+    const schedule={...req.body.schedule};
+    console.log(schedule);
     const buisness = await Business.findOne();
-    buisness.schedule = [...req.body.schedule];
+    buisness.schedule = schedule;
 
     await buisness.save();
 
