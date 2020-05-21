@@ -39,7 +39,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
     nextPage = true;
   };
 
-  if (props.loading) return <div>Loading...</div>;
+  //if (props.loading) return <div>Loading...</div>;
   if (!props.loading && !props.error && nextPage) props.step('increment');
 
 

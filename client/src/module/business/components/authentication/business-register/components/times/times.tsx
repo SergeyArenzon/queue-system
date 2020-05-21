@@ -87,7 +87,7 @@ const Times: React.FC<Props> = (props) => {
         }        
     }
     
-    if (props.loading) return <div>Loading...</div>;
+  //  if (props.loading) return <div>Loading...</div>;
 
     return (
         <div className={TimesStyle.Times}>
