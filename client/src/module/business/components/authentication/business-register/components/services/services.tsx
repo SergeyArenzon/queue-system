@@ -192,7 +192,7 @@ const Services: React.FC<Props> = (props) => {
                 <Button border={true} onClick={(e: any) => addNewService(e, Service)} color='purple-register'>הוסף שירות</Button>
             </div>
 
-            <div className={BusinessRegistrationStyle.Buttons} >
+            <div className={BusinessRegistrationStyle.Button}  >
                 <Button onClick={() => props.step('decrement')} color='orange'>חזור</Button>
                 <Button onClick={() => props.step('increment')} color='purple-register'>המשך</Button>
             </div>

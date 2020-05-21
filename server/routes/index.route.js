@@ -1,3 +1,3 @@
 module.exports = (app) => {
-  app.use("/business", require("./business/index.business-route"));
+  app.use("/:businessUrl/business", require("./business/index.business-route"));
 };

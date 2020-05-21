@@ -112,6 +112,7 @@
   margin: 0;
   margin-right: 30px;
   margin-top: 10px;
+  animation: fade-right .3s linear;
 
   &::before {
     content: "שגיאה: ";
@@ -136,3 +137,19 @@
     opacity: 1;
   }
 }
+
+@keyframes fade-right {
+  0% {
+    margin-right: -200px;
+  }
+  40% {
+    margin-right: 60px;
+  }
+  80% {
+    margin-right: 10px;
+  }
+  100% {
+    margin-right: 30px;
+  }
+}
+

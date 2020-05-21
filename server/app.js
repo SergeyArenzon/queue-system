@@ -16,7 +16,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cors());
-require("./routes/index.route")(app);
+
 
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
@@ -25,20 +25,34 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: msg, data: data });
 });
 
-// DB connection
-mongoose
-  .connect(process.env.MONGO_URI, {
+app.listen(process.env.PORT);
+
+
+app.use("/:businessUrl", (req, res, next) => {
+  console.log(req.params.businessUrl);
+   mongoose
+  .connect(process.env.MONGO_URI + req.params.businessUrl,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
   })
-  .then((result) => {
-    console.log("DB Connected");
+    .then((result) => {
+      console.log("DB Connected");
+      next();
+    })
+    .catch((err) => {
+      return next(err);
+    });
+});
 
-    app.listen(process.env.PORT);
-    console.log("Server is running on port - " + process.env.PORT);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+require("./routes/index.route")(app);
+
+app.use((error, req, res, next) => {
+  const status = error.statusCode || 500;
+  const msg = (error.data && error.data.msg )||error.message || "error with statusCode" + status;
+  const data = error.data;
+  console.log(error);
+  
+  res.status(status).json({ message: msg, data });
+});

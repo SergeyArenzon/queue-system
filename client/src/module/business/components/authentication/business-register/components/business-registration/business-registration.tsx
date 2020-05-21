@@ -6,6 +6,8 @@ import { AiOutlineLink } from "react-icons/ai";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { getError, getLoading } from "../../../../../../../store/auth/auth.selectors";
 import { connect } from "react-redux";
+import { registerBusiness } from "../../../../../../../store/auth/auth.actions";
+import { newBusinessForm } from "../../../../../../../store/auth/auth.types";
 
 interface OwnProps {
   step: (step: 'decrement' | 'increment') => void,
@@ -19,6 +21,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
+  registerBusiness: typeof registerBusiness;
 }
 
 // Become true when user click on next in the first time
@@ -26,7 +29,6 @@ let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const BusinessRegistration: React.FC<Props> = (props) => {
-  const [Errors, setErrors] = useState<any[]>(new Array(7));
   const links = props.values.socialMediaLinks;
 
   const changeLinks = (e: any, name: string) => {
@@ -34,41 +36,23 @@ const BusinessRegistration: React.FC<Props> = (props) => {
     props.onChange(e, "socialMediaLinks", links);
   };
 
+  // Checks the information in front of the server
   const onClickNext = () => {
-    props.step("increment"); //// Delete for validation
-
-    const temp = [...Errors];
-    const urlValidation = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-    if (props.values.businessName.length < 2) {
-      temp[0] = "שם חייב להכיל לפחות 2 אותיות";
-      setErrors(temp);
-    } else if (props.values.businessAddress.length < 2) {
-      temp[1] = "כתובת חייבת להכיל לפחות 7 תווים";
-      setErrors(temp);
-    } else if (!props.values.businessPhone.match(/\d/g)) {
-      temp[2] = "טלפון יכול להכיל רק מספרים";
-      setErrors(temp);
-    } else if (!props.values.businessEmail.match(/\S+@\S+\.\S+/)) {
-      temp[3] = "אימייל לא תקין";
-      setErrors(temp);
-    } else if (
-      (props.values.socialMediaLinks["website"] &&
-        !props.values.socialMediaLinks["website"].match(urlValidation)) ||
-      (props.values.socialMediaLinks["facebook"] &&
-        !props.values.socialMediaLinks["facebook"].match(urlValidation)) ||
-      (props.values.socialMediaLinks["instagram"] &&
-        !props.values.socialMediaLinks["instagram"].match(urlValidation))
-    ) {
-      temp[4] = "קישור לא תקין";
-      setErrors(temp);
-    } else {
-      props.step("increment");
-      return;
-    }
-    setTimeout(() => {
-      setErrors(new Array(7));
-    }, 3000);
+    props.step('increment');
+    const form: newBusinessForm = {
+      name: props.values.businessName,
+      address: props.values.businessAddress,
+      phone: props.values.businessPhone,
+      email: props.values.businessEmail,
+      logo: props.values.logo,
+      links: props.values.socialMediaLinks,
+      about: props.values.about
+    };
+    props.registerBusiness(form);
+    nextPage = true;
   };
+
+  if (!props.loading && !props.error && nextPage) props.step('increment');
 
   return (
     <div className={BusinessRegistrationStyle.Business}>
@@ -78,6 +62,8 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           הפרטים בדף זה הם של העסק שלך.
         </p>
       </div>
+
+      {props.error && <p className={ManagerRegistrationStyle.Error}>{props.error}</p>}
 
       <div className={ManagerRegistrationStyle.Body}>
         {/* Busniess Name */}
@@ -93,12 +79,6 @@ const BusinessRegistration: React.FC<Props> = (props) => {
             placeholder=""
             onChange={(e) => props.onChange(e, "businessName")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[0] ? {} : { display: "none" }}
-          >
-            <i>{Errors[0]}</i>
-          </span>
         </div>
 
         {/* Address */}
@@ -114,12 +94,6 @@ const BusinessRegistration: React.FC<Props> = (props) => {
             placeholder=""
             onChange={(e) => props.onChange(e, "businessAddress")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[1] ? {} : { display: "none" }}
-          >
-            <i>{Errors[1]}</i>
-          </span>
         </div>
 
         {/* Business Phone */}
@@ -135,12 +109,6 @@ const BusinessRegistration: React.FC<Props> = (props) => {
             placeholder=""
             onChange={(e) => props.onChange(e, "businessPhone")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[2] ? {} : { display: "none" }}
-          >
-            <i>{Errors[2]}</i>
-          </span>
         </div>
 
         {/* Email */}
@@ -156,12 +124,6 @@ const BusinessRegistration: React.FC<Props> = (props) => {
             placeholder=""
             onChange={(e) => props.onChange(e, "businessEmail")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[3] ? {} : { display: "none" }}
-          >
-            <i>{Errors[3]}</i>
-          </span>
         </div>
 
         {/* About */}
@@ -175,12 +137,6 @@ const BusinessRegistration: React.FC<Props> = (props) => {
             style={{ height: "100px" }}
             onChange={(e) => props.onChange(e, "about")}
           />
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[4] ? {} : { display: "none" }}
-          >
-            <i>{Errors[4]}</i>
-          </span>
         </div>
 
         {/* Links */}
@@ -220,12 +176,6 @@ const BusinessRegistration: React.FC<Props> = (props) => {
               onChange={(e) => changeLinks(e, "instagram")}
             />
           </div>
-          <span
-            className={ManagerRegistrationStyle.Error}
-            style={Errors[5] ? {} : { display: "none" }}
-          >
-            <i>{Errors[5]}</i>
-          </span>
         </div>
       </div>
 
@@ -248,7 +198,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-
+  registerBusiness: (form: newBusinessForm) => dispatch(registerBusiness(form))
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(BusinessRegistration);

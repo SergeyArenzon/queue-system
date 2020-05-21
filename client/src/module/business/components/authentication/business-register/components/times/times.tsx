@@ -3,9 +3,9 @@ import ManagerRegistrationStyle from '../manager-registration/manager-registrati
 import BusinessRegistrationStyle from '../business-registration/business-registration.module.scss';
 import TimesStyle from './times.module.scss';
 import Button from '../../../../../../../models/ui/button/button';
-import { registerManager } from '../../../../../../../store/auth/auth.actions';
 import { getLoading, getError } from '../../../../../../../store/auth/auth.selectors';
 import { connect } from 'react-redux';
+import { postBuisnessHours } from '../../../../../../../store/auth/auth.actions';
 
 interface OwnProps {
     step: (step: 'decrement' | 'increment') => void,
@@ -19,12 +19,13 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    registerManager: typeof registerManager
+    postBuisnessHours: typeof postBuisnessHours
 }
 
 // Become true when user click on next in the first time
 let nextPage = false;
 const FullHebDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+const FullEngDays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 const mobileHebDays = ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ש'"];
 const hours = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
     "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
@@ -33,7 +34,7 @@ type Props = DispatchProps & StateProps & OwnProps;
 const Times: React.FC<Props> = (props) => {
     const [CurDay, setCurDay] = useState<number>(0)
     const [IsMobile, setIsMobile] = useState<any>(false);
-
+    const [Error, setError] = useState('');
     // Component did mount
     useEffect(() => {
         const resize = () => { // Check if the device witdh <= 600px
@@ -44,15 +45,14 @@ const Times: React.FC<Props> = (props) => {
         }
         resize();
     }, [IsMobile]);
-
     let hebDays: string[] = IsMobile ? mobileHebDays : FullHebDays;
-
-
 
     const onClickDay = (e: any, i: number) => {
         const workdays = [...props.values.workDays];
-        if (workdays[i] === undefined)
+        if (workdays[i] !== true) {
             workdays[i] = true
+            setError('');
+        }
         else
             workdays[i] = !props.values.workDays[i];
 
@@ -69,6 +69,22 @@ const Times: React.FC<Props> = (props) => {
         props.onChange(e, 'workHours', workHours);
     }
 
+    const onClickNext = () => {
+        let schdule: { [day: string]: { start: string, end: string }[] } = {};
+        props.values.workDays.forEach((day: boolean, i: number) => {
+            if (day) {
+                schdule[FullEngDays[i]] = [];
+                schdule[FullEngDays[i]].push({ start: props.values.workHours[i].start, end: props.values.workHours[i].end })
+
+            }
+        });
+        if (Object.keys(schdule).length === 0) {
+            setError('לא הוזנו ימים')
+        }
+        else {
+            props.postBuisnessHours(schdule);
+        }
+    }
 
     return (
         <div className={TimesStyle.Times}>
@@ -77,8 +93,9 @@ const Times: React.FC<Props> = (props) => {
                 <p className={ManagerRegistrationStyle.SubTitle}>הוסף אני הימים והשעות שהעסק שלך פועל בהם</p>
             </div>
 
-            <div className={TimesStyle.Body}>
+            {Error && <p className={ManagerRegistrationStyle.Error}>{Error}</p>}
 
+            <div className={TimesStyle.Body}>
                 <p className={TimesStyle.Title}>סמן את ימי העבודה שלך</p>
                 <div className={TimesStyle.Days}>
 
@@ -141,7 +158,7 @@ const Times: React.FC<Props> = (props) => {
             </div>
             <div className={BusinessRegistrationStyle.Buttons} style={{ marginTop: '30px' }}>
                 <Button onClick={() => props.step('decrement')} color='orange'>חזור</Button>
-                <Button onClick={() => props.step('increment')} color='purple-register'>המשך</Button>
+                <Button onClick={onClickNext} color='purple-register'>המשך</Button>
             </div>
         </div>
     )
@@ -153,7 +170,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    registerManager: (form: any) => dispatch(registerManager(form))
+    postBuisnessHours: (form: { [day: string]: { start: string, end: string }[] }) => dispatch(postBuisnessHours(form))
 
 });
 

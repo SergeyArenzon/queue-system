@@ -49,6 +49,16 @@ export type newEmployeeForm = {
   password: string;
 };
 
+export type newBusinessForm = {
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  about: string;
+  links: { [key: string]: string };
+  logo?: string;
+};
+
 export type loginEmployeeForm = {
   phone: string;
   password: string;

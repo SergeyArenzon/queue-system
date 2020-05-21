@@ -13,7 +13,8 @@ export const authReducer = (state = initialAuthState, action: allAuthActionTypes
       console.log("START_POST_BUSINESS");
       return {
         ...state,
-        loading: true
+        loading: true,
+        error: ''
       };
 
     case AuthActionsEnum.SUCCESS_POST_BUSINESS:

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import ManagerRegistrationStyle from "./manager-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
-import { registerManager } from "../../../../../../../store/auth/auth.actions";
+import { registerEmployee } from "../../../../../../../store/auth/auth.actions";
 import { getLoading, getError } from "../../../../../../../store/auth/auth.selectors";
 
 interface OwnProps {
@@ -17,7 +17,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  registerManager: typeof registerManager
+  registerEmployee: typeof registerEmployee
 }
 // Become true when user click on next in the first time
 let nextPage = false;
@@ -35,7 +35,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       email: props.values.managerEmail,
       password: props.values.password,
     };
-    props.registerManager(form);
+    props.registerEmployee(form);
     nextPage = true;
   };
 
@@ -161,7 +161,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  registerManager: (form: any) => dispatch(registerManager(form))
+  registerEmployee: (form: any) => dispatch(registerEmployee(form))
 
 });
 

@@ -46,12 +46,12 @@ exports.errorHandler = (error) => {
 
 exports.error422 = (req) => {
   const errors = validationResult(req);
-
+      console.log(errors);
+      
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed ");
     error.statusCode = 422;
     error.data = errors.array()[0];
-    console.log(error.data);
 
     throw error;
   }
@@ -65,9 +65,11 @@ exports.error401 = (isEqual) => {
   }
 };
 
-exports.error404 = (obj) => {
+const msgError404Heb='אובייקט לא נמצא';
+ const msgError404 =msgError404Heb;
+exports.error404 = (obj) => {    
   if (!obj) {
-    const error = new Error("could not find the object");
+    const error = new Error(msgError404);
     error.statusCode = 404;
     throw error;
   }
@@ -82,7 +84,7 @@ exports.error401auth = (token) => {
 };
 
 exports.error403Admin = (req) => {
-  if (req.employee.isAdmin) {
+  if (!req.employee.isAdmin) {
     const error = new Error("not auth to do this");
     error.statusCode = 403;
     throw error;
