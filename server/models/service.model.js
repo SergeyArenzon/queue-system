@@ -7,6 +7,11 @@ const serviceSchema = new Schema(
       type: String,
       required: true,
     },
+    category: {
+      type: String,
+      required: true,
+      default: "general",
+    },
     price: {
       type: Number,
       required: true,
