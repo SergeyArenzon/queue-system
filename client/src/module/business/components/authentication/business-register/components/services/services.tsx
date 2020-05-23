@@ -4,7 +4,6 @@ import ManagerRegistrationStyle from "../manager-registration/manager-registrati
 import BusinessRegistrationStyle from "../business-registration/business-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
 import { Service } from "../../../../../../../models/system/service";
-import { uniqueId, cloneDeep } from "lodash";
 import { connect } from "react-redux";
 import { postService } from "../../../../../../../store/service/service.actions";
 import {
@@ -30,6 +29,13 @@ interface OwnProps {
 interface DispatchProps {
   postService: typeof postService;
 }
+
+interface StateProps {
+  error: string;
+  loading: boolean;
+  services: Service[];
+}
+
 const initService: Service = {
   category: "",
   title: "",
@@ -37,8 +43,8 @@ const initService: Service = {
   duration: 0,
   available: true,
 };
-type Props = DispatchProps & serviceState & OwnProps;
 
+type Props = DispatchProps & StateProps & OwnProps;
 const Services: React.FC<Props> = (props) => {
   const [Service, setService] = useState<Service>(initService); // Hold the cuurent service
   const [Error, setError] = useState<string>("");
@@ -94,54 +100,53 @@ const Services: React.FC<Props> = (props) => {
   //   }
   //   return serivcesList;
   // };
-  const AllServices = () => {
-    console.log(props.services);
 
+  const AllServices = () => {
     return props.services.length > 0
-      ? props.services.map((service) => (
-          <p>
-            {service.title} {service.price} {service.duration}{" "}
-          </p>
-        ))
+      ? props.services.map((service: Service, i: number) => (
+        <p onClick={() => editService(service)} key={i * 13}>
+          {service.title} {service.price} {service.duration}{" "}
+        </p>
+      ))
       : null;
   };
 
   // Invoke when user click on existing service
-  // const editService = (service: Service) => {
-  //   setService(service);
-  //   setEditMode(true);
-  // };
+  const editService = (service: Service) => {
+    setService(service);
+    setEditMode(true);
+  };
 
   // Add new service
   const addNewService = (e: any, service: Service) => {
     // if (!service.category) {
     //     setError('כל שירות חייב להיות משוייך לקטגוריה')
     // }
-    if (!service.title) {
-      setError("כותרת ריקה");
-    } else if (!service.price) {
-      setError("לא הוזן מחיר");
-    } else if (!service.duration) {
-      setError("לא הוזן זמן");
-    } else {
-      props.postService(service);
+    // if (!service.title) {
+    //   setError("כותרת ריקה");
+    // } else if (!service.price) {
+    //   setError("לא הוזן מחיר");
+    // } else if (!service.duration) {
+    //   setError("לא הוזן זמן");
+    // } else {      
+    props.postService(service);
 
-      // const services = props.values.services;
-      // if (EditMode) {
-      //   const findService = (s: Service) => s.id === Service.id;
-      //   const i = services[Service.category].findIndex(findService);
-      //   services[Service.category].splice(i, 1);
-      // }
-      // if (!services[service.category]) {
-      //   services[service.category] = [];
-      // }
-      // service.id = uniqueId();
-      // services[service.category].push(service);
-      // props.onChange(e, "services", services);
-      // setService(initService);
-      // setError("");
-      // setEditMode(false);
-    }
+    // const services = props.values.services;
+    // if (EditMode) {
+    //   const findService = (s: Service) => s.id === Service.id;
+    //   const i = services[Service.category].findIndex(findService);
+    //   services[Service.category].splice(i, 1);
+    // }
+    // if (!services[service.category]) {
+    //   services[service.category] = [];
+    // }
+    // service.id = uniqueId();
+    // services[service.category].push(service);
+    // props.onChange(e, "services", services);
+    // setService(initService);
+    // setError("");
+    // setEditMode(false);
+
   };
   // console.log(cloneDeep(props.values.services));
 
@@ -172,7 +177,7 @@ const Services: React.FC<Props> = (props) => {
         </p>
       </div>
 
-      {Error && <p className={ManagerRegistrationStyle.Error}>{Error}</p>}
+      {props.error && <p className={ManagerRegistrationStyle.Error}>{props.error}</p>}
 
       <div className={ManagerRegistrationStyle.Body}>
         {/* Category Name */}
@@ -239,6 +244,7 @@ const Services: React.FC<Props> = (props) => {
       </div>
 
       <div className={ServicesStyle.ServicesList}>{AllServices()}</div>
+
       <div className={ServicesStyle.Button}>
         <Button
           border={true}
@@ -249,13 +255,9 @@ const Services: React.FC<Props> = (props) => {
         </Button>
       </div>
 
-      <div className={BusinessRegistrationStyle.Button}>
-        <Button onClick={() => props.step("decrement")} color="orange">
-          חזור
-        </Button>
-        <Button onClick={() => props.step("increment")} color="purple-register">
-          המשך
-        </Button>
+      <div className={BusinessRegistrationStyle.Buttons}>
+        <Button onClick={() => props.step("decrement")} color="orange"> חזור </Button>
+        <Button onClick={() => props.step("increment")} color="purple-register"> סיום </Button>
       </div>
     </div>
   );

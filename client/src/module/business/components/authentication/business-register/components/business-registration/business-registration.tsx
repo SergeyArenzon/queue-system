@@ -29,9 +29,9 @@ let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const BusinessRegistration: React.FC<Props> = (props) => {
-  const links = props.values.socialMediaLinks;
 
   const changeLinks = (e: any, name: string) => {
+    const links = props.values.socialMediaLinks;
     links[name] = e.target.value;
     props.onChange(e, "socialMediaLinks", links);
   };

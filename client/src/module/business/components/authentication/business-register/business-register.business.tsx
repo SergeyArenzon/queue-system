@@ -9,6 +9,7 @@ import BusinessRegistration from './components/business-registration/business-re
 import Services from './components/services/services';
 import Times from './components/times/times';
 import Timeline from './components/timeline/timeline';
+import Domain from './components/domain/domain';
 
 interface FormState {
     managerFirstName: string,
@@ -101,13 +102,15 @@ const BusinessRegister: React.FC<Props> = (props) => {
             </div>
 
             <div className={BusinessRegisterStyle.Form}>
-                {Step === 1 && <ManagerRegistration step={step} onChange={onChange} values={values} />}
+                {Step === 1 && <Domain />}
 
-                {Step === 2 && <BusinessRegistration step={step} onChange={onChange} values={values} />}
+                {Step === 2 && <ManagerRegistration step={step} onChange={onChange} values={values} />}
 
-                {Step === 3 && <Times step={step} onChange={onChange} values={values} />}
+                {Step === 3 && <BusinessRegistration step={step} onChange={onChange} values={values} />}
 
-                {Step === 4 && <Services step={step} onChange={onChange} values={values} />}
+                {Step === 4 && <Times step={step} onChange={onChange} values={values} />}
+
+                {Step === 5 && <Services step={step} onChange={onChange} values={values} />}
             </div>
 
         </div>

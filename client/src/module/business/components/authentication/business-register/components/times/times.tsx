@@ -35,6 +35,7 @@ const Times: React.FC<Props> = (props) => {
     const [CurDay, setCurDay] = useState<number>(0)
     const [IsMobile, setIsMobile] = useState<any>(false);
     const [Error, setError] = useState('');
+
     // Component did mount
     useEffect(() => {
         const resize = () => { // Check if the device witdh <= 600px
@@ -45,6 +46,7 @@ const Times: React.FC<Props> = (props) => {
         }
         resize();
     }, [IsMobile]);
+
     let hebDays: string[] = IsMobile ? mobileHebDays : FullHebDays;
 
     const onClickDay = (e: any, i: number) => {
@@ -84,10 +86,10 @@ const Times: React.FC<Props> = (props) => {
         }
         else {
             props.postBuisnessHours(schdule);
-        }        
+        }
     }
-    
-  //  if (props.loading) return <div>Loading...</div>;
+
+    //  if (props.loading) return <div>Loading...</div>;
 
     return (
         <div className={TimesStyle.Times}>
@@ -133,9 +135,10 @@ const Times: React.FC<Props> = (props) => {
                                 })
                             }
                         </select>
+                        
                         <br />
-                        <div className={TimesStyle.Hour}>
 
+                        <div className={TimesStyle.Hour}>
                             <select onChange={(e) => changeHour(e, 'start')} value={props.values.workHours[CurDay]['start'] ?
                                 props.values.workHours[CurDay]['start'] : ''}>
                                 {
