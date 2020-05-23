@@ -5,18 +5,18 @@ const serviceController = require("../../controller/business/service.business-co
 const isAuth = require("../../middleware/is-auth");
 
 const { serviceValidator } = require("../../validator/service.validator");
+try {
+  router.post(
+    "/",
+    serviceValidator,
+    isAuth("employee"),
+    serviceController.postService
+  );
+} catch (error) {
+  console.log(error);
+}
 
-router.post(
-  "/",
-  serviceValidator,
-  isAuth("employee"),
-  serviceController.postService
-);
-router.get(
-  "/",
-  isAuth("employee"),
-  serviceController.getServices
-);
+router.get("/", isAuth("employee"), serviceController.getServices);
 router.put(
   "/:serviceId",
   serviceValidator,

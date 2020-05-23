@@ -8,16 +8,16 @@ module.exports = (kind) => {
   return async (req, res, next) => {
     const token = req.body.token;
 
+    error401auth(token);
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-      error401auth(decodedToken);
 
       switch (kind) {
         case "employee":
           req.employee = await Employee(req.mongo).findById(
             decodedToken.employeeId
           );
+
           error404(req.employee);
           break;
         case "client":
@@ -30,7 +30,7 @@ module.exports = (kind) => {
           return next(error);
       }
     } catch (err) {
-      return next(err);
+      next(err);
     }
 
     return next();

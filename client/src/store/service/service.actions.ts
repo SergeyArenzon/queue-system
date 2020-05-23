@@ -9,7 +9,7 @@ export const postService = (form: Service) => {
     const send = { ...form, token };
     console.log(send);
 
-    API.post("gilad/business/service", send)
+    API.post("react/business/service", send)
 
       .then((res) => {
         console.log(res.data);

@@ -28,28 +28,33 @@ mongoose
   .then(() => {
     console.log("DB Connected");
   });
+app.get("/check/:businessUrl", async (req, res, next) => {
+  const businessUrl = req.params.businessUrl;
+  console.log(businessUrl);
 
-app.get("/check", async (req, res, next) => {
   try {
-    const dataBaseList = await mongoose.connections[0].db
+    let ans = await mongoose.connections[0].db
       .admin()
       .listDatabases({ listDatabases: 1, nameOnly: true });
-    
-    res.status(200).json(dataBaseList.databases);
-  } catch (error) {    
+
+    res.status(200).json(ans.databases);
+  } catch (error) {
     next(error);
   }
 });
 
-app.use("/:businessUrl", (req, res, next) => {
-  const businessUrl = req.params.businessUrl;
+app.use("/:businessUrl", async (req, res, next) => {
+  try {
+    const businessUrl = req.params.businessUrl;
 
-  req.mongo = mongoose.connection.useDb(businessUrl);
-
-  require("./routes/index.route")(app);
-
-  next();
+    req.mongo = mongoose.connection.useDb(businessUrl);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
+
+require("./routes/index.route")(app);
 
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
@@ -61,4 +66,8 @@ app.use((error, req, res, next) => {
   // console.log(error);
 
   res.status(status).json({ message: msg, data });
+});
+
+app.use(function (req, res, next) {
+  res.status(404).json({ message: "Sorry can't find that!" });
 });
