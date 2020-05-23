@@ -34,4 +34,4 @@ const clientSchema = new Schema({
   remark: { type: String, default: "" },
 });
 
-module.exports = mongoose.model("Client", clientSchema);
+// module.exports = mongoose.model("Client", clientSchema);
