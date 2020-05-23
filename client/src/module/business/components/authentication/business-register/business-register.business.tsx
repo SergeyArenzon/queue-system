@@ -102,7 +102,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
             </div>
 
             <div className={BusinessRegisterStyle.Form}>
-                {Step === 1 && <Domain />}
+                {Step === 1 && <Domain step={step}/>}
 
                 {Step === 2 && <ManagerRegistration step={step} onChange={onChange} values={values} />}
 

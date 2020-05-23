@@ -12,6 +12,11 @@ router.post(
   isAuth("employee"),
   serviceController.postService
 );
+router.get(
+  "/",
+  isAuth("employee"),
+  serviceController.getServices
+);
 router.put(
   "/:serviceId",
   serviceValidator,

@@ -3,6 +3,11 @@ import ManagerRegistrationStyle from "../manager-registration/manager-registrati
 import Button from '../../../../../../../models/ui/button/button';
 import { connect } from 'react-redux';
 import { getLoading, getError } from '../../../../../../../store/auth/auth.selectors';
+import { getDomain } from '../../../../../../../store/auth/auth.actions';
+
+interface OwnProps {
+    step: (step: "decrement" | "increment") => void;
+}
 
 interface StateProps {
     loading: boolean;
@@ -10,9 +15,10 @@ interface StateProps {
 }
 
 interface DispatchProps {
+    getDomain: typeof getDomain
 }
 
-type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps & OwnProps;
 const Domain: React.FC<Props> = (props) => {
     const [Name, setName] = useState<string>('');
 
@@ -20,7 +26,9 @@ const Domain: React.FC<Props> = (props) => {
 
     // Checks the information in the server
     const onClickNext = () => {
+        props.step('increment');
 
+        props.getDomain(Name);
     };
 
     return (
@@ -70,7 +78,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-
+    getDomain: (domain: string) => dispatch(getDomain(domain))
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Domain);
