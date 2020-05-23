@@ -10,13 +10,15 @@ export const getDomain = (domain: string) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
     API.get("check/" + domain)
-      .then((res) => {})
+      .then((res) => {
+        console.log(res.data);
+      })
       .then(() => {
         return dispatch({ type: AuthActionsEnum.SUCCESS_POST_BUSINESS });
       })
       .catch((error: any) => {
         const msg = error.response.data.message;
-        console.log(error);
+        console.log(msg);
 
         return dispatch({
           type: AuthActionsEnum.FALID_POST_BUSINESS,
@@ -30,7 +32,7 @@ export const registerEmployee = (form: newEmployeeForm) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
 
-    API.post("react/business/auth/register", form)
+    API.post("/business/auth/register", form)
       .then((res) => {
         const token = res.data.token;
         localStorage.setItem("token", token);

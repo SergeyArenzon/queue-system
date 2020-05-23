@@ -36,8 +36,9 @@ app.get("/check/:businessUrl", async (req, res, next) => {
     let ans = await mongoose.connections[0].db
       .admin()
       .listDatabases({ listDatabases: 1, nameOnly: true });
-
-    res.status(200).json(ans.databases);
+    ans = ans.databases.every((e) => e.name !== businessUrl);
+    if (!ans) throw new Error("שם קיים במערכת");
+    res.status(200);
   } catch (error) {
     next(error);
   }
