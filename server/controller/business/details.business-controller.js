@@ -1,4 +1,3 @@
-const Business = require("../../models/business.model");
 const moment = require("moment");
 const {
   error422,
@@ -16,8 +15,8 @@ exports.postBuisnessDetails = async (req, res, next) => {
     about,
     notifications,
   } = req.body;
-      console.log(req.employee);
-      
+  console.log(req.employee);
+
   try {
     error422(req);
 
@@ -33,6 +32,8 @@ exports.postBuisnessDetails = async (req, res, next) => {
       about,
       notifications,
     };
+    const Business = require("../../models/business.model")(req.mongo);
+
     const detailsExist = await Business.findOneAndUpdate(updatdeDetail);
     if (!detailsExist) await new Business(updatdeDetail).save();
 
@@ -46,14 +47,14 @@ exports.postBuisnessDetails = async (req, res, next) => {
 };
 
 exports.postBuisnessHours = async (req, res, next) => {
-  
   try {
     // error422(req);
-    
-    
+
     error403Admin(req);
-    const schedule={...req.body.schedule};
+    const schedule = { ...req.body.schedule };
     console.log(schedule);
+    const Business = require("../../models/business.model")(req.mongo);
+
     const buisness = await Business.findOne();
     buisness.schedule = schedule;
 
@@ -82,6 +83,8 @@ exports.postDefualtHours = async (req, res, next) => {
   console.log(a);
 
   try {
+    const Business = require("../../models/business.model")(req.mongo);
+
     const buisness = await Business.findOne();
 
     buisness.schedule = arr;
@@ -99,6 +102,8 @@ exports.postDefualtHours = async (req, res, next) => {
 
 exports.getBuisnessDetails = async (req, res, next) => {
   try {
+    const Business = require("../../models/business.model")(req.mongo);
+
     const buisnessDetails = await Business.findOne();
     error404(buisnessDetails);
     res.status(200).json({

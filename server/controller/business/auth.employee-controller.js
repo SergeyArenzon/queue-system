@@ -1,6 +1,3 @@
-const Business = require("../../models/business.model");
-const Employee = require("../../models/employee.model");
-
 const { error401, error404, error422 } = require("../../helper/dbErrorHandler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken"); // to generate signed token
@@ -8,6 +5,7 @@ const jwt = require("jsonwebtoken"); // to generate signed token
 exports.register = async (req, res, next) => {
   const { firstName, lastName, phone, email, password, isAdmin } = req.body;
 
+  const Employee = require("../../models/employee.model")(req.mongo);
   try {
     error422(req);
 
@@ -25,14 +23,14 @@ exports.register = async (req, res, next) => {
     const token = createToken(employee);
     res.status(201).json({ message: "create new business", token: token });
   } catch (error) {
-    console.log(error);
-
     return next(error);
   }
 };
 
 exports.employeeLogin = async (req, res, next) => {
   try {
+    const Employee = require("../../models/employee.model")(req.mongo);
+
     const { phone, password } = req.body;
     const employee = await Employee.findOne({ phone: phone });
     error404(employee);
@@ -47,7 +45,8 @@ exports.employeeLogin = async (req, res, next) => {
 };
 
 const createToken = (employee) => {
-  return jwt.sign({
+  return jwt.sign(
+    {
       employeeId: employee._id.toString(),
     },
     process.env.JWT_SECRET

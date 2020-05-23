@@ -1,5 +1,3 @@
-const Service = require("../../models/service.model");
-
 const {
   error422,
   error404,
@@ -7,7 +5,8 @@ const {
 } = require("../../helper/dbErrorHandler");
 exports.postService = async (req, res, next) => {
   try {
-    error422(req, next);
+    error422(req);
+    const Service = require("../../models/service.model")(req.mongo);
 
     error403Admin(req);
 
@@ -33,6 +32,8 @@ exports.postService = async (req, res, next) => {
 exports.putService = async (req, res, next) => {
   try {
     error422(req);
+    const Service = require("../../models/service.model")(req.mongo);
+
     const service = await Service.findById(req.params.serviceId);
     error404(service);
 
@@ -54,7 +55,11 @@ exports.putService = async (req, res, next) => {
 
 exports.deleteService = async (req, res, next) => {
   try {
-    const service = await Service.findById(req.params.serviceId);
+    const serviceId = req.params.serviceId;
+
+    const Service = require("../../models/service.model")(req.mongo);
+
+    const service = await Service.findById(serviceId);
 
     await error404(service);
 

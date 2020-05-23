@@ -7,17 +7,17 @@ const Client = require("../models/client.model");
 module.exports = (kind) => {
   return async (req, res, next) => {
     const token = req.body.token;
-    console.log(req.body);
 
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decodedToken);
 
       error401auth(decodedToken);
 
       switch (kind) {
         case "employee":
-          req.employee = await Employee.findById(decodedToken.employeeId);
+          req.employee = await Employee(req.mongo).findById(
+            decodedToken.employeeId
+          );
           error404(req.employee);
           break;
         case "client":

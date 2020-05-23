@@ -4,7 +4,7 @@ const router = express.Router();
 const serviceController = require("../../controller/business/service.business-controller");
 const isAuth = require("../../middleware/is-auth");
 
-const { serviceValidator } = require("../../validator/business.validator");
+const { serviceValidator } = require("../../validator/service.validator");
 
 router.post(
   "/",

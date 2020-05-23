@@ -6,7 +6,7 @@ const isAuth = require("../../middleware/is-auth");
 
 const {
   businessDetailsValidator,
-  businessHoursValidator,
+  // businessHoursValidator,
 } = require("../../validator/business.validator");
 
 router.post(
@@ -23,11 +23,7 @@ router.post(
   businessDetailsController.postBuisnessHours
 );
 
-router.post(
-  "/defualthours",
-
-  businessDetailsController.postDefualtHours
-);
+router.post("/defualthours", businessDetailsController.postDefualtHours);
 
 router.get("/", businessDetailsController.getBuisnessDetails);
 

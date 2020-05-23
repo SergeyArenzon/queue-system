@@ -46,8 +46,8 @@ exports.errorHandler = (error) => {
 
 exports.error422 = (req) => {
   const errors = validationResult(req);
-      console.log(errors);
-      
+  // console.log(errors);
+
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed ");
     error.statusCode = 422;
@@ -65,9 +65,9 @@ exports.error401 = (isEqual) => {
   }
 };
 
-const msgError404Heb='אובייקט לא נמצא';
- const msgError404 =msgError404Heb;
-exports.error404 = (obj) => {    
+const msgError404Heb = "אובייקט לא נמצא";
+const msgError404 = msgError404Heb;
+exports.error404 = (obj) => {
   if (!obj) {
     const error = new Error(msgError404);
     error.statusCode = 404;
