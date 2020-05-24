@@ -1,8 +1,12 @@
 const { body } = require("express-validator");
 
+const hebrewErrorValidator = require("./hebrewErrorValidator");
+
 exports.serviceValidator = [
-  body("title").trim().isLength({ min: 1 }).withMessage("שם קטגוריה חייב להיות לפחות 2 תווים"),
-  body("title").trim().isLength({ min: 1 }).withMessage("שם שירות חייב להיות לפחות 2 תווים"),
-  body("price").trim().isNumeric(),
-  body("duration").trim().isNumeric(),
+  body("category", hebrewErrorValidator.categoryHebError)
+    .trim()
+    .isLength({ min: 2 }),
+  body("title", hebrewErrorValidator.titleHebError).trim().isLength({ min: 2 }),
+  body("price", hebrewErrorValidator.priceHebError).trim().isNumeric(),
+  body("duration", hebrewErrorValidator.durationHebError).trim().isNumeric(),
 ];

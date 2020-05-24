@@ -1,37 +1,47 @@
 const { body } = require("express-validator");
 const Emplyee = require("../models/employee.model");
 
+const hebrewErrorValidator = require("./hebrewErrorValidator");
+
 exports.employeeValidator = [
-  body("firstName")
+  body("firstName", hebrewErrorValidator.firstNameHebError)
     .trim()
     .not()
     .isEmpty()
-    .withMessage("שם פרטי הוא שדה חובה")
     .isLength({
       min: 2,
       max: 12,
     }),
-  body("lastName", "שם משפחה הוא שדה חובה").trim().notEmpty(),
-  body("email", "@ אימייל חייב להיות בין 3 ל 32 תווים אימייל חייב להכיל")
+  body("lastName", hebrewErrorValidator.lastNameHebError).trim().notEmpty(),
+  body("email", hebrewErrorValidator.emailHebError)
     .isEmail()
     .normalizeEmail()
     .custom((value, { req }) => {
       return Emplyee(req.mongo)
         .findOne({ email: value })
         .then((userDoc) => {
-          if (userDoc) return Promise.reject("אימייל כבר קיים במערכת");
+          if (userDoc)
+            return Promise.reject(
+              hebrewErrorValidator.emailRegisterExistHebError
+            );
         });
     }),
-  body("password", "סיסמא הוא שדה חובה").trim().notEmpty().isLength({
-    min: 6,
-  }),
-  body("phone", "טלפון הוא שדה חובה")
+  body("password", hebrewErrorValidator.passwordHebError)
+    .trim()
+    .notEmpty()
+    .isLength({
+      min: 6,
+    }),
+  body("phone", hebrewErrorValidator.phoneHebError)
     .isMobilePhone()
     .custom((value, { req }) => {
       return Emplyee(req.mongo)
         .findOne({ phone: value })
         .then((userDoc) => {
-          if (userDoc) return Promise.reject("הטלפון קיים כבר");
+          if (userDoc)
+            return Promise.reject(
+              hebrewErrorValidator.phoneRegisterExistHebError
+            );
         });
     }),
 ];

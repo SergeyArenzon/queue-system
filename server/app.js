@@ -36,8 +36,9 @@ app.get("/check/:businessUrl", async (req, res, next) => {
     let ans = await mongoose.connections[0].db
       .admin()
       .listDatabases({ listDatabases: 1, nameOnly: true });
-
-    res.status(200).json(ans.databases);
+    ans = ans.databases.every((e) => e.name !== businessUrl);
+    if (!ans) throw new Error("שם קיים במערכת");
+    res.status(200);
   } catch (error) {
     next(error);
   }
@@ -58,16 +59,15 @@ require("./routes/index.route")(app);
 
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
-  const msg =
-    (error.data && error.data.msg) ||
-    error.message ||
-    "error with statusCode" + status;
+  const message = !error.statusCode
+    ? error.name + "   גישה נדחתה, נא להתחבר מחדש, אם זה חוזר אנא פנה לתמיכה"
+    : error.message;
   const data = error.data;
-  // console.log(error);
+  // console.log(message);
 
-  res.status(status).json({ message: msg, data });
+  res.status(status).json({ message, data });
 });
 
 app.use(function (req, res, next) {
-  res.status(404).json({ message: "Sorry can't find that!" });
+  res.status(404).json({ message: "שגיאה כללית" });
 });
