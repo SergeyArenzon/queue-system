@@ -1,4 +1,6 @@
 const { errorPassword401: error401, error404, error422 } = require("../../helper/dbErrorHandler");
+const Domain = require('../../models/domain.model');
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken"); // to generate signed token
 
@@ -8,6 +10,12 @@ exports.register = async (req, res, next) => {
   const Employee = require("../../models/employee.model")(req.mongo);
   try {
     error422(req);
+
+    const domain = new Domain({
+      phone,
+      domain: req.mongo.name
+    });
+    await domain.save();
 
     const hashedPw = await bcrypt.hash(password, 12);
 
@@ -23,15 +31,21 @@ exports.register = async (req, res, next) => {
     const token = createToken(employee);
     res.status(201).json({ message: "create new business", token: token });
   } catch (error) {
+    console.log(error);
+    
     return next(error);
   }
 };
-
+const mongoose = require('mongoose');
 exports.employeeLogin = async (req, res, next) => {
   try {
+    const { phone, password } = req.body;
+    const domain = await Domain.findOne({ phone: phone })
+    error404(domain)
+
+    req.mongo = mongoose.connection.useDb(domain.domain);
     const Employee = require("../../models/employee.model")(req.mongo);
 
-    const { phone, password } = req.body;
     const employee = await Employee.findOne({ phone: phone });
     error404(employee);
 
@@ -40,6 +54,7 @@ exports.employeeLogin = async (req, res, next) => {
     const token = createToken(employee);
     res.status(200).json({ message: "employee login success", token: token });
   } catch (error) {
+  
     return next(error);
   }
 };

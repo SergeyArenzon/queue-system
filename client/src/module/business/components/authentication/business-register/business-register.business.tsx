@@ -27,8 +27,7 @@ interface FormState {
     socialMediaLinks: { [key: string]: string },
     about: string,
     services: { [key: string]: Service[] },
-    workDays: boolean[],
-    workHours: { "start": string, "end": string }[]
+    workTimes:  {[day: string]: { start: string, end: string }}
 }
 
 interface StateProps {
@@ -59,8 +58,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
         socialMediaLinks: { 'website': '', 'facebook': '', 'instagram': '' },
         about: '',
         services: {},
-        workDays: new Array(7),
-        workHours: new Array({ "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' }, { "start": '', "end": '' })
+        workTimes: {}
     });
 
     const [Step, setStep] = useState<number>(1);
@@ -87,10 +85,10 @@ const BusinessRegister: React.FC<Props> = (props) => {
     }
 
     const { domain, managerFirstName, managerLastName, managerPhone, managerEmail, password, validatePassword, businessName, businessAddress,
-        businessPhone, businessEmail, logo, socialMediaLinks, about, services, workDays, workHours } = Form;
+        businessPhone, businessEmail, logo, socialMediaLinks, about, services, workTimes } = Form;
     const values = {
         domain, managerFirstName, managerLastName, managerPhone, managerEmail, password, validatePassword, businessName, businessAddress,
-        businessPhone, businessEmail, logo, socialMediaLinks, about, services, workDays, workHours
+        businessPhone, businessEmail, logo, socialMediaLinks, about, services, workTimes
     }
 
     return (

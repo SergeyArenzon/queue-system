@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import ManagerRegistrationStyle from '../manager-registration/manager-registration.module.scss';
 import BusinessRegistrationStyle from '../business-registration/business-registration.module.scss';
 import TimesStyle from './times.module.scss';
+import { cloneDeep } from 'lodash'
 import Button from '../../../../../../../models/ui/button/button';
 import { getLoading, getError } from '../../../../../../../store/auth/auth.selectors';
 import { connect } from 'react-redux';
@@ -49,48 +50,47 @@ const Times: React.FC<Props> = (props) => {
 
     let hebDays: string[] = IsMobile ? mobileHebDays : FullHebDays;
 
+    // Invoke when user click on day checkbox
     const onClickDay = (e: any, i: number) => {
-        const workdays = [...props.values.workDays];
-        if (workdays[i] !== true) {
-            workdays[i] = true
-            setError('');
+        const times = cloneDeep(props.values.workTimes);
+        if (times[FullEngDays[i]]) {
+            delete times[FullEngDays[i]];
         }
-        else
-            workdays[i] = !props.values.workDays[i];
-
-        props.onChange(e, 'workDays', workdays);
+        else {
+            times[FullEngDays[i]] = { start: "06:00", end: "24:00" }
+            if (Object.keys(props.values.workTimes).length < 2)
+                setCurDay(i)
+        }
+        props.onChange(e, 'workTimes', times);
     }
 
+    // Invoke when user choose day to pick hours
     const changeDay = (e: any) => {
         setCurDay(e.target.value);
     }
 
+    // Invoke when user pick hour
     const changeHour = (e: any, value: 'start' | 'end') => {
-        const workHours = [...props.values.workHours];
-        workHours[CurDay][value] = e.target.value;
-        props.onChange(e, 'workHours', workHours);
+        const times = cloneDeep(props.values.workTimes);
+        times[FullEngDays[CurDay]][value] = e.target.value;
+        props.onChange(e, 'workTimes', times);
     }
 
+    // Checks the information in front of the server
     const onClickNext = () => {
-        props.step('increment')
-        let schdule: { [day: string]: { start: string, end: string }[] } = {};
-        props.values.workDays.forEach((day: boolean, i: number) => {
-            if (day) {
-                if (!schdule[FullEngDays[i]])
-                    schdule[FullEngDays[i]] = [];
-                schdule[FullEngDays[i]].push({ start: props.values.workHours[i].start, end: props.values.workHours[i].end })
-            }
-        });
-        if (Object.keys(schdule).length === 0) {
+        if (Object.keys(props.values.workTimes).length === 0) {
             setError('לא הוזנו ימים')
         }
-        else {
-            props.postBuisnessHours(schdule, props.values.domain);
+
+        let schdule: { [day: string]: { start: string, end: string }[] } = {};
+        for (const [key, value] of Object.entries(props.values.workTimes)) {
+            schdule[key] = [];
+            schdule[key].push(props.values.workTimes[key]);
         }
+        props.postBuisnessHours(schdule);
+        nextPage = true;
     }
 
-    //  if (props.loading) return <div>Loading...</div>;
-    if (!props.loading && !props.error && nextPage) props.step('increment');
 
     return (
         <div className={TimesStyle.Times}>
@@ -102,16 +102,16 @@ const Times: React.FC<Props> = (props) => {
             {Error && <p className={ManagerRegistrationStyle.Error}>{Error}</p>}
 
             <div className={TimesStyle.Body}>
+                {/* Days */}
                 <p className={TimesStyle.Title}>סמן את ימי העבודה שלך</p>
                 <div className={TimesStyle.Days}>
-
                     {
                         hebDays.map((day: string, i: number) => {
                             return (
                                 <React.Fragment key={i * 26}>
                                     <div className={TimesStyle.Day} >
                                         <input onClick={(e) => onClickDay(e, i)} className={TimesStyle.Checkbox}
-                                            type="checkbox" defaultChecked={props.values.workDays[i]} id={"day" + i} value={i} />
+                                            type="checkbox" defaultChecked={props.values[FullEngDays[i]]} id={"day" + i} value={i} />
                                         <label htmlFor={"day" + i}>{" " + day}</label>
                                     </div>
                                 </React.Fragment>
@@ -119,16 +119,15 @@ const Times: React.FC<Props> = (props) => {
                         })
                     }
                 </div>
-
-                {
-                    (props.values.workDays[0] || props.values.workDays[1] || props.values.workDays[2] || props.values.workDays[3]) &&
+                {/* Check list days */}
+                {(Object.keys(props.values.workTimes).length !== 0) &&
                     <div className={TimesStyle.Hours}>
                         <p className={TimesStyle.Title}> סמן שעות עבודה </p>
                         <span>בחר יום</span>
                         <select onChange={changeDay} >
                             {
                                 hebDays.map((day: string, i: number) => {
-                                    if (props.values.workDays[i]) {
+                                    if (props.values.workTimes[FullEngDays[i]]) {
                                         return (
                                             <option key={i * 21} value={i}>{day}</option>
                                         );
@@ -136,25 +135,25 @@ const Times: React.FC<Props> = (props) => {
                                 })
                             }
                         </select>
-                        
-                        <br />
 
+                        <br />
+                        {/* Start Hours */}
                         <div className={TimesStyle.Hour}>
-                            <select onChange={(e) => changeHour(e, 'start')} value={props.values.workHours[CurDay]['start'] ?
-                                props.values.workHours[CurDay]['start'] : ''}>
+                            <select onChange={(e) => changeHour(e, 'start')} value={props.values.workTimes[FullEngDays[CurDay]] ?
+                                props.values.workTimes[FullEngDays[CurDay]].start : ''}>
                                 {
                                     hours.map((hour: string) => {
                                         return <option key={parseInt(hour) * 2} value={hour}>{hour}</option>
                                     })
                                 }
                             </select>
-                            <select onChange={(e) => changeHour(e, 'end')} value={props.values.workHours[CurDay]['end'] ?
-                                props.values.workHours[CurDay]['end'] : ''}>
+                            {/* End Hours */}
+                            <select onChange={(e) => changeHour(e, 'end')} value={props.values.workTimes[FullEngDays[CurDay]] ?
+                                props.values.workTimes[FullEngDays[CurDay]].end : ''}>
                                 {
                                     hours.map((hour: string) => {
-                                        if (props.values.workHours[CurDay]['start']) {
-                                            if (parseInt(props.values.workHours[CurDay]['start']) > parseInt(hour)) return;
-                                        }
+                                        if (parseInt(props.values.workTimes[FullEngDays[CurDay]].start) > parseInt(hour))
+                                            return;
                                         return <option key={parseInt(hour) * 6} value={hour}>{hour}</option>
                                     })
                                 }
@@ -163,10 +162,18 @@ const Times: React.FC<Props> = (props) => {
                     </div>
                 }
             </div>
-            <div className={BusinessRegistrationStyle.Buttons} style={{ marginTop: '30px' }}>
-                <Button onClick={() => props.step('decrement')} color='orange'>חזור</Button>
-                <Button onClick={onClickNext} color='purple-register'>המשך</Button>
-            </div>
+
+            {!props.loading ?
+                <div className={BusinessRegistrationStyle.Buttons} style={{ marginTop: '30px' }}>
+                    <Button onClick={() => props.step("decrement")} color="orange">
+                        חזור
+                    </Button>
+                    <Button onClick={onClickNext} color="purple-register">
+                        המשך
+                    </Button>
+                </div> :
+                <div>Loading...</div>
+            }
         </div>
     )
 }
@@ -177,8 +184,16 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    postBuisnessHours: (form: { [day: string]: { start: string, end: string }[] }, domain: string) => dispatch(postBuisnessHours(form, domain))
+    postBuisnessHours: (form: { [day: string]: { start: string, end: string }[] }) => dispatch(postBuisnessHours(form))
 
 });
 
-export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Times);
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Times,
+    (prevState, nextState) => {
+        console.log('Times');
+        if (!nextState.loading && !nextState.error && nextPage) {
+            prevState.step('increment');
+            return true;
+        }
+        return false;
+    }));

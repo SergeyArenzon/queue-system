@@ -54,6 +54,11 @@ const SingletonBusinessSchema = (() => {
           require: false,
           default: [],
         },
+        domain: {
+          type: String,
+          require: true,
+        
+        },
 
         schedule: {
           type: Map,

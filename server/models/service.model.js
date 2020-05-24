@@ -18,7 +18,6 @@ const SingletonServiceSchema = (() => {
         category: {
           type: String,
           required: true,
-          default: "general",
         },
         price: {
           type: Number,

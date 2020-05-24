@@ -16,7 +16,8 @@ try {
   console.log(error);
 }
 
-router.get("/", isAuth("employee"), serviceController.getServices);
+router.get("/", serviceController.getServices);
+
 router.put(
   "/:serviceId",
   serviceValidator,

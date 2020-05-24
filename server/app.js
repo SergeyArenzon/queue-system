@@ -30,6 +30,8 @@ mongoose
     console.log("DB Connected");
   });
 
+app.post("/login", require('./controller/business/auth.employee-controller').employeeLogin);
+
 app.get("/check/:businessUrl", async (req, res, next) => {
   const businessUrl = req.params.businessUrl;
   try {

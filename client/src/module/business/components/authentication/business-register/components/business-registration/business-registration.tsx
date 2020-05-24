@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import BusinessRegistrationStyle from "./business-registration.module.scss";
 import ManagerRegistrationStyle from "../manager-registration/manager-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
@@ -7,7 +7,7 @@ import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { getError, getLoading } from "../../../../../../../store/auth/auth.selectors";
 import { connect } from "react-redux";
 import { registerBusiness } from "../../../../../../../store/auth/auth.actions";
-import { newBusinessForm } from "../../../../../../../store/auth/auth.types";
+import { businessForm } from "../../../../../../../store/auth/auth.types";
 
 interface OwnProps {
   step: (step: 'decrement' | 'increment') => void,
@@ -38,22 +38,19 @@ const BusinessRegistration: React.FC<Props> = (props) => {
 
   // Checks the information in front of the server
   const onClickNext = () => {
-    props.step('increment');
-    const form: newBusinessForm = {
+    const form: businessForm = {
       name: props.values.businessName,
       address: props.values.businessAddress,
       phone: props.values.businessPhone,
       email: props.values.businessEmail,
       logo: props.values.logo,
       links: props.values.socialMediaLinks,
-      about: props.values.about
+      about: props.values.about,
+      domain: props.values.domain
     };
-    props.registerBusiness(form, props.values.domain);
+    props.registerBusiness(form);
     nextPage = true;
   };
-
-  if (!props.loading && !props.error && nextPage) props.step('increment');
-  //if (props.loading) return <div>Loading...</div>;
 
 
   return (
@@ -181,14 +178,17 @@ const BusinessRegistration: React.FC<Props> = (props) => {
         </div>
       </div>
 
-      <div className={BusinessRegistrationStyle.Buttons}>
+      {!props.loading ?
+        <div className={BusinessRegistrationStyle.Buttons}>
         <Button onClick={() => props.step("decrement")} color="orange">
           חזור
         </Button>
         <Button onClick={onClickNext} color="purple-register">
           המשך
         </Button>
-      </div>
+      </div> :
+      <div>Loading...</div>  
+    }
     </div>
   );
 };
@@ -200,7 +200,15 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  registerBusiness: (form: newBusinessForm, domain: string) => dispatch(registerBusiness(form, domain))
+  registerBusiness: (form: businessForm) => dispatch(registerBusiness(form))
 });
 
-export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(BusinessRegistration);
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(BusinessRegistration,
+  (prevState, nextState) => {
+    console.log('ManagerRegistration');
+    if (!nextState.loading && !nextState.error && nextPage) {
+      prevState.step('increment');
+      return true;
+    }
+    return false;
+  }));

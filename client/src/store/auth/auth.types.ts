@@ -49,7 +49,8 @@ export type newEmployeeForm = {
   password: string;
 };
 
-export type newBusinessForm = {
+export type businessForm = {
+  id?: string;
   name: string;
   address: string;
   phone: string;
@@ -57,6 +58,7 @@ export type newBusinessForm = {
   about: string;
   links: { [key: string]: string };
   logo?: string;
+  domain: string;
 };
 
 export type loginEmployeeForm = {

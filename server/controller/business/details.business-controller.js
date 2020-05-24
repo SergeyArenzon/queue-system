@@ -14,6 +14,7 @@ exports.postBuisnessDetails = async (req, res, next) => {
     links,
     about,
     notifications,
+    domain
   } = req.body;
   console.log(req.employee);
 
@@ -31,6 +32,7 @@ exports.postBuisnessDetails = async (req, res, next) => {
       links,
       about,
       notifications,
+      domain
     };
     const Business = require("../../models/business.model")(req.mongo);
 

@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import ServicesStyle from "./services.module.scss";
 import ManagerRegistrationStyle from "../manager-registration/manager-registration.module.scss";
 import BusinessRegistrationStyle from "../business-registration/business-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
 import { Service } from "../../../../../../../models/system/service";
 import { connect } from "react-redux";
-import { postService } from "../../../../../../../store/service/service.actions";
+import { postService, updateService, getAllServices } from "../../../../../../../store/service/service.actions";
 import {
   getLoading,
   getError,
   getServices,
 } from "../../../../../../../store/service/service.selectors";
-
-import { serviceState } from "../../../../../../../store/service/service.types";
 
 interface AutoCompleteState {
   showOptions: boolean;
@@ -28,6 +26,8 @@ interface OwnProps {
 
 interface DispatchProps {
   postService: typeof postService;
+  updateService: typeof updateService;
+  getAllServices: typeof getAllServices;
 }
 
 interface StateProps {
@@ -44,8 +44,11 @@ const initService: Service = {
   available: true,
 };
 
+// Become true when user click on next in the first time
+let nextPage = false;
 type Props = DispatchProps & StateProps & OwnProps;
 const Services: React.FC<Props> = (props) => {
+
   const [Service, setService] = useState<Service>(initService); // Hold the cuurent service
   const [AutoComplete, setAutoComplete] = useState<AutoCompleteState>({
     showOptions: false,
@@ -56,10 +59,10 @@ const Services: React.FC<Props> = (props) => {
 
   // Initial filteredOptions array in options
   const onCategoryChange = (e: any) => {
-    const options = Object.keys(props.values.services);
+    const titles: string[] = props.services.map(s => s.category);
     const userInput = e.currentTarget.value;
 
-    const filteredOptions = options.filter(
+    const filteredOptions = titles.filter(
       (optionName) =>
         optionName.toLowerCase().indexOf(userInput.toLowerCase()) > -1
     );
@@ -81,29 +84,11 @@ const Services: React.FC<Props> = (props) => {
     });
   };
 
-  // Show all the services that added
-  // const AllServices = () => {
-  //   const serivcesList: JSX.Element[] = [];
-
-  //   for (var key in props.values.services) {
-  //     console.log(props.values.services);
-
-  //     if (!props.values.services[key]) continue;
-  //     props.values.services[key].forEach((s: Service) => {
-  //       serivcesList.push(
-  //         <p onClick={() => editService(s)} key={s.price * s.duration}>
-  //           {s.title}
-  //         </p>
-  //       );
-  //     });
-  //   }
-  //   return serivcesList;
-  // };
 
   const AllServices = () => {
-    return props.services.length > 0
+    return props.getAllServices.length > 0
       ? props.services.map((service: Service, i: number) => (
-        <p onClick={() => editService(service)} key={i * 13}>
+        <p onClick={() => editService(service)} key={service.id}>
           {service.title} {service.price} {service.duration}{" "}
         </p>
       ))
@@ -118,36 +103,18 @@ const Services: React.FC<Props> = (props) => {
 
   // Add new service
   const addNewService = (e: any, service: Service) => {
-    // if (!service.category) {
-    //     setError('כל שירות חייב להיות משוייך לקטגוריה')
-    // }
-    // if (!service.title) {
-    //   setError("כותרת ריקה");
-    // } else if (!service.price) {
-    //   setError("לא הוזן מחיר");
-    // } else if (!service.duration) {
-    //   setError("לא הוזן זמן");
-    // } else {      
-    props.postService(service);
-
-    // const services = props.values.services;
-    // if (EditMode) {
-    //   const findService = (s: Service) => s.id === Service.id;
-    //   const i = services[Service.category].findIndex(findService);
-    //   services[Service.category].splice(i, 1);
-    // }
-    // if (!services[service.category]) {
-    //   services[service.category] = [];
-    // }
-    // service.id = uniqueId();
-    // services[service.category].push(service);
-    // props.onChange(e, "services", services);
-    // setService(initService);
-    // setError("");
-    // setEditMode(false);
-
+    if (EditMode) {
+      props.updateService(Service);
+      setEditMode(false);
+    }
+    else {
+      props.postService(service);
+      if(!props.error){
+        setService(initService);  
+      }
+    }
+     nextPage = true;
   };
-  // console.log(cloneDeep(props.values.services));
 
   // AutoComplete Item
   let optionList;
@@ -166,6 +133,7 @@ const Services: React.FC<Props> = (props) => {
       );
     }
   }
+   
 
   return (
     <div className={ServicesStyle.Services}>
@@ -250,13 +218,16 @@ const Services: React.FC<Props> = (props) => {
           onClick={(e: any) => addNewService(e, Service)}
           color="purple-register"
         >
-          הוסף שירות
+          {EditMode ? 'עדכן שירות' : 'הוסף שירות'}
         </Button>
       </div>
 
       <div className={BusinessRegistrationStyle.Buttons}>
         <Button onClick={() => props.step("decrement")} color="orange"> חזור </Button>
-        <Button onClick={() => props.step("increment")} color="purple-register"> סיום </Button>
+        <Button onClick={() => {
+          console.log(props.getAllServices());
+          
+        }}  color="purple-register"> סיום </Button>
       </div>
     </div>
   );
@@ -270,9 +241,17 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   postService: (form: Service) => dispatch(postService(form)),
+  updateService: (service: Service) => dispatch(updateService(service)),
+  getAllServices: () => dispatch(getAllServices())
+
 });
 
-export default connect<serviceState, DispatchProps>(
-  mapStateToProps,
-  mapDispatchToProps
-)(Services);
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Services,
+  (prevState, nextState) => {
+    console.log('Services');
+    if (!nextState.loading && !nextState.error && nextPage) {
+     // prevState.step('increment');
+      return true;
+    }
+    return false;
+  }));

@@ -32,27 +32,14 @@ exports.postService = async (req, res, next) => {
 
 exports.getServices = async (req, res, next) => {
   try {
-    error422(req);
-    const Service = require("../../models/service.model")(req.mongo);
-
-    error403Admin(req);
-
-    const { title, price, duration } = req.body;
-
-    const service = new Service({
-      title: title,
-      price: price,
-      duration: duration,
-    });
-
-    await service.save();
-
+    const services = await Service(req.mongo).find();    
+    error404(services)
     res.status(201).json({
-      msg: "create new service",
-      service: service,
+      msg: "all the services",
+      services
     });
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    return next(error);
   }
 };
 

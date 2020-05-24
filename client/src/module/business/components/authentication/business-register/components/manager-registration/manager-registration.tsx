@@ -28,7 +28,6 @@ const ManagerRegistration: React.FC<Props> = (props) => {
 
   // Checks the information in front of the server
   const onClickNext = () => {
-    props.step('increment');
     const form = {
       firstName: props.values.managerFirstName,
       lastName: props.values.managerLastName,
@@ -36,11 +35,9 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       email: props.values.managerEmail,
       password: props.values.password,
     };
-    props.registerEmployee(form, props.values.domain);
+    props.registerEmployee(form);
     nextPage = true;
   };
-
-  //if (props.loading) return <div>Loading...</div>;
 
   return (
     <div className={ManagerRegistrationStyle.Manager}>
@@ -147,14 +144,17 @@ const ManagerRegistration: React.FC<Props> = (props) => {
         </div>
       </div>
 
-      <div className={BusinessRegistrationStyle.Buttons}>
-        <Button onClick={() => props.step("decrement")} color="orange">
-          חזור
+      {!props.loading ?
+        <div className={BusinessRegistrationStyle.Buttons}>
+          <Button onClick={() => props.step("decrement")} color="orange">
+            חזור
         </Button>
-        <Button onClick={onClickNext} color="purple-register">
-          המשך
+          <Button onClick={onClickNext} color="purple-register">
+            המשך
         </Button>
-      </div>
+        </div> :
+        <div>Loading...</div>
+      }
     </div>
   );
 };
@@ -165,7 +165,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  registerEmployee: (form: any, domain: string) => dispatch(registerEmployee(form, domain))
+  registerEmployee: (form: any) => dispatch(registerEmployee(form))
 
 });
 

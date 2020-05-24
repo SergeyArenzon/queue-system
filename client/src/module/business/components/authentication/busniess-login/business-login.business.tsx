@@ -38,7 +38,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
       phone: Form.phone,
       password: Form.password
     };
-    props.loginEmployee(form, Domain);
+    props.loginEmployee(form);
     nextPage = true;
   };
 
@@ -124,7 +124,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  loginEmployee: (form: FormState, domain: string) => dispatch(loginEmployee(form, domain))
+  loginEmployee: (form: FormState) => dispatch(loginEmployee(form))
 }); 
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(BusinessLogin);
