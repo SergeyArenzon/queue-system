@@ -1,6 +1,6 @@
 import {
   loginEmployeeForm,
-  newEmployeeForm,
+  employeeForm,
   AuthActionsEnum,
   businessForm,
 } from "./auth.types";
@@ -27,7 +27,7 @@ export const getDomain = (domain: string) => {
   };
 };
 
-export const registerEmployee = (form: newEmployeeForm) => {
+export const registerEmployee = (form: employeeForm) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
     const domain = localStorage.getItem("domain");
@@ -124,3 +124,13 @@ export const loginEmployee = (form: loginEmployeeForm) => {
       });
   };
 };
+
+
+export const signInCheck = () => {
+  const token = localStorage.getItem("token");
+  const domain = localStorage.getItem("domain");
+  if (token && domain) {
+    return { type: AuthActionsEnum.SIGN_IN, ans: true }
+  }
+  return { type: AuthActionsEnum.SIGN_IN, ans: false }
+}

@@ -1,6 +1,8 @@
 export interface AuthState {
   error: string;
   loading: boolean;
+  isSignIn: boolean;
+  isAdmin: boolean
 }
 
 export enum AuthActionsEnum {
@@ -8,6 +10,7 @@ export enum AuthActionsEnum {
   POST_BUSINESS = "POST_BUSINESS",
   SUCCESS_POST_BUSINESS = "SUCCESS_POST_BUSINESS",
   FALID_POST_BUSINESS = "FALID_POST_BUSINESS",
+  SIGN_IN = "SIGN_IN"
 }
 
 export interface AuthActionPattern {
@@ -20,7 +23,7 @@ export interface startPostBusinessActionType extends AuthActionPattern {
 
 export interface postBusinessActionType extends AuthActionPattern {
   type: AuthActionsEnum.POST_BUSINESS;
-  form: newBusniessForm;
+  form: businessForm;
 }
 
 export interface successPostBusinesActionType extends AuthActionPattern {
@@ -32,16 +35,14 @@ export interface faildPostBusinesActionType extends AuthActionPattern {
   error: Error;
 }
 
-export type newBusniessForm = {
-  // employeeDeatils: { name: string, phone: string, email: string, password: string },
-  // businessDetails: { name: string, phone: string, email: string }
-  name: string;
-  phone: string;
-  email: string;
-  password: string;
-};
+export interface signInActionType extends AuthActionPattern {
+  type: AuthActionsEnum.SIGN_IN;
+  ans: boolean;
+}
 
-export type newEmployeeForm = {
+
+
+export type employeeForm = {
   firstName: string;
   lastName: string;
   phone: string;

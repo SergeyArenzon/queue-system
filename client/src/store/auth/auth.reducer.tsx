@@ -1,10 +1,11 @@
 import { initialAuthState } from "./auth.state";
 import {
   startPostBusinessActionType, postBusinessActionType, successPostBusinesActionType,
-  faildPostBusinesActionType, AuthActionsEnum
+  faildPostBusinesActionType, AuthActionsEnum, signInActionType
 } from "./auth.types";
 
-type allAuthActionTypes = startPostBusinessActionType | postBusinessActionType | successPostBusinesActionType | faildPostBusinesActionType
+type allAuthActionTypes = startPostBusinessActionType | postBusinessActionType | successPostBusinesActionType | faildPostBusinesActionType |
+  signInActionType;
 
 
 export const authReducer = (state = initialAuthState, action: allAuthActionTypes) => {
@@ -33,6 +34,12 @@ export const authReducer = (state = initialAuthState, action: allAuthActionTypes
         error: action.error
       };
 
+    case AuthActionsEnum.SIGN_IN:
+      console.log("SIGN_IN");
+      return {
+        ...state,
+        isSignIn: action.ans
+      };
   }
   return state;
 

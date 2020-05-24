@@ -33,13 +33,15 @@ exports.postService = async (req, res, next) => {
 
 exports.getServices = async (req, res, next) => {
   try {
+    const Service = require("../../models/service.model");
+    
     const services = await Service(req.mongo).find();
     error404(services);
     res.status(201).json({
       msg: "all the services",
       services,
     });
-  } catch (error) {
+  } catch (error) {    
     return next(error);
   }
 };

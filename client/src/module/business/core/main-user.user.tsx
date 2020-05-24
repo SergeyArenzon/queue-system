@@ -6,7 +6,6 @@ const MainUser = () => {
     return (
         <React.Fragment>
             <MenuUser />
-            <UserRouting />  
         </React.Fragment>
     )
 }

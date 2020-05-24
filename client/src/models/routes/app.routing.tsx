@@ -6,15 +6,16 @@ import Customers from "../../module/business/components/customers/customers.busi
 import CalendarUser from "../../module/business/components/calendar/calendar.business";
 import BusinessRegister from "../../module/business/components/authentication/business-register/business-register.business";
 import BusinessLogin from "../../module/business/components/authentication/busniess-login/business-login.business";
+import PrivateRoute from "./private-route.routes";
+import AdminRoute from "./admin-route.routes";
 
 const Routing = () => {
   return (
     <Switch>
       <Route exact path="/business" component={Home} />
-      <Route path="/business/allcustomers" component={Customers} />
-      <Route path="/business/calander" component={CalendarUser} />
+      <PrivateRoute path="/business/allcustomers" component={Customers} />
+      <AdminRoute path="/business/calander" component={CalendarUser} />
       <Route path="/business/register" component={BusinessRegister} />
-
       <Route path="/business/login" component={BusinessLogin} />
     </Switch>
   );

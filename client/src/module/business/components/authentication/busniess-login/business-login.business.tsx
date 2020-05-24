@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BusinessLoginStyle from './business-login.module.scss';
 import BusinessRegisterStyle from '../business-register/business-register.module.scss';
 import ManagerRegistrationStyle from "../business-register/components/manager-registration/manager-registration.module.scss";
@@ -31,7 +31,13 @@ const BusinessLogin: React.FC<Props> = (props) => {
     password: "",
   });
 
-  const [Domain, setDomain] = useState('');
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const domain = localStorage.getItem("domain");
+    console.log(domain, token);
+
+  }, [])
+
   // Checks the information in front of the server
   const onClickNext = () => {
     const form = {
@@ -75,21 +81,6 @@ const BusinessLogin: React.FC<Props> = (props) => {
                 />
               </div>
 
-              {/* Domain */}
-              <div className={ManagerRegistrationStyle.Field}>
-                <label htmlFor="domain">דומיין *</label>
-
-                <input
-                  id="domain"
-                  name="domain"
-                  required
-                  type="text"
-                  value={Domain}
-                  placeholder=""
-                  onChange={(e) => { setDomain(e.target.value) }}
-                />
-              </div>
-
               {/* Password */}
               <div className={ManagerRegistrationStyle.Field}>
                 <label htmlFor="password">סיסמא *</label>
@@ -125,6 +116,6 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   loginEmployee: (form: FormState) => dispatch(loginEmployee(form))
-}); 
+});
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(BusinessLogin);

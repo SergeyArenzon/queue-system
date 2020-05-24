@@ -19,10 +19,9 @@ exports.register = async (req, res, next) => {
       phone,
       domain: req.mongo.name,
     });
-    console.log("afadf");
 
     await domain.save();
-    console.log("aaaaaaaaa");
+
 
     const hashedPw = await bcrypt.hash(password, 12);
 
@@ -59,7 +58,7 @@ exports.employeeLogin = async (req, res, next) => {
     const isEqual = await bcrypt.compare(password, employee.password);
     error401(isEqual);
     const token = createToken(employee);
-    res.status(200).json({ message: "employee login success", token: token });
+    res.status(200).json({ message: "employee login success", token, domain: domain.domain });
   } catch (error) {
     return next(error);
   }

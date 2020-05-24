@@ -71,5 +71,5 @@ app.use((error, req, res, next) => {
 });
 
 app.use(function (req, res, next) {
-  res.status(404).json({ message: "שגיאה כללית" });
+  res.status(404).json({ message: "כתובת לא נמצאה" });
 });
