@@ -12,6 +12,7 @@ import Timeline from './components/timeline/timeline';
 import Domain from './components/domain/domain';
 
 interface FormState {
+    domain: string,
     managerFirstName: string,
     managerLastName: string,
     managerPhone: string,
@@ -43,6 +44,7 @@ type Props = DispatchProps & StateProps;
 const BusinessRegister: React.FC<Props> = (props) => {
 
     const [Form, setForm] = useState<FormState>({
+        domain: '',
         managerFirstName: '',
         managerLastName: '',
         managerPhone: '',
@@ -84,10 +86,10 @@ const BusinessRegister: React.FC<Props> = (props) => {
         });
     }
 
-    const { managerFirstName, managerLastName, managerPhone, managerEmail, password, validatePassword, businessName, businessAddress,
+    const { domain, managerFirstName, managerLastName, managerPhone, managerEmail, password, validatePassword, businessName, businessAddress,
         businessPhone, businessEmail, logo, socialMediaLinks, about, services, workDays, workHours } = Form;
     const values = {
-        managerFirstName, managerLastName, managerPhone, managerEmail, password, validatePassword, businessName, businessAddress,
+        domain, managerFirstName, managerLastName, managerPhone, managerEmail, password, validatePassword, businessName, businessAddress,
         businessPhone, businessEmail, logo, socialMediaLinks, about, services, workDays, workHours
     }
 
@@ -98,7 +100,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
             </div>
 
             <div className={BusinessRegisterStyle.Form}>
-                {Step === 1 && <Domain step={step}/>}
+                {Step === 1 && <Domain step={step} onChange={onChange} values={values} />}
 
                 {Step === 2 && <ManagerRegistration step={step} onChange={onChange} values={values} />}
 

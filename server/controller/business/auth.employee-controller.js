@@ -1,4 +1,4 @@
-const { error401, error404, error422 } = require("../../helper/dbErrorHandler");
+const { errorPassword401: error401, error404, error422 } = require("../../helper/dbErrorHandler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken"); // to generate signed token
 

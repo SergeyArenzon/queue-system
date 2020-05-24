@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import ManagerRegistrationStyle from "../manager-registration/manager-registration.module.scss";
 import Button from '../../../../../../../models/ui/button/button';
 import { connect } from 'react-redux';
@@ -6,8 +6,11 @@ import { getLoading, getError } from '../../../../../../../store/auth/auth.selec
 import { getDomain } from '../../../../../../../store/auth/auth.actions';
 
 interface OwnProps {
-    step: (step: "decrement" | "increment") => void;
-}
+    step: (step: 'decrement' | 'increment') => void,
+    onChange: (e: any, name: string, value?: any) => void,
+    values: any
+  }
+  
 
 interface StateProps {
     loading: boolean;
@@ -18,17 +21,19 @@ interface DispatchProps {
     getDomain: typeof getDomain
 }
 
+// Become true when user click on next in the first time
+let nextPage = false;
+
 type Props = DispatchProps & StateProps & OwnProps;
 const Domain: React.FC<Props> = (props) => {
-    const [Name, setName] = useState<string>('');
-
-
 
     // Checks the information in the server
     const onClickNext = () => {
-        //props.step('increment');
-        props.getDomain(Name);
+        props.getDomain(props.values.domain);
+        nextPage = true;
     };
+
+    if (!props.loading && !props.error && nextPage) props.step('increment');
 
     return (
         <div>
@@ -39,7 +44,7 @@ const Domain: React.FC<Props> = (props) => {
                 </p>
             </div>
 
-            {props.error && <p className={ManagerRegistrationStyle.Error}>{props.error}</p>}
+            {props.error && <p className={ManagerRegistrationStyle.Error} style={{ marginBottom: '-50px' }}>{props.error}</p>}
 
 
             <div className={ManagerRegistrationStyle.Body} style={{ marginTop: '50px' }}>
@@ -52,9 +57,9 @@ const Domain: React.FC<Props> = (props) => {
                         name="name"
                         required={true}
                         type="text"
-                        value={Name}
+                        value={props.values.domain}
                         placeholder=""
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => props.onChange(e, 'domain')}
                     />
                 </div>
             </div>
@@ -80,4 +85,12 @@ const mapDispatchToProps = (dispatch: any) => ({
     getDomain: (domain: string) => dispatch(getDomain(domain))
 });
 
-export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Domain);
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Domain,
+    (prevState, nextState) => {
+        console.log('Domain');
+        if (!nextState.loading && !nextState.error && nextPage) {
+            prevState.step('increment');
+            return true;
+        }
+        return false;
+    }));

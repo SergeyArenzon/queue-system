@@ -1,6 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { connect } from "react-redux";
 import ManagerRegistrationStyle from "./manager-registration.module.scss";
+import BusinessRegistrationStyle from "../business-registration/business-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
 import { registerEmployee } from "../../../../../../../store/auth/auth.actions";
 import { getLoading, getError } from "../../../../../../../store/auth/auth.selectors";
@@ -35,13 +36,11 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       email: props.values.managerEmail,
       password: props.values.password,
     };
-    props.registerEmployee(form);
+    props.registerEmployee(form, props.values.domain);
     nextPage = true;
   };
 
   //if (props.loading) return <div>Loading...</div>;
-  if (!props.loading && !props.error && nextPage) props.step('increment');
-
 
   return (
     <div className={ManagerRegistrationStyle.Manager}>
@@ -148,8 +147,13 @@ const ManagerRegistration: React.FC<Props> = (props) => {
         </div>
       </div>
 
-      <div className={ManagerRegistrationStyle.Buttons} onClick={onClickNext}>
-        <Button color="purple-register">המשך</Button>
+      <div className={BusinessRegistrationStyle.Buttons}>
+        <Button onClick={() => props.step("decrement")} color="orange">
+          חזור
+        </Button>
+        <Button onClick={onClickNext} color="purple-register">
+          המשך
+        </Button>
       </div>
     </div>
   );
@@ -161,8 +165,16 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  registerEmployee: (form: any) => dispatch(registerEmployee(form))
+  registerEmployee: (form: any, domain: string) => dispatch(registerEmployee(form, domain))
 
 });
 
-export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(ManagerRegistration);
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(ManagerRegistration,
+  (prevState, nextState) => {
+    console.log('ManagerRegistration');
+    if (!nextState.loading && !nextState.error && nextPage) {
+      prevState.step('increment');
+      return true;
+    }
+    return false;
+  }));

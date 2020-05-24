@@ -48,7 +48,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
       links: props.values.socialMediaLinks,
       about: props.values.about
     };
-    props.registerBusiness(form);
+    props.registerBusiness(form, props.values.domain);
     nextPage = true;
   };
 
@@ -200,7 +200,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  registerBusiness: (form: newBusinessForm) => dispatch(registerBusiness(form))
+  registerBusiness: (form: newBusinessForm, domain: string) => dispatch(registerBusiness(form, domain))
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(BusinessRegistration);

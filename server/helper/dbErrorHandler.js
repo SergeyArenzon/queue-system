@@ -2,6 +2,13 @@
 const { validationResult } = require("express-validator");
 const hebrewErrorValidator = require("../validator/hebrewErrorValidator");
 
+exports.errorDomain401 = (isDomainExist) => {
+  if (!isDomainExist) {
+    const error = new Error(hebrewErrorValidator.wrongDomain401HebError);
+    error.statusCode = 401;
+    throw error;
+  }
+};
 exports.error422 = (req) => {
   const errors = validationResult(req);
   // console.log(errors);
@@ -15,7 +22,7 @@ exports.error422 = (req) => {
   }
 };
 
-exports.error401 = (isEqual) => {
+exports.errorPassword401 = (isEqual) => {
   if (!isEqual) {
     const error = new Error(hebrewErrorValidator.wrongPassword401HebError);
     error.statusCode = 401;

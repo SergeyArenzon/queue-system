@@ -31,13 +31,14 @@ const BusinessLogin: React.FC<Props> = (props) => {
     password: "",
   });
 
+  const [Domain, setDomain] = useState('');
   // Checks the information in front of the server
   const onClickNext = () => {
     const form = {
       phone: Form.phone,
       password: Form.password
     };
-    props.loginEmployee(form);
+    props.loginEmployee(form, Domain);
     nextPage = true;
   };
 
@@ -71,6 +72,21 @@ const BusinessLogin: React.FC<Props> = (props) => {
                   value={Form.phone}
                   placeholder=""
                   onChange={(e) => { setForm({ ...Form, 'phone': e.target.value }) }}
+                />
+              </div>
+
+              {/* Domain */}
+              <div className={ManagerRegistrationStyle.Field}>
+                <label htmlFor="domain">דומיין *</label>
+
+                <input
+                  id="domain"
+                  name="domain"
+                  required
+                  type="text"
+                  value={Domain}
+                  placeholder=""
+                  onChange={(e) => { setDomain(e.target.value) }}
                 />
               </div>
 
@@ -108,7 +124,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  loginEmployee: (form: FormState) => dispatch(loginEmployee(form))
-});
+  loginEmployee: (form: FormState, domain: string) => dispatch(loginEmployee(form, domain))
+}); 
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(BusinessLogin);

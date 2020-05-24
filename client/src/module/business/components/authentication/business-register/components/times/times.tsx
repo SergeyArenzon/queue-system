@@ -85,7 +85,7 @@ const Times: React.FC<Props> = (props) => {
             setError('לא הוזנו ימים')
         }
         else {
-            props.postBuisnessHours(schdule);
+            props.postBuisnessHours(schdule, props.values.domain);
         }
     }
 
@@ -177,7 +177,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    postBuisnessHours: (form: { [day: string]: { start: string, end: string }[] }) => dispatch(postBuisnessHours(form))
+    postBuisnessHours: (form: { [day: string]: { start: string, end: string }[] }, domain: string) => dispatch(postBuisnessHours(form, domain))
 
 });
 
