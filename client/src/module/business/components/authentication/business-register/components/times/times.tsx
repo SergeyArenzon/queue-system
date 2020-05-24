@@ -90,6 +90,7 @@ const Times: React.FC<Props> = (props) => {
     }
 
     //  if (props.loading) return <div>Loading...</div>;
+    if (!props.loading && !props.error && nextPage) props.step('increment');
 
     return (
         <div className={TimesStyle.Times}>
@@ -152,7 +153,7 @@ const Times: React.FC<Props> = (props) => {
                                 {
                                     hours.map((hour: string) => {
                                         if (props.values.workHours[CurDay]['start']) {
-                                            if (parseInt(props.values.workHours[CurDay]['start']) > parseInt(hour)) return
+                                            if (parseInt(props.values.workHours[CurDay]['start']) > parseInt(hour)) return;
                                         }
                                         return <option key={parseInt(hour) * 6} value={hour}>{hour}</option>
                                     })

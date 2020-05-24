@@ -7,6 +7,8 @@ import {
 import API from "../../models/axios/axios";
 
 export const getDomain = (domain: string) => {
+  console.log(domain);
+  
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
     API.get("check/" + domain)
@@ -115,7 +117,6 @@ export const loginEmployee = (form: loginEmployeeForm) => {
           type: AuthActionsEnum.FALID_POST_BUSINESS,
           error: msg,
         });
-        console.log(msg);
       });
   };
 };

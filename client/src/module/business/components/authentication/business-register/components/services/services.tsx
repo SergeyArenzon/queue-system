@@ -47,7 +47,6 @@ const initService: Service = {
 type Props = DispatchProps & StateProps & OwnProps;
 const Services: React.FC<Props> = (props) => {
   const [Service, setService] = useState<Service>(initService); // Hold the cuurent service
-  const [Error, setError] = useState<string>("");
   const [AutoComplete, setAutoComplete] = useState<AutoCompleteState>({
     showOptions: false,
     filteredOptions: [],

@@ -26,8 +26,7 @@ const Domain: React.FC<Props> = (props) => {
 
     // Checks the information in the server
     const onClickNext = () => {
-        props.step('increment');
-
+        //props.step('increment');
         props.getDomain(Name);
     };
 

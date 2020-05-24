@@ -84,10 +84,6 @@ const BusinessRegister: React.FC<Props> = (props) => {
         });
     }
 
-    const onSubmit = () => {
-
-    }
-
     const { managerFirstName, managerLastName, managerPhone, managerEmail, password, validatePassword, businessName, businessAddress,
         businessPhone, businessEmail, logo, socialMediaLinks, about, services, workDays, workHours } = Form;
     const values = {

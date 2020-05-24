@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import BusinessRegistrationStyle from "./business-registration.module.scss";
 import ManagerRegistrationStyle from "../manager-registration/manager-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";

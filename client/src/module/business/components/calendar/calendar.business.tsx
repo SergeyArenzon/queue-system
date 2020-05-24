@@ -8,8 +8,8 @@ import Button from '../../../../models/ui/button/button';
 import NewQueue from './components/add-new-queue/add-new-queue.calendar';
 
 const CalendarUser = () => {
-    const [StartHour, setStartHour] = useState(7);
-    const [EndHour, setEndHour] = useState(20);
+    const [StartHour] = useState(7);
+    const [EndHour] = useState(20);
     const [CurWeek, setCurWeek] = useState(parseInt(moment(new Date()).format('WW')))
     const [OpenModal, setOpenModal] = useState<boolean>(false)
     const [NewEvent, setNewEvent] = useState<{ date: string, hour: string }>({ date: "", hour: "" });
