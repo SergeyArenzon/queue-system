@@ -1,15 +1,21 @@
 const { body } = require("express-validator");
 // const Emplyee = require("../models/employee.model");
 
+const hebrewErrorValidator = require("./hebrewErrorValidator");
 exports.businessDetailsValidator = [
   //Business Details
-  body("name").trim().not().isEmpty().withMessage("שם העסק הוא שדה חובה"),
-  body("address", "כתובת העסק הוא שדה חובה").trim().notEmpty(),
-  body("email", "אימייל חייב להיות בין 3 ל 32 תווים")
+  body("name", hebrewErrorValidator.businessNameHebError)
     .trim()
-    .isEmail()
-    .normalizeEmail(),
-  body("phone", "טלפון העסק הוא שדה חובה").trim().isMobilePhone(),
+    .not()
+    .isEmpty(),
+  body("address", hebrewErrorValidator.businessAdressHebError)
+    .trim()
+    .notEmpty(),
+  body("email", hebrewErrorValidator.emailHebError)
+    .trim()
+    .normalizeEmail()
+    .isEmail(),
+  body("phone", hebrewErrorValidator.phoneHebError).trim().isMobilePhone(),
 ];
 
 // exports.businessHoursValidator = [

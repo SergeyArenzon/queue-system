@@ -11,7 +11,7 @@ module.exports = (kind) => {
     error401auth(token);
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
+      error404(decodedToken);
       switch (kind) {
         case "employee":
           req.employee = await Employee(req.mongo).findById(
@@ -30,7 +30,7 @@ module.exports = (kind) => {
           return next(error);
       }
     } catch (err) {
-      next(err);
+      return next(err);
     }
 
     return next();
