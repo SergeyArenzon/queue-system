@@ -15,7 +15,13 @@ exports.businessDetailsValidator = [
     .trim()
     .normalizeEmail()
     .isEmail(),
-  body("phone", hebrewErrorValidator.phoneHebError).trim().isMobilePhone(),
+  body("phone", hebrewErrorValidator.phoneHebError)
+    .trim()
+    .isMobilePhone()
+    .isLength({
+      min: 2,
+      max: 11,
+    }),
 ];
 
 // exports.businessHoursValidator = [

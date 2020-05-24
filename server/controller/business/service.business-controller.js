@@ -11,9 +11,10 @@ exports.postService = async (req, res, next) => {
 
     error403Admin(req);
 
-    const { title, price, duration } = req.body;
+    const { title, price, duration, category } = req.body;
 
     const service = new Service({
+      category,
       title: title,
       price: price,
       duration: duration,
@@ -32,11 +33,11 @@ exports.postService = async (req, res, next) => {
 
 exports.getServices = async (req, res, next) => {
   try {
-    const services = await Service(req.mongo).find();    
-    error404(services)
+    const services = await Service(req.mongo).find();
+    error404(services);
     res.status(201).json({
       msg: "all the services",
-      services
+      services,
     });
   } catch (error) {
     return next(error);
@@ -49,14 +50,17 @@ exports.putService = async (req, res, next) => {
     const Service = require("../../models/service.model")(req.mongo);
 
     const service = await Service.findById(req.params.serviceId);
+
     error404(service);
 
     error403Admin(req);
 
-    const { title, price, duration } = req.body;
+    const { title, price, duration, category } = req.body;
     service.title = title;
     service.price = price;
     service.duration = duration;
+    service.category = category;
+
     await service.save();
     res.status(200).json({
       message: "service update",

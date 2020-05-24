@@ -9,7 +9,7 @@ const cors = require("cors");
 // import routes
 const mongoose = require("mongoose");
 
-const { errorDomain401 } = require('./helper/dbErrorHandler')
+const { errorDomain401 } = require("./helper/dbErrorHandler");
 const app = express();
 
 // Middleware
@@ -30,15 +30,16 @@ mongoose
     console.log("DB Connected");
   });
 
-app.post("/login", require('./controller/business/auth.employee-controller').employeeLogin);
+app.post(
+  "/login",
+  require("./controller/business/auth.employee-controller").employeeLogin
+);
 
 app.get("/check/:businessUrl", async (req, res, next) => {
   const businessUrl = req.params.businessUrl;
   try {
-    let ans = await mongoose.connections[0].db
-      .admin()
-      .listDatabases({ listDatabases: 1, nameOnly: true });
-    ans = ans.databases.every((e) => e.name !== businessUrl) && businessUrl.length > 2;
+    let ans = await require("./models/domain.model").find();
+    ans = ans.every((e) => e.domain !== businessUrl) && businessUrl.length > 2;
     errorDomain401(ans);
     res.status(200).json({ message: "Domain is free" });
   } catch (error) {
@@ -51,6 +52,7 @@ app.use("/:businessUrl", async (req, res, next) => {
     const businessUrl = req.params.businessUrl;
 
     req.mongo = mongoose.connection.useDb(businessUrl);
+
     next();
   } catch (error) {
     next(error);

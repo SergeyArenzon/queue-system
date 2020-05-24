@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 const Emplyee = require("../models/employee.model");
-
+const Domain = require("../models/domain.model");
 const hebrewErrorValidator = require("./hebrewErrorValidator");
 
 exports.employeeValidator = [
@@ -33,15 +33,18 @@ exports.employeeValidator = [
       min: 6,
     }),
   body("phone", hebrewErrorValidator.phoneHebError)
+    .trim()
     .isMobilePhone()
+    .isLength({
+      min: 2,
+      max: 11,
+    })
     .custom((value, { req }) => {
-      return Emplyee(req.mongo)
-        .findOne({ phone: value })
-        .then((userDoc) => {
-          if (userDoc)
-            return Promise.reject(
-              hebrewErrorValidator.phoneRegisterExistHebError
-            );
-        });
+      return Domain.findOne({ phone: value }).then((userDoc) => {
+        if (userDoc)
+          return Promise.reject(
+            hebrewErrorValidator.phoneRegisterExistHebError
+          );
+      });
     }),
 ];

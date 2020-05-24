@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken"); // to generate signed token
 
 exports.register = async (req, res, next) => {
   const { firstName, lastName, phone, email, password, isAdmin } = req.body;
+  console.log("afds", req.mongo);
 
   const Employee = require("../../models/employee.model")(req.mongo);
   try {
@@ -19,10 +20,7 @@ exports.register = async (req, res, next) => {
       phone,
       domain: req.mongo.name,
     });
-    console.log("afadf");
-
     await domain.save();
-    console.log("aaaaaaaaa");
 
     const hashedPw = await bcrypt.hash(password, 12);
 

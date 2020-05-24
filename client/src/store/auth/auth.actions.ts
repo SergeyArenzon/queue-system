@@ -83,7 +83,7 @@ export const postBuisnessHours = (form: {
     const token = localStorage.getItem("token");
     const send = { schedule: { ...form }, token };
 
-    API.post( domain + "/business/details/hours", send)
+    API.post(domain + "/business/details/hours", send)
       .then((res) => {
         console.log(res.data.msg, "test");
       })
@@ -93,7 +93,7 @@ export const postBuisnessHours = (form: {
       .catch((error: any) => {
         const msg = error.response.data.message;
         console.log(msg);
-        
+
         return dispatch({
           type: AuthActionsEnum.FALID_POST_BUSINESS,
           error: msg,
@@ -105,7 +105,7 @@ export const postBuisnessHours = (form: {
 export const loginEmployee = (form: loginEmployeeForm) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
-    API.post("/business/auth/login", form)
+    API.post("/login", form)
       .then((res) => {
         const token = res.data.token;
         const domain = res.data.domain;
