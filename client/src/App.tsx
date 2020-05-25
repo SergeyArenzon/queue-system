@@ -22,20 +22,17 @@ const App: React.FC<Props> = (props) => {
 
   useEffect(() => {
     props.signInCheck();
+    
   });
 
 
   return (
     <BrowserRouter>
-      {
-        props.isSignIn ?
+
           <React.Fragment>
-            <Redirect to="/business" />
             <MainUser />
           </React.Fragment>
-          :
-          <Redirect to="/business/login" />}
-      }
+
 
       <Routing />
     </BrowserRouter>

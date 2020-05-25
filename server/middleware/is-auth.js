@@ -6,8 +6,7 @@ const Client = require("../models/client.model");
 
 module.exports = (kind) => {
   return async (req, res, next) => {
-    const token = req.body.token;
-
+    const token = req.body.token;        
     error401auth(token);
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);

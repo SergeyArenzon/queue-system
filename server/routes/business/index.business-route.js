@@ -22,6 +22,8 @@ router.get("/", async (req, res, next) => {
       // employee: req.employee,
     });
   } catch (error) {
+    console.log(error);
+    
     return next(error);
   }
 });

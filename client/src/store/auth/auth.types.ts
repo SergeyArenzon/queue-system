@@ -38,6 +38,7 @@ export interface faildPostBusinesActionType extends AuthActionPattern {
 export interface signInActionType extends AuthActionPattern {
   type: AuthActionsEnum.SIGN_IN;
   ans: boolean;
+  isAdmin: boolean;
 }
 
 
