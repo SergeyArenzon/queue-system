@@ -135,8 +135,6 @@ export const signInCheck = () => {
   return (dispatch: any, getState: any) => {
     API.post(domain + "/business", { token })
       .then((res) => {
-        console.log('signInCheck');
-
         const isAdmin = res.data.employee.isAdmin;
         return dispatch({ type: AuthActionsEnum.SIGN_IN, ans: true, isAdmin: isAdmin })
       })
