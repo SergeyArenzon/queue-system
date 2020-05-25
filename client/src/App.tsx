@@ -22,6 +22,7 @@ const App: React.FC<Props> = (props) => {
 
   useEffect(() => {
     props.signInCheck();
+    
   });
 
 

@@ -36,9 +36,12 @@ export const authReducer = (state = initialAuthState, action: allAuthActionTypes
 
     case AuthActionsEnum.SIGN_IN:
       console.log("SIGN_IN");
+      console.log(action.isAdmin);
+      
       return {
         ...state,
-        isSignIn: action.ans
+        isSignIn: action.ans,
+        isAdmin: action.isAdmin
       };
   }
   return state;

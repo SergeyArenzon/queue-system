@@ -19,6 +19,8 @@ const AdminRoute: React.SFC<Props> = ({ component: Component, ...rest }) => {
     if (!Component) {
         return null;
     }
+    console.log(rest.isAdmin);
+    
     return (
         <Route
             {...rest}

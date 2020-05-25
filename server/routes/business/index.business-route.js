@@ -1,6 +1,6 @@
 // module.exports = () => {
 
-const { isAuth } = require("../../middleware/is-auth");
+const isAuth = require("../../middleware/is-auth");
 const router = require("express").Router();
 
 const Business = require("../../models/business.model");
@@ -22,6 +22,8 @@ router.post("/", isAuth("employee"), async (req, res, next) => {
       employee: req.employee,
     });
   } catch (error) {
+    console.log(error);
+    
     return next(error);
   }
 });
