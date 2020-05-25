@@ -130,16 +130,18 @@ export const signInCheck = () => {
   const token = localStorage.getItem("token");
   const domain = localStorage.getItem("domain");
   if (!token || !domain) {
-    return { type: AuthActionsEnum.SIGN_IN, ans: false }
+    return { type: AuthActionsEnum.SIGN_IN, ans: false, isAdmin: false }
   }
   return (dispatch: any, getState: any) => {
     API.post(domain + "/business", { token })
       .then((res) => {
+        console.log('signInCheck');
+
         const isAdmin = res.data.employee.isAdmin;
-        return { type: AuthActionsEnum.SIGN_IN, ans: true, isAdmin: isAdmin }
+        return dispatch({ type: AuthActionsEnum.SIGN_IN, ans: true, isAdmin: isAdmin })
       })
       .catch((error: any) => {
-        return { type: AuthActionsEnum.SIGN_IN, ans: false, isAdmin: false }
+        return dispatch({ type: AuthActionsEnum.SIGN_IN, ans: false, isAdmin: false })
       });
   }
 }

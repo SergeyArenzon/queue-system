@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 //import MainUser from './module/business/core/main-user.user';
 import Routing from './models/routes/app.routing';
 import { BrowserRouter, Redirect } from 'react-router-dom';
-import MenuUser from './module/business/components/menu/menu-user.business';
 import { signInCheck } from './store/auth/auth.actions';
 import { getIsSignIn } from './store/auth/auth.selectors';
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import MainUser from './module/business/core/main-user.user';
 
 
@@ -22,18 +21,12 @@ const App: React.FC<Props> = (props) => {
 
   useEffect(() => {
     props.signInCheck();
-    
   });
 
 
   return (
     <BrowserRouter>
-
-          <React.Fragment>
-            <MainUser />
-          </React.Fragment>
-
-
+      <MainUser />
       <Routing />
     </BrowserRouter>
   );
