@@ -5,13 +5,19 @@ import {
   faildPostBusinesActionType,
   AuthActionsEnum,
   signInActionType,
+  startPostResetPasswordActionType,
+  successPostResetPasswordActionType,
+  faildPostResetPasswordActionType,
 } from "./auth.types";
 
 type allAuthActionTypes =
   | startPostBusinessActionType
   | successPostBusinesActionType
   | faildPostBusinesActionType
-  | signInActionType;
+  | signInActionType
+  | startPostResetPasswordActionType
+  | successPostResetPasswordActionType
+  | faildPostResetPasswordActionType;
 
 export const authReducer = (
   state = initialAuthState,
@@ -49,6 +55,31 @@ export const authReducer = (
         isSignIn: action.ans,
         isAdmin: action.isAdmin,
       };
+
+    case AuthActionsEnum.START_POST_RESET_PASSWORD:
+      console.log("START_POST_RESET_PASSWORD");
+      return {
+        ...state,
+        loading: true,
+        error: "",
+      };
+
+    case AuthActionsEnum.SUCCESS_POST_RESET_PASSWORD:
+      console.log("SUCCESS_POST_RESET_PASSWORD");
+      return {
+        ...state,
+        loading: false,
+        error: "",
+      };
+
+    case AuthActionsEnum.FALID_POST_RESET_PASSWORD:
+      console.log("FALID_POST_RESET_PASSWORD");
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+    default:
+      return state;
   }
-  return state;
 };

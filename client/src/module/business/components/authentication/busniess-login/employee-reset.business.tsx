@@ -5,13 +5,10 @@ import ManagerRegistrationStyle from "../business-register/components/manager-re
 import { connect } from "react-redux";
 import { getLoading, getError } from "../../../../../store/auth/auth.selectors";
 import Button from "../../../../../models/ui/button/button";
-import { loginEmployee } from "../../../../../store/auth/auth.actions";
-import { Route } from "react-router-dom";
+import { resetPasswordEmployee } from "../../../../../store/auth/auth.actions";
+import { resetPasswordEmployeeForm } from "../../../../../store/auth/auth.types";
 
-interface FormState {
-  phone: string;
-  password: string;
-}
+import { Route } from "react-router-dom";
 
 interface StateProps {
   loading: boolean;
@@ -19,18 +16,13 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  loginEmployee: typeof loginEmployee;
+  resetPasswordEmployee: typeof resetPasswordEmployee;
 }
-
-// Become true when user click on next in the first time
-let nextPage = false,
-  reset = false;
 
 type Props = DispatchProps & StateProps;
 const BusinessLogin: React.FC<Props> = (props) => {
-  const [Form, setForm] = useState<FormState>({
+  const [Form, setForm] = useState<resetPasswordEmployeeForm>({
     phone: "",
-    password: "",
   });
 
   useEffect(() => {
@@ -43,16 +35,15 @@ const BusinessLogin: React.FC<Props> = (props) => {
   const onClickNext = () => {
     const form = {
       phone: Form.phone,
-      password: Form.password,
     };
-    props.loginEmployee(form);
-    nextPage = true;
+    props.resetPasswordEmployee(form);
+    // nextPage = true;
   };
 
-  if (reset)
-    return <Route path="/business/resetpassword" component={BusinessLogin} />;
-  if (!props.loading && !props.error && nextPage)
-    return <div>התחברת בהצלחה</div>;
+  // if (reset)
+  //   return <Route path="/business/resetpassword" component={BusinessLogin} />;
+  // if (!props.loading && !props.error && nextPage)
+  //   return <div>התחברת בהצלחה</div>;
 
   return (
     <div className={BusinessRegisterStyle.Register}>
@@ -90,10 +81,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
             </div>
 
             <div onClick={onClickNext} className={BusinessLoginStyle.Button}>
-              <Button color="purple-register">התחבר</Button>
-            </div>
-            <div onClick={onClickNext} className={BusinessLoginStyle.Button}>
-              <Button color="purple-register">אפס סיסמא</Button>
+              <Button color="purple-register">שלח קוד איפוס</Button>
             </div>
           </React.Fragment>
         )}
@@ -108,7 +96,8 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  loginEmployee: (form: FormState) => dispatch(loginEmployee(form)),
+  resetPasswordEmployee: (form: resetPasswordEmployeeForm) =>
+    dispatch(resetPasswordEmployee(form)),
 });
 
 export default connect<StateProps, DispatchProps>(

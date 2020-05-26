@@ -1,4 +1,9 @@
-import { loginEmployeeForm, employeeForm, AuthActionsEnum } from "./auth.types";
+import {
+  loginEmployeeForm,
+  employeeForm,
+  AuthActionsEnum,
+  resetPasswordEmployeeForm,
+} from "./auth.types";
 import API from "../../models/axios/axios";
 
 export const getDomain = (domain: string) => {
@@ -88,6 +93,29 @@ export const signInCheck = () => {
           type: AuthActionsEnum.SIGN_IN,
           ans: false,
           isAdmin: false,
+        });
+      });
+  };
+};
+
+export const resetPasswordEmployee = (form: resetPasswordEmployeeForm) => {
+  return (dispatch: any, getState: any) => {
+    dispatch({ type: AuthActionsEnum.START_POST_RESET_PASSWORD });
+    API.post("/sendMessage", form)
+      .then((res) => {
+        const token = res.data.token;
+        console.log(res.data.message);
+
+        localStorage.setItem("token", token);
+      })
+      .then(() => {
+        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_RESET_PASSWORD });
+      })
+      .catch((error: any) => {
+        const msg = error.response.data.message;
+        return dispatch({
+          type: AuthActionsEnum.FALID_POST_RESET_PASSWORD,
+          error: msg,
         });
       });
   };
