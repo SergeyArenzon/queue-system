@@ -4,12 +4,13 @@ const { error401auth, error404 } = require("../helper/dbErrorHandler");
 
 const Client = require("../models/client.model");
 
-module.exports = (kind) => {
+module.exports = (kind, mongoose = null) => {
   return async (req, res, next) => {
-    const token = req.body.token;        
+    const token = kind === "resetPassword" ? req.params.token : req.body.token;
     error401auth(token);
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
       error404(decodedToken);
       switch (kind) {
         case "employee":
@@ -23,6 +24,17 @@ module.exports = (kind) => {
           req.client = await Client.findById(decodedToken.clientId);
           error404(req.client);
           break;
+
+        case "resetPassword":
+          req.domain = decodedToken.domain.domain;
+
+          req.mongo = mongoose.connection.useDb(req.domain);
+          req.employee = await Employee(req.mongo).findOne({
+            phone: decodedToken.phone,
+          });
+          error404(req.employee);
+          break;
+
         default:
           const error = new Error("error in the path");
           error.statusCode = 404;

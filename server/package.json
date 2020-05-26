@@ -20,7 +20,8 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.26.0",
     "mongoose": "^5.9.14",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "twilio": "^3.43.1"
   },
   "devDependencies": {
     "@types/mongoose": "^5.7.21",

@@ -48,3 +48,13 @@ exports.employeeValidator = [
       });
     }),
 ];
+
+exports.passwordIsEqualValidator = [
+  body("password", hebrewErrorValidator.passwordHebError)
+    .trim()
+    .notEmpty()
+    .isLength({
+      min: 6,
+    }),
+  // body("password", hebrewErrorValidator.passwordConfirmHebError).equals(),
+];

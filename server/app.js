@@ -35,6 +35,21 @@ app.post(
   require("./controller/business/auth.employee-controller").employeeLogin
 );
 
+app.post(
+  "/sendMessage",
+
+  require("./controller/business/auth.employee-controller")
+    .employeeSmsResetPassword
+);
+
+app.post(
+  "/resetPassword/:token",
+  require("./validator/employee.validator").passwordIsEqualValidator,
+  require("./middleware/is-auth")("resetPassword", mongoose),
+  require("./controller/business/auth.employee-controller")
+    .employeeResetPassword
+);
+
 app.get("/check/:businessUrl", async (req, res, next) => {
   const businessUrl = req.params.businessUrl;
   try {
@@ -62,6 +77,8 @@ app.use("/:businessUrl", async (req, res, next) => {
 require("./routes/index.route")(app);
 
 app.use((error, req, res, next) => {
+  // console.log(error);
+
   const status = error.statusCode || 500;
   const message = !error.statusCode
     ? error.name + " גישה נדחתה, נא להתחבר מחדש, אם זה חוזר אנא פנה לתמיכה"
