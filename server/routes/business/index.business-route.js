@@ -10,7 +10,7 @@ router.use("/auth", require("./auth.employee-route"));
 router.use("/service", require("./service.business-route"));
 router.use("/details", require("./details.business-route"));
 
-router.post("/", isAuth("employee"), async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const business = await Business(req.mongo).findOne();
     const services = await Service(req.mongo).find();
@@ -19,7 +19,7 @@ router.post("/", isAuth("employee"), async (req, res, next) => {
       msg: "all the business",
       services,
       business,
-      employee: req.employee,
+      // employee: req.employee,
     });
   } catch (error) {    
     return next(error);
