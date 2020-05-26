@@ -77,16 +77,16 @@ export const monthNumberToHeb = (month: number): string => {
 
 // Dictionary of events - id: Week Number , value: Array of events such that place i in the array represent a day 
 // (0 - Sunday... 2 - thursday). Every day its a dictionary of events such that the key is the start hour and the value is the event.
-export const events: { [id: number]: { [id: string]: Event }[] } = {}
+export const events: { [weekNumber: number]: { [startHour: string]: Event }[] } = {}
 
 events[20] = new Array(7)
 events[21] = new Array(7)
 events[22] = new Array(7)
 events[23] = new Array(7)
 
-const sunday: { [id: string]: Event } = {}; // All the events in sunday, week 20.
-const monday: { [id: string]: Event } = {};
-const wensday: { [id: string]: Event } = {};
+const sunday: { [startHour: string]: Event } = {}; // All the events in sunday, week 20.
+const monday: { [startHour: string]: Event } = {};
+const wensday: { [startHour: string]: Event } = {};
 
 sunday['14:45'] = {
     id: 1,
@@ -129,7 +129,7 @@ events[20][1] = monday;
 events[20][3] = wensday;
 
 events[21] = new Array(7);
-const sundayWeek21: { [id: string]: Event } = {}; // All the events in sunday week 21
+const sundayWeek21: { [startHour: string]: Event } = {}; // All the events in sunday week 21
 
 sundayWeek21['08:45'] = {
     id: 4,

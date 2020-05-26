@@ -21,9 +21,7 @@ router.post("/", isAuth("employee"), async (req, res, next) => {
       business,
       employee: req.employee,
     });
-  } catch (error) {
-    console.log(error);
-    
+  } catch (error) {    
     return next(error);
   }
 });
