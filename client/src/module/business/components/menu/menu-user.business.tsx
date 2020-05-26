@@ -9,6 +9,7 @@ import { MdSettings, MdKeyboardArrowLeft, MdPeople, MdDashboard } from 'react-ic
 
 const MenuUser = () => {
     const [ShowDropdown, setShowDropdown] = useState<boolean>(false);
+    const [ShowDropdownSettins, setShowDropdownSettins] = useState<boolean>(false);
     const [ShowMobileMenu, setShowMobileMenu] = useState<any>({ transform: "translateX(100%)" });
     const [IsMobile, setIsMobile] = useState<any>(false);
 
@@ -95,12 +96,18 @@ const MenuUser = () => {
                         </div>
                     </NavLink>
 
-                    <NavLink className={menuUserStyle.MenuItem} activeClassName={menuUserStyle.Current} to='/business/settings'>
-                        <div className={menuUserStyle.Text}>
-                            <MdSettings />
-                            <span>הגדרות</span>
+                    <div className={menuUserStyle.MenuItem + " " + menuUserStyle.Dropdown} >
+                        <div className={menuUserStyle.Text} onClick={() => { setShowDropdownSettins(!ShowDropdownSettins) }}>
+                            <MdPeople />
+                            <span >הגדרות</span>
+                            <MdKeyboardArrowLeft size="1.3rem" className={menuUserStyle.ArrowIcon}
+                                style={ShowDropdownSettins ? { transform: ' rotate(-90deg)' } : {}} />
                         </div>
-                    </NavLink>
+
+                        <Dropdown items={[{ title: 'שירותים', url: '/business/allcustomers' }, { title: 'שעות', url: '/business/customerweek' },
+                        { title: 'עובדים', url: '/business/customerweek' }, { title: 'הגדות כלליות', url: '/business/customerweek' }]}
+                            show={ShowDropdownSettins} />
+                    </div>
                 </div>
             </div>
         </React.Fragment>
