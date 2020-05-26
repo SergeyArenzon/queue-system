@@ -21,12 +21,16 @@ const App: React.FC<Props> = (props) => {
 
   useEffect(() => {
     props.signInCheck();
-  });
+  }, []);
+  
+console.log(props.isSignIn);
 
 
   return (
     <BrowserRouter>
-      <MainUser />
+      {
+        props.isSignIn && <MainUser />
+      }
       <Routing />
     </BrowserRouter>
   );

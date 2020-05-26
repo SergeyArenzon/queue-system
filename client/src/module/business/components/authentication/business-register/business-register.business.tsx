@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import BusinessRegisterStyle from './business-register.module.scss'
+import BusinessRegisterStyle from './business-register.module.scss';
+import * as language from '../../../../../assets/language/language';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { getLoading, getError } from '../../../../../store/auth/auth.selectors';
@@ -10,6 +11,9 @@ import Services from './components/services/services';
 import Times from './components/times/times';
 import Timeline from './components/timeline/timeline';
 import Domain from './components/domain/domain';
+import Modal from '../../../../../models/ui/modal/modal';
+import Input from '../../../../../models/ui/input/input';
+import Button from '../../../../../models/ui/button/button';
 
 interface FormState {
     domain: string,
@@ -27,7 +31,7 @@ interface FormState {
     socialMediaLinks: { [key: string]: string },
     about: string,
     services: { [key: string]: Service[] },
-    workTimes:  {[day: string]: { start: string, end: string }}
+    workTimes: { [day: string]: { start: string, end: string } }
 }
 
 interface StateProps {
@@ -41,15 +45,16 @@ interface DispatchProps {
 type Props = DispatchProps & StateProps;
 
 const BusinessRegister: React.FC<Props> = (props) => {
+    const [OpenModal, setOpenModal] = useState<boolean>(false)
 
     const [Form, setForm] = useState<FormState>({
         domain: '',
         managerFirstName: '',
         managerLastName: '',
-        managerPhone: '',
+        managerPhone: '0502243024',
         managerEmail: '',
-        password: '',
-        validatePassword: '',
+        password: '111111',
+        validatePassword: '111111',
         businessName: '',
         businessAddress: '',
         businessPhone: '',
@@ -61,7 +66,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
         workTimes: {}
     });
 
-    const [Step, setStep] = useState<number>(1);
+    const [Step, setStep] = useState<number>(2);
 
     const step = (step: 'decrement' | 'increment') => {
         if (step === "decrement") {
@@ -91,8 +96,48 @@ const BusinessRegister: React.FC<Props> = (props) => {
         businessPhone, businessEmail, logo, socialMediaLinks, about, services, workTimes
     }
 
+    const [phoneVerification, setphoneVerification] = useState<string>("");
+    const [ChangePhone, setChangePhone] = useState<boolean>(false);
+
     return (
         <div className={BusinessRegisterStyle.Register}>
+            {
+                OpenModal &&
+                <Modal title="אימות טלפון" color="purple-register">
+                    <div className={BusinessRegisterStyle.Modal}>
+                        {
+                            ChangePhone ?
+                                <p>נא הזן מספר טלפון תקין </p>
+                                :
+                                <p>שלחנו אלייך עכשיו SMS עם קוד אימות למספר {Form.managerPhone} </p>
+                        }
+                        {
+                            ChangePhone ?
+                                <Input label="מספר טלפון" name="phone" type="tel"
+                                    value={Form.managerPhone} onChange={(e) => onChange(e, "managerPhone")} />
+                                :
+                                <Input label="קוד אימות" name="phone" type="text"
+                                    value={phoneVerification} onChange={(e) => setphoneVerification(e.target.value)} />
+                        }
+
+                        <div className={BusinessRegisterStyle.Buttons}>
+                            {
+                                ChangePhone ?
+                                    <React.Fragment>
+                                        <Button color="orange" onClick={() => setChangePhone(false)}>החלף מספר</Button>
+                                    </React.Fragment>
+                                    :
+                                    <React.Fragment>
+                                        <Button color="orange" onClick={() => setChangePhone(true)}>החלף מספר</Button>
+                                        <Button color="purple-register">{language.next[1]}</Button>
+
+                                    </React.Fragment>
+                            }
+                        </div>
+                    </div>
+
+                </Modal>
+            }
             <div className={BusinessRegisterStyle.Timeline}>
                 <Timeline step={Step} />
             </div>
@@ -100,7 +145,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
             <div className={BusinessRegisterStyle.Form}>
                 {Step === 1 && <Domain step={step} onChange={onChange} values={values} />}
 
-                {Step === 2 && <ManagerRegistration step={step} onChange={onChange} values={values} />}
+                {Step === 2 && <ManagerRegistration openModal={() => setOpenModal(!OpenModal)} step={step} onChange={onChange} values={values} />}
 
                 {Step === 3 && <BusinessRegistration step={step} onChange={onChange} values={values} />}
 

@@ -13,6 +13,7 @@ interface OwnProps {
   step: (step: "decrement" | "increment") => void;
   onChange: (e: any, name: string) => void;
   values: any;
+  openModal: () => void;
 }
 
 interface StateProps {
@@ -53,7 +54,6 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       props.registerEmployee(form);
       nextPage = true;
     }
-
   };
 
   return (
@@ -116,8 +116,11 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(ManagerRegistration,
   (prevProps, nextProps) => {
     console.log('ManagerRegistration');
-    if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
-      nextProps.step('increment');
+    //if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
+
+    if (!nextProps.loading && nextPage && Error.length <= 1) {
+      //nextProps.step('increment');
+      prevProps.openModal()
       return true;
     }
     return false;

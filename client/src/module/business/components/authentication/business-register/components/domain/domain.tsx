@@ -80,9 +80,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Domain,
     (prevProps, nextProps) => {
-        console.log('Domain');
-        console.log(Error.length);
-        
+        console.log('Domain');        
         if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
             nextProps.step('increment');
             return true;
