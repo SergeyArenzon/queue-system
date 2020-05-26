@@ -42,9 +42,6 @@ exports.register = async (req, res, next) => {
   const { firstName, lastName, phone, email, password, isAdmin } = req.body;
 
   try {
-    transpoter.sendMail({
-      to,
-    });
     error422(req);
     const Employee = require("../../models/employee.model")(req.mongo);
 

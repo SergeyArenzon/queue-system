@@ -29,7 +29,6 @@ mongoose
   .then(() => {
     console.log("DB Connected");
   });
-  
 
 app.get(
   "/mail",
@@ -83,7 +82,7 @@ app.use("/:businessUrl", async (req, res, next) => {
 require("./routes/index.route")(app);
 
 app.use((error, req, res, next) => {
-  // console.log(error);
+  console.log(error);
 
   const status = error.statusCode || 500;
   const message = !error.statusCode

@@ -1,9 +1,4 @@
-import {
-  loginEmployeeForm,
-  employeeForm,
-  AuthActionsEnum,
-  businessForm,
-} from "./auth.types";
+import { loginEmployeeForm, employeeForm, AuthActionsEnum } from "./auth.types";
 import API from "../../models/axios/axios";
 
 export const getDomain = (domain: string) => {
@@ -49,59 +44,6 @@ export const registerEmployee = (form: employeeForm) => {
   };
 };
 
-export const registerBusiness = (form: businessForm) => {
-  return (dispatch: any, getState: any) => {
-    dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
-    const token = localStorage.getItem("token");
-    const send = { ...form, token };
-    const domain = localStorage.getItem("domain");
-
-    API.post(domain + "/business/details", send)
-      .then((res) => {
-        console.log(res.data.msg, "test");
-      })
-      .then(() => {
-        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_BUSINESS });
-      })
-      .catch((error: any) => {
-        const msg = error.response.data.message;
-        return dispatch({
-          type: AuthActionsEnum.FALID_POST_BUSINESS,
-          error: msg,
-        });
-      });
-  };
-};
-
-export const postBuisnessHours = (form: {
-  [day: string]: { start: string; end: string }[];
-}) => {
-  return (dispatch: any, getState: any) => {
-    const domain = localStorage.getItem("domain");
-
-    dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
-    const token = localStorage.getItem("token");
-    const send = { schedule: { ...form }, token };
-
-    API.post(domain + "/business/details/hours", send)
-      .then((res) => {
-        console.log(res.data.msg, "test");
-      })
-      .then(() => {
-        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_BUSINESS });
-      })
-      .catch((error: any) => {
-        const msg = error.response.data.message;
-        console.log(msg);
-
-        return dispatch({
-          type: AuthActionsEnum.FALID_POST_BUSINESS,
-          error: msg,
-        });
-      });
-  };
-};
-
 export const loginEmployee = (form: loginEmployeeForm) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_POST_BUSINESS });
@@ -125,21 +67,28 @@ export const loginEmployee = (form: loginEmployeeForm) => {
   };
 };
 
-
 export const signInCheck = () => {
   const token = localStorage.getItem("token");
   const domain = localStorage.getItem("domain");
   if (!token || !domain) {
-    return { type: AuthActionsEnum.SIGN_IN, ans: false, isAdmin: false }
+    return { type: AuthActionsEnum.SIGN_IN, ans: false, isAdmin: false };
   }
   return (dispatch: any, getState: any) => {
     API.post(domain + "/business", { token })
       .then((res) => {
         const isAdmin = res.data.employee.isAdmin;
-        return dispatch({ type: AuthActionsEnum.SIGN_IN, ans: true, isAdmin: isAdmin })
+        return dispatch({
+          type: AuthActionsEnum.SIGN_IN,
+          ans: true,
+          isAdmin: isAdmin,
+        });
       })
       .catch((error: any) => {
-        return dispatch({ type: AuthActionsEnum.SIGN_IN, ans: false, isAdmin: false })
+        return dispatch({
+          type: AuthActionsEnum.SIGN_IN,
+          ans: false,
+          isAdmin: false,
+        });
       });
-  }
-}
+  };
+};

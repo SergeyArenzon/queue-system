@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { getLoading, getError } from "../../../../../store/auth/auth.selectors";
 import Button from "../../../../../models/ui/button/button";
 import { loginEmployee } from "../../../../../store/auth/auth.actions";
-import { NavLink, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 interface FormState {
   phone: string;
@@ -23,7 +23,8 @@ interface DispatchProps {
 }
 
 // Become true when user click on next in the first time
-let nextPage = false;
+let nextPage = false,
+  reset = false;
 
 type Props = DispatchProps & StateProps;
 const BusinessLogin: React.FC<Props> = (props) => {
@@ -31,7 +32,6 @@ const BusinessLogin: React.FC<Props> = (props) => {
     phone: "",
     password: "",
   });
-  const [reset, setReset] = useState<boolean>(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -48,14 +48,9 @@ const BusinessLogin: React.FC<Props> = (props) => {
     props.loginEmployee(form);
     nextPage = true;
   };
-  const resetPasswordHandler = () => {
-    console.log("here");
 
-    setReset(true);
-  };
-  console.log(reset);
-
-  if (reset) return <Redirect to="/business/resetpassword" />;
+  if (reset)
+    return <Route path="/business/resetpassword" component={BusinessLogin} />;
   if (!props.loading && !props.error && nextPage)
     return <div>התחברת בהצלחה</div>;
 
@@ -67,7 +62,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
         <div className={ManagerRegistrationStyle.Header}>
           <p className={ManagerRegistrationStyle.Title}>התחברות עובד</p>
           <p className={ManagerRegistrationStyle.SubTitle}>
-            ברוך שובך למערכת, נא הכנס את פרטי ההתחברות שלך.
+            נא הקלד מס טלפון לאיפוס
           </p>
         </div>
 
@@ -92,32 +87,12 @@ const BusinessLogin: React.FC<Props> = (props) => {
                   }}
                 />
               </div>
-
-              {/* Password */}
-              <div className={ManagerRegistrationStyle.Field}>
-                <label htmlFor="password">סיסמא *</label>
-
-                <input
-                  id="password"
-                  name="password"
-                  required
-                  type="password"
-                  value={Form.password}
-                  placeholder=""
-                  onChange={(e) => {
-                    setForm({ ...Form, password: e.target.value });
-                  }}
-                />
-              </div>
             </div>
 
             <div onClick={onClickNext} className={BusinessLoginStyle.Button}>
               <Button color="purple-register">התחבר</Button>
             </div>
-            <div
-              onClick={resetPasswordHandler}
-              className={BusinessLoginStyle.Button}
-            >
+            <div onClick={onClickNext} className={BusinessLoginStyle.Button}>
               <Button color="purple-register">אפס סיסמא</Button>
             </div>
           </React.Fragment>

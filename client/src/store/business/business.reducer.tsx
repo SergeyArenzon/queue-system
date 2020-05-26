@@ -1,24 +1,24 @@
-import { initialAuthState } from "./auth.state";
+import { initialAuthState } from "./business.state";
 import {
   startPostBusinessActionType,
+  postBusinessActionType,
   successPostBusinesActionType,
   faildPostBusinesActionType,
-  AuthActionsEnum,
-  signInActionType,
-} from "./auth.types";
+  BusinessActionsEnum,
+} from "./business.types";
 
 type allAuthActionTypes =
   | startPostBusinessActionType
+  | postBusinessActionType
   | successPostBusinesActionType
-  | faildPostBusinesActionType
-  | signInActionType;
+  | faildPostBusinesActionType;
 
-export const authReducer = (
+export const businessReducer = (
   state = initialAuthState,
   action: allAuthActionTypes
 ) => {
   switch (action.type) {
-    case AuthActionsEnum.START_POST_BUSINESS:
+    case BusinessActionsEnum.START_POST_BUSINESS:
       console.log("START_POST_BUSINESS");
       return {
         ...state,
@@ -26,7 +26,7 @@ export const authReducer = (
         error: "",
       };
 
-    case AuthActionsEnum.SUCCESS_POST_BUSINESS:
+    case BusinessActionsEnum.SUCCESS_POST_BUSINESS:
       console.log("SUCCESS_POST_BUSINESS");
       return {
         ...state,
@@ -34,20 +34,12 @@ export const authReducer = (
         error: "",
       };
 
-    case AuthActionsEnum.FALID_POST_BUSINESS:
+    case BusinessActionsEnum.FALID_POST_BUSINESS:
       console.log("FALID_POST_BUSINESS");
       return {
         ...state,
         loading: false,
         error: action.error,
-      };
-
-    case AuthActionsEnum.SIGN_IN:
-      console.log("SIGN_IN");
-      return {
-        ...state,
-        isSignIn: action.ans,
-        isAdmin: action.isAdmin,
       };
   }
   return state;
