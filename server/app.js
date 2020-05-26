@@ -69,11 +69,9 @@ app.get("/check/:businessUrl", async (req, res, next) => {
 });
 
 app.use("/:businessUrl", async (req, res, next) => {
-  try {
+  try {    
     const businessUrl = req.params.businessUrl;
-
     req.mongo = mongoose.connection.useDb(businessUrl);
-
     next();
   } catch (error) {
     next(error);

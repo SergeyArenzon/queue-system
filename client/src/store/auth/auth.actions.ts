@@ -136,6 +136,8 @@ export const signInCheck = () => {
     API.post(domain + "/business", { token })
       .then((res) => {
         const isAdmin = res.data.employee.isAdmin;
+        console.log(res.data.employee, 'ss');
+        
         return dispatch({ type: AuthActionsEnum.SIGN_IN, ans: true, isAdmin: isAdmin })
       })
       .catch((error: any) => {

@@ -43,3 +43,24 @@
     }
   }
 }
+
+
+.Modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & p {
+    text-align: center;
+    color: $text-body;
+    font-weight: 400;
+    font-size: inherit;
+  }
+
+  & .Buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+    width: 80%;
+  }
+}
