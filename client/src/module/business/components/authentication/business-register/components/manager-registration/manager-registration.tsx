@@ -1,10 +1,13 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { connect } from "react-redux";
+import * as language from '../../../../../../../assets/language/language'
 import ManagerRegistrationStyle from "./manager-registration.module.scss";
 import BusinessRegistrationStyle from "../business-registration/business-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
 import { registerEmployee } from "../../../../../../../store/auth/auth.actions";
 import { getLoading, getError } from "../../../../../../../store/auth/auth.selectors";
+import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
+import Input from "../../../../../../../models/ui/input/input";
 
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
@@ -14,7 +17,7 @@ interface OwnProps {
 
 interface StateProps {
   loading: boolean;
-  error: Error
+  error: string
 }
 
 interface DispatchProps {
@@ -25,134 +28,75 @@ let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const ManagerRegistration: React.FC<Props> = (props) => {
+  const [Error, setError] = useState<string>("");
 
   // Checks the information in front of the server
   const onClickNext = () => {
-    const form = {
-      firstName: props.values.managerFirstName,
-      lastName: props.values.managerLastName,
-      phone: props.values.managerPhone,
-      email: props.values.managerEmail,
-      password: props.values.password,
-    };
-    props.registerEmployee(form);
-    nextPage = true;
+    //props.step('increment');
+    const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+
+    if (props.values.password !== props.values.validatePassword) {
+      setError(language.confirmPasswordError[1]);
+    }
+    else if (!phone.test(props.values.managerPhone)) {
+      setError(language.phoneError[1]);
+    }
+    else {
+      setError("");
+      const form = {
+        firstName: props.values.managerFirstName,
+        lastName: props.values.managerLastName,
+        phone: props.values.managerPhone,
+        email: props.values.managerEmail,
+        password: props.values.password,
+      };
+      props.registerEmployee(form);
+      nextPage = true;
+    }
+
   };
 
   return (
     <div className={ManagerRegistrationStyle.Manager}>
-      <div className={ManagerRegistrationStyle.Header}>
-        <p className={ManagerRegistrationStyle.Title}>הרשמת מנהל</p>
-        <p className={ManagerRegistrationStyle.SubTitle}>
-          הפרטים שתמלא בדף זה, יהיו פרטי ההתחברות שלך למערכת בעתיד.
-        </p>
-      </div>
-
-      {props.error && <p className={ManagerRegistrationStyle.Error}>{props.error}</p>}
+      <AuthenticationHeadrer title={language.managerHeaderTitle[1]} subTitle={language.managerHeaderSubTitle[1]}
+        error={Error ? Error : props.error} />
 
       <div className={ManagerRegistrationStyle.Body}>
         {/* First Name */}
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="firstname">שם פרטי *</label>
-          <input
-            pattern="[A-Za-z]{3}"
-            id="firstname"
-            name="firstname"
-            required={true}
-            type="text"
-            value={props.values.managerFirstName}
-            placeholder=""
-            onChange={(e) => props.onChange(e, "managerFirstName")}
-          />
-        </div>
+        <Input label={language.firstName[1]} name="firstname" type="text"
+          value={props.values.managerFirstName} onChange={(e) => props.onChange(e, 'managerFirstName')} />
 
         {/* Last Name */}
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="lastname">שם משפחה *</label>
-
-          <input
-            id="lastname"
-            name="lastname"
-            required={true}
-            type="text"
-            value={props.values.managerLastName}
-            placeholder=""
-            onChange={(e) => props.onChange(e, "managerLastName")}
-          />
-        </div>
+        <Input label={language.lastName[1]} name="lastname" type="text"
+          value={props.values.managerLastName} onChange={(e) => props.onChange(e, 'managerLastName')} />
 
         {/* Phone */}
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="phone">מספר טלפון *</label>
+        <Input label={language.phone[1]} name="phone" type="tel"
+          value={props.values.managerPhone} onChange={(e) => props.onChange(e, 'managerPhone')} />
 
-          <input
-            id="phone"
-            name="phone"
-            required
-            type="tel"
-            value={props.values.managerPhone}
-            placeholder=""
-            onChange={(e) => props.onChange(e, "managerPhone")}
-          />
-        </div>
-
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="email">אימייל *</label>
-
-          <input
-            id="email"
-            name="email"
-            required
-            type="email"
-            value={props.values.managerEmail}
-            placeholder=""
-            onChange={(e) => {
-              props.onChange(e, "managerEmail");
-            }}
-          />
-        </div>
+        {/* Email */}
+        <Input label={language.email[1]} name="email" type="email"
+          value={props.values.managerEmail} onChange={(e) => props.onChange(e, 'managerEmail')} />
 
         {/* Password */}
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="password">סיסמא *</label>
+        <Input label={language.password[1]} name="password" type="password"
+          value={props.values.password} onChange={(e) => props.onChange(e, 'password')} />
 
-          <input
-            id="password"
-            name="password"
-            required
-            type="password"
-            value={props.values.password}
-            placeholder=""
-            onChange={(e) => props.onChange(e, "password")}
-          />
-        </div>
-
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="validatePassword">וודא סיסמא *</label>
-
-          <input
-            id="validatePassword"
-            name="validatePassword"
-            required
-            type="password"
-            value={props.values.validatePassword}
-            placeholder=""
-            onChange={(e) => {
-              props.onChange(e, "validatePassword");
-            }}
-          />
-        </div>
+        {/* Confirm Password */}
+        <Input label={language.confirmPassword[1]} name="password" type="password"
+          value={props.values.validatePassword} onChange={(e) => props.onChange(e, 'validatePassword')} />
       </div>
 
       {!props.loading ?
         <div className={BusinessRegistrationStyle.Buttons}>
           <Button onClick={() => props.step("decrement")} color="orange">
-            חזור
-        </Button>
+            {language.back[1]}
+          </Button>
           <Button onClick={onClickNext} color="purple-register">
-            המשך
-        </Button>
-        </div> :
+            {language.next[1]}
+          </Button>
+        </div>
+        :
         <div>Loading...</div>
       }
     </div>
@@ -170,10 +114,10 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(ManagerRegistration,
-  (prevState, nextState) => {
+  (prevProps, nextProps) => {
     console.log('ManagerRegistration');
-    if (!nextState.loading && !nextState.error && nextPage) {
-      prevState.step('increment');
+    if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
+      nextProps.step('increment');
       return true;
     }
     return false;

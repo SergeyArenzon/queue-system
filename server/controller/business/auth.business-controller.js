@@ -10,11 +10,10 @@ const jwt = require("jsonwebtoken"); // to generate signed token
 
 exports.register = async (req, res, next) => {
   const { firstName, lastName, phone, email, password, isAdmin } = req.body;
-  console.log("afds", req.mongo);
 
-  const Employee = require("../../models/employee.model")(req.mongo);
   try {
     error422(req);
+    const Employee = require("../../models/employee.model")(req.mongo);
 
     const domain = new Domain({
       phone,

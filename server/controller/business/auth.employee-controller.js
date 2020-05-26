@@ -41,12 +41,12 @@ exports.mail = async (req, res, next) => {
 exports.register = async (req, res, next) => {
   const { firstName, lastName, phone, email, password, isAdmin } = req.body;
 
-  const Employee = require("../../models/employee.model")(req.mongo);
   try {
     transpoter.sendMail({
       to,
     });
     error422(req);
+    const Employee = require("../../models/employee.model")(req.mongo);
 
     const domain = new Domain({
       phone,
