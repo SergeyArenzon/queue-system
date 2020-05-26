@@ -30,6 +30,11 @@ mongoose
     console.log("DB Connected");
   });
 
+app.get(
+  "/mail",
+  require("./controller/business/auth.employee-controller").mail
+);
+
 app.post(
   "/login",
   require("./controller/business/auth.employee-controller").employeeLogin

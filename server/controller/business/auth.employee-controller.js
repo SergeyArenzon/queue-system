@@ -5,14 +5,47 @@ const {
 } = require("../../helper/dbErrorHandler");
 const Domain = require("../../models/domain.model");
 
+const sendgridTransport = require("nodemailer-sendgrid-transport");
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken"); // to generate signed token
 
+const transpoter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key:
+        "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",
+    },
+  })
+);
+
+exports.mail = async (req, res, next) => {
+  try {
+    console.log("here");
+
+    transpoter.sendMail({
+      to: "dorlevy121@gmail.com",
+      from: "kavanu@kavanu.com",
+      subject: "are you ready",
+      html: "<p> when you us to speak?</p>",
+    });
+    console.log("im here");
+
+    res.status(200);
+  } catch (error) {
+    console.log(error);
+
+    return next(error);
+  }
+};
 exports.register = async (req, res, next) => {
   const { firstName, lastName, phone, email, password, isAdmin } = req.body;
 
   const Employee = require("../../models/employee.model")(req.mongo);
   try {
+    transpoter.sendMail({
+      to,
+    });
     error422(req);
 
     const domain = new Domain({
@@ -36,8 +69,6 @@ exports.register = async (req, res, next) => {
     const token = createToken(employee);
     res.status(201).json({ message: "create new business", token: token });
   } catch (error) {
-    console.log(error);
-
     return next(error);
   }
 };
