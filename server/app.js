@@ -29,6 +29,7 @@ mongoose
   .then(() => {
     console.log("DB Connected");
   });
+  
 
 app.post(
   "/login",
@@ -39,7 +40,7 @@ app.get("/check/:businessUrl", async (req, res, next) => {
   const businessUrl = req.params.businessUrl;
   try {
     let ans = await require("./models/domain.model").find();
-    ans = ans.every((e) => e.domain !== businessUrl) && businessUrl.length > 2;
+    ans = ans.every((e) => e.domain !== businessUrl);
     errorDomain401(ans);
     res.status(200).json({ message: "Domain is free" });
   } catch (error) {

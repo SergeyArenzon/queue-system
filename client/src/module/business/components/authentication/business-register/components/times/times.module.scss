@@ -1,57 +1,12 @@
 @import "../../../../../../../models/style/main.scss";
 
 .Times {
-  animation: fade .5s ease-in-out;
+  animation: fade 0.5s ease-in-out;
 
   & .Body {
     & .Days {
       display: flex;
       justify-content: space-around;
-      & .Day {
-        & .Checkbox {
-          display: none;
-          &:checked + label::before {
-            background-color: $purple-register;
-            border-color: $background-menu;
-            color: #fff;
-            text-align: center;
-          }
-
-          &:disabled + label::before {
-            transform: scale(1);
-            border-color: #aaa;
-          }
-
-          &:checked:disabled + label::before {
-            transform: scale(1);
-            background-color: #bfb;
-            border-color: #bfb;
-          }
-        }
-
-        & label {
-          display: block;
-          cursor: pointer;
-
-          &::before {
-            content: "\2714";
-            border: 1px solid #000;
-            border-radius: 0.2em;
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            padding-left: 0.2em;
-            padding-bottom: 0.3em;
-            vertical-align: bottom;
-            color: transparent;
-            transition: 0.2s;
-          }
-
-          &:active::before {
-            transform: scale(0);
-          }
-        }
-      }
     }
 
     & .Hours {
@@ -70,13 +25,11 @@
         &::-ms-expand {
           display: none;
         }
-
-
       }
 
       & .Hour {
-          display: flex;
-          justify-content: space-between;
+        display: flex;
+        justify-content: space-between;
       }
     }
   }
@@ -88,9 +41,4 @@
   font-size: 1rem;
   font-weight: 400;
   margin-right: 15px;
-}
-
-@keyframes fade {
-  from {opacity: 0;}
-  to {opacity: 1;}
 }

@@ -11,9 +11,9 @@ const jwt = require("jsonwebtoken"); // to generate signed token
 exports.register = async (req, res, next) => {
   const { firstName, lastName, phone, email, password, isAdmin } = req.body;
 
-  const Employee = require("../../models/employee.model")(req.mongo);
   try {
     error422(req);
+    const Employee = require("../../models/employee.model")(req.mongo);
 
     const domain = new Domain({
       phone,
@@ -21,7 +21,6 @@ exports.register = async (req, res, next) => {
     });
 
     await domain.save();
-
 
     const hashedPw = await bcrypt.hash(password, 12);
 

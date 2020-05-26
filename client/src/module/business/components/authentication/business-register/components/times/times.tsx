@@ -1,12 +1,14 @@
 import React, { useState, useEffect, memo } from 'react';
-import ManagerRegistrationStyle from '../manager-registration/manager-registration.module.scss';
 import BusinessRegistrationStyle from '../business-registration/business-registration.module.scss';
+import * as language from '../../../../../../../assets/language/language'
 import TimesStyle from './times.module.scss';
 import { cloneDeep } from 'lodash'
 import Button from '../../../../../../../models/ui/button/button';
 import { getLoading, getError } from '../../../../../../../store/auth/auth.selectors';
 import { connect } from 'react-redux';
 import { postBuisnessHours } from '../../../../../../../store/auth/auth.actions';
+import AuthenticationHeadrer from '../../../shared/authentication-header/authentication-headrer';
+import Checkbox from '../../../../../../../models/ui/checkbox/checkbox';
 
 interface OwnProps {
     step: (step: 'decrement' | 'increment') => void,
@@ -78,10 +80,12 @@ const Times: React.FC<Props> = (props) => {
 
     // Checks the information in front of the server
     const onClickNext = () => {
+        //props.step('increment');
         if (Object.keys(props.values.workTimes).length === 0) {
-            setError('לא הוזנו ימים')
+            setError('לא הוזנו ימים');
+            return;
         }
-
+        setError("");
         let schdule: { [day: string]: { start: string, end: string }[] } = {};
         for (const [key, value] of Object.entries(props.values.workTimes)) {
             schdule[key] = [];
@@ -94,12 +98,8 @@ const Times: React.FC<Props> = (props) => {
 
     return (
         <div className={TimesStyle.Times}>
-            <div className={ManagerRegistrationStyle.Header}>
-                <p className={ManagerRegistrationStyle.Title}>קביעת זמני פעילות</p>
-                <p className={ManagerRegistrationStyle.SubTitle}>הוסף אני הימים והשעות שהעסק שלך פועל בהם</p>
-            </div>
 
-            {Error && <p className={ManagerRegistrationStyle.Error}>{Error}</p>}
+            <AuthenticationHeadrer title={language.timesHeaderTitle[1]} subTitle={language.timesHeaderSubTitle[1]} error={Error} />
 
             <div className={TimesStyle.Body}>
                 {/* Days */}
@@ -109,11 +109,8 @@ const Times: React.FC<Props> = (props) => {
                         hebDays.map((day: string, i: number) => {
                             return (
                                 <React.Fragment key={i * 26}>
-                                    <div className={TimesStyle.Day} >
-                                        <input onClick={(e) => onClickDay(e, i)} className={TimesStyle.Checkbox}
-                                            type="checkbox" defaultChecked={props.values[FullEngDays[i]]} id={"day" + i} value={i} />
-                                        <label htmlFor={"day" + i}>{" " + day}</label>
-                                    </div>
+                                    <Checkbox id={"day" + i} onClick={(e) => onClickDay(e, i)} value={i}
+                                        defaultChecked={props.values[FullEngDays[i]]} label={" " + day} />
                                 </React.Fragment>
                             )
                         })
@@ -166,10 +163,10 @@ const Times: React.FC<Props> = (props) => {
             {!props.loading ?
                 <div className={BusinessRegistrationStyle.Buttons} style={{ marginTop: '30px' }}>
                     <Button onClick={() => props.step("decrement")} color="orange">
-                        חזור
+                        {language.back[1]}
                     </Button>
                     <Button onClick={onClickNext} color="purple-register">
-                        המשך
+                        {language.next[1]}
                     </Button>
                 </div> :
                 <div>Loading...</div>
@@ -189,10 +186,10 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Times,
-    (prevState, nextState) => {
+    (prevProps, nextProps) => {
         console.log('Times');
-        if (!nextState.loading && !nextState.error && nextPage) {
-            prevState.step('increment');
+        if (!nextProps.loading && nextPage && Error.length <= 1) {
+            nextProps.step('increment');
             return true;
         }
         return false;

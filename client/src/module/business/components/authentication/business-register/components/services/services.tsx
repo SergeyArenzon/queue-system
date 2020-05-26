@@ -2,6 +2,7 @@ import React, { useState, memo } from "react";
 import ServicesStyle from "./services.module.scss";
 import ManagerRegistrationStyle from "../manager-registration/manager-registration.module.scss";
 import BusinessRegistrationStyle from "../business-registration/business-registration.module.scss";
+import * as language from '../../../../../../../assets/language/language'
 import Button from "../../../../../../../models/ui/button/button";
 import { Service } from "../../../../../../../models/system/service";
 import { connect } from "react-redux";
@@ -11,6 +12,8 @@ import {
   getError,
   getServices,
 } from "../../../../../../../store/service/service.selectors";
+import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
+import Input from "../../../../../../../models/ui/input/input";
 
 interface AutoCompleteState {
   showOptions: boolean;
@@ -109,11 +112,11 @@ const Services: React.FC<Props> = (props) => {
     }
     else {
       props.postService(service);
-      if(!props.error){
-        setService(initService);  
+      if (!props.error) {
+        setService(initService);
       }
     }
-     nextPage = true;
+    nextPage = true;
   };
 
   // AutoComplete Item
@@ -133,81 +136,32 @@ const Services: React.FC<Props> = (props) => {
       );
     }
   }
-   
+
 
   return (
     <div className={ServicesStyle.Services}>
-      <div className={ManagerRegistrationStyle.Header}>
-        <p className={ManagerRegistrationStyle.Title}>הוספת שירותים</p>
-        <p className={ManagerRegistrationStyle.SubTitle}>
-          הוסף את כל השירותים שהעסק שלך מציע.
-        </p>
-      </div>
+      <AuthenticationHeadrer title={language.servicesHeaderTitle[1]} subTitle={language.servicesHeaderSubTitle[1]} error={props.error} />
 
-      {props.error && <p className={ManagerRegistrationStyle.Error}>{props.error}</p>}
 
       <div className={ManagerRegistrationStyle.Body}>
         {/* Category Name */}
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="category">קטגוריה *</label>
-          <input
-            id="category"
-            name="category"
-            required={true}
-            type="text"
-            value={Service.category}
-            onChange={onCategoryChange}
-          />
-        </div>
+        <Input label={language.categoryName[1]} name="category" type="text"
+          value={Service.category} onChange={onCategoryChange} />
 
         {/* AutoComplete */}
         <div className={ServicesStyle.Options}>{optionList}</div>
 
         {/* Service Name */}
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="title">שם השירות *</label>
-
-          <input
-            id="title"
-            name="title"
-            required={true}
-            type="text"
-            value={Service.title}
-            onChange={(e) => setService({ ...Service, title: e.target.value })}
-          />
-        </div>
+        <Input label={language.serviceName[1]} name="title" type="text"
+          value={Service.title} onChange={(e) => setService({ ...Service, title: e.target.value })} />
 
         {/* Service Price */}
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="price">מחיר*</label>
-
-          <input
-            id="price"
-            name="price"
-            required={true}
-            type="number"
-            value={Service.price}
-            onChange={(e) =>
-              setService({ ...Service, price: parseInt(e.target.value) })
-            }
-          />
-        </div>
+        <Input label={language.price[1]} name="price" type="number"
+          value={Service.price} onChange={(e) => setService({ ...Service, price: parseInt(e.target.value) })} />
 
         {/* Service Duration */}
-        <div className={ManagerRegistrationStyle.Field}>
-          <label htmlFor="duration">משך זמן*</label>
-
-          <input
-            id="duration"
-            name="duration"
-            required={true}
-            type="number"
-            value={Service.duration}
-            onChange={(e) =>
-              setService({ ...Service, duration: parseInt(e.target.value) })
-            }
-          />
-        </div>
+        <Input label={language.duration[1]} name="duration" type="number"
+          value={Service.duration} onChange={(e) => setService({ ...Service, duration: parseInt(e.target.value) })} />
       </div>
 
       <div className={ServicesStyle.ServicesList}>{AllServices()}</div>
@@ -223,11 +177,11 @@ const Services: React.FC<Props> = (props) => {
       </div>
 
       <div className={BusinessRegistrationStyle.Buttons}>
-        <Button onClick={() => props.step("decrement")} color="orange"> חזור </Button>
+        <Button onClick={() => props.step("decrement")} color="orange"> {language.back[1]} </Button>
         <Button onClick={() => {
           console.log(props.getAllServices());
-          
-        }}  color="purple-register"> סיום </Button>
+
+        }} color="purple-register"> סיום </Button>
       </div>
     </div>
   );
@@ -247,10 +201,10 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Services,
-  (prevState, nextState) => {
+  (prevProps, nextProps) => {
     console.log('Services');
-    if (!nextState.loading && !nextState.error && nextPage) {
-     // prevState.step('increment');
+    if (!nextProps.loading && !nextProps.error && nextPage) {
+      nextProps.step('increment');
       return true;
     }
     return false;

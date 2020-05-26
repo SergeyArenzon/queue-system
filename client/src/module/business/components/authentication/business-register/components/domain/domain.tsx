@@ -1,20 +1,22 @@
-import React, { useState, memo } from 'react';
+import React, { memo, useState } from 'react';
 import ManagerRegistrationStyle from "../manager-registration/manager-registration.module.scss";
+import * as language from '../../../../../../../assets/language/language'
 import Button from '../../../../../../../models/ui/button/button';
 import { connect } from 'react-redux';
 import { getLoading, getError } from '../../../../../../../store/auth/auth.selectors';
 import { getDomain } from '../../../../../../../store/auth/auth.actions';
+import AuthenticationHeadrer from '../../../shared/authentication-header/authentication-headrer';
+import Input from '../../../../../../../models/ui/input/input';
 
 interface OwnProps {
     step: (step: 'decrement' | 'increment') => void,
     onChange: (e: any, name: string, value?: any) => void,
     values: any
-  }
-  
+}
 
 interface StateProps {
     loading: boolean;
-    error: Error
+    error: string
 }
 
 interface DispatchProps {
@@ -26,53 +28,44 @@ let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const Domain: React.FC<Props> = (props) => {
+    const [Error, setError] = useState<string>("");
 
     // Checks the information in the server
     const onClickNext = () => {
-        props.getDomain(props.values.domain);
-        nextPage = true;
+        //props.step('increment');
+        const english = /^[a-zA-Z]+$/;
+        if (props.values.domain.length < 2) {
+            setError(language.domainLengthError[1]);
+        }
+        else if (!english.test(props.values.domain)) {
+            setError(language.englishOnlyError[1])
+        }
+        else {
+            setError("");
+            props.getDomain(props.values.domain);
+            nextPage = true;
+        }
     };
 
-    if (!props.loading && !props.error && nextPage) props.step('increment');
-
     return (
-        <div>
-            <div className={ManagerRegistrationStyle.Header}>
-                <p className={ManagerRegistrationStyle.Title}>הוספת עסק חדש</p>
-                <p className={ManagerRegistrationStyle.SubTitle}>
-                    השם שתוסיף לכאן יהיה כתובת האתר שלך.
-                </p>
-            </div>
-
-            {props.error && <p className={ManagerRegistrationStyle.Error} style={{ marginBottom: '-50px' }}>{props.error}</p>}
-
+        <React.Fragment>
+            <AuthenticationHeadrer title={language.domainHeaderTitle[1]} subTitle={language.domainHeaderSubTitle[1]}
+                error={Error ? Error : props.error} />
 
             <div className={ManagerRegistrationStyle.Body} style={{ marginTop: '50px' }}>
-                {/* First Name */}
-                <div className={ManagerRegistrationStyle.Field}>
-                    <label htmlFor="name">שם העסק (באנגלית)</label>
-                    <input
-                        pattern="[A-Za-z]{3}"
-                        id="name"
-                        name="name"
-                        required={true}
-                        type="text"
-                        value={props.values.domain}
-                        placeholder=""
-                        onChange={(e) => props.onChange(e, 'domain')}
-                    />
-                </div>
+                <Input label={language.domainTitle[1]} name="domain" type="text"
+                    value={props.values.domain} onChange={(e) => props.onChange(e, 'domain')} />
             </div>
 
             {
                 !props.loading ?
                     <div style={{ textAlign: 'center', marginTop: '30px' }} onClick={onClickNext}>
-                        <Button color="purple-register">המשך</Button>
+                        <Button color="purple-register">{language.next[1]}</Button>
                     </div>
                     :
                     <div style={{ textAlign: 'center' }}>Loading...</div>
             }
-        </div>
+        </React.Fragment>
     )
 }
 
@@ -86,10 +79,12 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Domain,
-    (prevState, nextState) => {
+    (prevProps, nextProps) => {
         console.log('Domain');
-        if (!nextState.loading && !nextState.error && nextPage) {
-            prevState.step('increment');
+        console.log(Error.length);
+        
+        if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
+            nextProps.step('increment');
             return true;
         }
         return false;
