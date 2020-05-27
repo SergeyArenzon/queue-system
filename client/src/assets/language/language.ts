@@ -73,7 +73,8 @@ export const back = ["Add New Business", "חזור"];
 
 // ** Login ** //
 export const loginTitle = ["Add New Business", "התחברות עובד"];
-export const loginSubTitle = [
-  "Add New Business",
-  "ברוך שובך למערכת, נא הכנס את פרטי ההתחברות שלך.",
-];
+export const loginSubTitle = ["Add New Business","ברוך שובך למערכת, נא הכנס את פרטי ההתחברות שלך."];
+
+// Reset Password
+export const restPasswordTitle = ["Add New Business","שחזור סיסמא"];
+export const restPasswordSubTitle = ["Add New Business","הכנס את מספר הטלפון שלך בכדי לקבל סיסמא חדשה - SMS"];

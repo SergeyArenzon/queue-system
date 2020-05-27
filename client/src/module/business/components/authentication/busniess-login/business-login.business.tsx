@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import BusinessLoginStyle from "./business-login.module.scss";
 import BusinessRegisterStyle from "../business-register/business-register.module.scss";
 import ManagerRegistrationStyle from "../business-register/components/manager-registration/manager-registration.module.scss";
@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { getLoading, getError } from "../../../../../store/auth/auth.selectors";
 import Button from "../../../../../models/ui/button/button";
 import { loginEmployee } from "../../../../../store/auth/auth.actions";
-import { NavLink, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AuthenticationHeadrer from "../shared/authentication-header/authentication-headrer";
 import * as language from "../../../../../assets/language/language";
 import Input from "../../../../../models/ui/input/input";
@@ -34,14 +34,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
     phone: "",
     password: "",
   });
-  const [reset, setReset] = useState<boolean>(false);
   const [Error, setError] = useState<string>("");
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const domain = localStorage.getItem("domain");
-    console.log(domain, token);
-  }, []);
 
   // Checks the information in front of the server
   const onClickNext = () => {
@@ -54,14 +47,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
       nextPage = true;
     }
   };
-  const resetPasswordHandler = () => {
-    console.log("here");
 
-    setReset(true);
-  };
-  console.log(reset);
-
-  if (reset) return <Redirect to="/business/resetpassword" />;
 
   return (
     <div className={BusinessRegisterStyle.Register}>
@@ -78,6 +64,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
           <div className={ManagerRegistrationStyle.Body}>
             {/* Phone */}
             <Input
+              style={{ marginTop: '10px' }}
               label={language.phone[1]}
               name="phone"
               type="tel"
@@ -87,6 +74,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
 
             {/* Password */}
             <Input
+              style={{ marginTop: '10px' }}
               label={language.password[1]}
               name="password"
               type="password"
@@ -96,19 +84,14 @@ const BusinessLogin: React.FC<Props> = (props) => {
           </div>
           {!props.loading ? (
             <React.Fragment>
-              <div onClick={onClickNext} className={BusinessLoginStyle.Button}>
-                <Button color="purple-register">התחבר</Button>
-              </div>
-              <div
-                onClick={resetPasswordHandler}
-                className={BusinessLoginStyle.Button}
-              >
-                <Button color="purple-register">אפס סיסמא</Button>
+              <div className={BusinessLoginStyle.Button}>
+                <Button color="purple-register" onClick={() => onClickNext()}>התחבר</Button>
+                <Link to="/business/resetpassword">איפוס סיסמא</Link>
               </div>
             </React.Fragment>
           ) : (
-            <div>Loading...</div>
-          )}
+              <div>Loading...</div>
+            )}
         </React.Fragment>
       </div>
     </div>

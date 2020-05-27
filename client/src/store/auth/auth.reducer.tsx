@@ -1,8 +1,8 @@
 import { initialAuthState } from "./auth.state";
 import {
-  startPostBusinessActionType,
-  successPostBusinesActionType,
-  faildPostBusinesActionType,
+  startPostAuthActionType,
+  successPostAuthActionType,
+  faildPostAuthActionType,
   AuthActionsEnum,
   signInActionType,
   startPostResetPasswordActionType,
@@ -11,9 +11,9 @@ import {
 } from "./auth.types";
 
 type allAuthActionTypes =
-  | startPostBusinessActionType
-  | successPostBusinesActionType
-  | faildPostBusinesActionType
+  | startPostAuthActionType
+  | successPostAuthActionType
+  | faildPostAuthActionType
   | signInActionType
   | startPostResetPasswordActionType
   | successPostResetPasswordActionType
@@ -24,24 +24,24 @@ export const authReducer = (
   action: allAuthActionTypes
 ) => {
   switch (action.type) {
-    case AuthActionsEnum.START_POST_BUSINESS:
-      console.log("START_POST_BUSINESS");
+    case AuthActionsEnum.START_POST_AUTH:
+      console.log("START_POST_Auth");
       return {
         ...state,
         loading: true,
         error: "",
       };
 
-    case AuthActionsEnum.SUCCESS_POST_BUSINESS:
-      console.log("SUCCESS_POST_BUSINESS");
+    case AuthActionsEnum.SUCCESS_POST_AUTH:
+      console.log("SUCCESS_POST_Auth");
       return {
         ...state,
         loading: false,
         error: "",
       };
 
-    case AuthActionsEnum.FALID_POST_BUSINESS:
-      console.log("FALID_POST_BUSINESS");
+    case AuthActionsEnum.FALID_POST_AUTH:
+      console.log("FALID_POST_Auth");
       return {
         ...state,
         loading: false,

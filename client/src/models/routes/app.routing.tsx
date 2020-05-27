@@ -6,7 +6,7 @@ import Customers from "../../module/business/components/customers/customers.busi
 import CalendarUser from "../../module/business/components/calendar/calendar.business";
 import BusinessRegister from "../../module/business/components/authentication/business-register/business-register.business";
 import BusinessLogin from "../../module/business/components/authentication/busniess-login/business-login.business";
-import EmployeeReset from "../../module/business/components/authentication/busniess-login/employee-reset.business";
+import EmployeeReset from "../../module/business/components/authentication/busniess-login/reset-employee-password.business";
 
 import PrivateRoute from "./private-route.routes";
 import AdminRoute from "./admin-route.routes";

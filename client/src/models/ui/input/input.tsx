@@ -7,13 +7,16 @@ interface OwnProps {
     type: string,
     value: any,
     onChange?: (e: any) => void,
-    placeholder?: string
+    placeholder?: string,
+    style?: {}
 }
 
 const Input: React.FC<OwnProps> = (props) => {
+    console.log(props.style);
+    
     return (
-        <div className={inputStyle.Input}>
-            {props.label && <label htmlFor={props.name}>{props.label}</label>}
+        <div style={props.style} className={inputStyle.Input}>
+            {props.label && <label style={props.style} htmlFor={props.name}>{props.label}</label>}
             <input
                 id={props.name}
                 name={props.name}
