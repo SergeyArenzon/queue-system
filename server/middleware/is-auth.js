@@ -6,7 +6,10 @@ const Client = require("../models/client.model");
 
 module.exports = (kind, mongoose = null) => {
   return async (req, res, next) => {
-    const token = kind === "resetPassword" ? req.params.token : req.body.token;
+    console.log(req.get("Authorization"));
+
+    let token = kind === "resetPassword" ? req.params.token : req.body.token;
+    if (!token) token = req.get("Authorization");
     error401auth(token);
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
