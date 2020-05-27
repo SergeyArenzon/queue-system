@@ -1,13 +1,11 @@
-const express = require("express");
-const router = express.Router();
-
-const businessDetailsController = require("../../controller/business/details.business-controller");
+const router = require("express").Router();
+const businessDetailsController = require("../../controller/domain/details.domain-controller");
 const isAuth = require("../../middleware/is-auth");
 
 const {
   businessDetailsValidator,
   // businessHoursValidator,
-} = require("../../validator/business.validator");
+} = require("../../validator/management/business.validator");
 
 router.post(
   "/",

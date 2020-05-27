@@ -2,7 +2,7 @@ const {
   error422,
   error404,
   error403Admin,
-} = require("../../helper/dbErrorHandler");
+} = require("../../utils/error/dbErrorHandler");
 
 exports.postService = async (req, res, next) => {
   try {
@@ -34,14 +34,14 @@ exports.postService = async (req, res, next) => {
 exports.getServices = async (req, res, next) => {
   try {
     const Service = require("../../models/service.model");
-    
+
     const services = await Service(req.mongo).find();
     error404(services);
     res.status(201).json({
       msg: "all the services",
       services,
     });
-  } catch (error) {    
+  } catch (error) {
     return next(error);
   }
 };
@@ -51,20 +51,11 @@ exports.putService = async (req, res, next) => {
     error422(req);
     const Service = require("../../models/service.model")(req.mongo);
 
-    const service = await Service.findById(req.params.serviceId);
-
-    error404(service);
-
     error403Admin(req);
 
-    const { title, price, duration, category } = req.body;
-    service.title = title;
-    service.price = price;
-    service.duration = duration;
-    service.category = category;
+    const service = await Service.findOneAndUpdate({ ...req.body });
 
-    await service.save();
-    res.status(200).json({
+    res.status(205).json({
       message: "service update",
       service: service,
     });
@@ -75,13 +66,9 @@ exports.putService = async (req, res, next) => {
 
 exports.deleteService = async (req, res, next) => {
   try {
-    const serviceId = req.params.serviceId;
+    const serviceId = req.body._id;
 
     const Service = require("../../models/service.model")(req.mongo);
-
-    const service = await Service.findById(serviceId);
-
-    await error404(service);
 
     await error403Admin(req);
 

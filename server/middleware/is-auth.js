@@ -1,15 +1,17 @@
 const jwt = require("jsonwebtoken");
 const Employee = require("../models/employee.model");
-const { error401auth, error404 } = require("../helper/dbErrorHandler");
+const { error401auth, error404 } = require("../utils/error/dbErrorHandler");
 
 const Client = require("../models/client.model");
 
 module.exports = (kind, mongoose = null) => {
   return async (req, res, next) => {
-    console.log(req.get("Authorization"));
+    console.log(req.get("token"));
 
     let token = kind === "resetPassword" ? req.params.token : req.body.token;
-    if (!token) token = req.get("Authorization");
+
+    if (!token) token = req.get("token");
+
     error401auth(token);
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);

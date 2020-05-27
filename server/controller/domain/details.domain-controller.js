@@ -1,40 +1,19 @@
 const moment = require("moment");
+
 const {
   error422,
   error404,
   error403Admin,
-} = require("../../helper/dbErrorHandler");
-exports.postBuisnessDetails = async (req, res, next) => {
-  const {
-    name,
-    address,
-    phone,
-    email,
-    logo,
-    links,
-    about,
-    notifications,
-    domain
-  } = req.body;
-  console.log(req.employee);
+} = require("../../utils/error/dbErrorHandler");
 
+exports.postBuisnessDetails = async (req, res, next) => {
   try {
     error422(req);
 
     error403Admin(req);
 
-    const updatdeDetail = {
-      name,
-      address,
-      phone,
-      email,
-      logo,
-      links,
-      about,
-      notifications,
-      domain
-    };
-    const Business = require("../../models/business.model")(req.mongo);
+    const updatdeDetail = { ...req.body };
+    const Business = require("../../models/business-details.model")(req.mongo);
 
     const detailsExist = await Business.findOneAndUpdate(updatdeDetail);
     if (!detailsExist) await new Business(updatdeDetail).save();
@@ -54,8 +33,8 @@ exports.postBuisnessHours = async (req, res, next) => {
 
     error403Admin(req);
     const schedule = { ...req.body.schedule };
-    console.log(schedule);
-    const Business = require("../../models/business.model")(req.mongo);
+
+    const Business = require("../../models/business-details.model")(req.mongo);
 
     const buisness = await Business.findOne();
     buisness.schedule = schedule;
@@ -85,7 +64,7 @@ exports.postDefualtHours = async (req, res, next) => {
   console.log(a);
 
   try {
-    const Business = require("../../models/business.model")(req.mongo);
+    const Business = require("../../models/business-details.model")(req.mongo);
 
     const buisness = await Business.findOne();
 
@@ -104,7 +83,7 @@ exports.postDefualtHours = async (req, res, next) => {
 
 exports.getBuisnessDetails = async (req, res, next) => {
   try {
-    const Business = require("../../models/business.model")(req.mongo);
+    const Business = require("../../models/business-details.model")(req.mongo);
 
     const buisnessDetails = await Business.findOne();
     error404(buisnessDetails);

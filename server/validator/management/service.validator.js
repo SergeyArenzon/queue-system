@@ -1,6 +1,5 @@
 const { body } = require("express-validator");
-
-const hebrewErrorValidator = require("./hebrewErrorValidator");
+const hebrewErrorValidator = require("../../utils/language/hebrew/hebrewErrorValidator");
 
 exports.serviceValidator = [
   body("category", hebrewErrorValidator.categoryHebError)
