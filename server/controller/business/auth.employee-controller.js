@@ -71,7 +71,6 @@ exports.employeeLogin = async (req, res, next) => {
   try {
     const { phone, password } = req.body;
     const domain = await Domain.findOne({ phone: phone });
-    console.log(domain);
 
     error404(domain);
 

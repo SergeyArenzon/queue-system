@@ -27,12 +27,38 @@ interface StateProps {
 interface DispatchProps {
   setNewPasswordEmployee: typeof setNewPasswordEmployee;
 }
-//  interface RouteComponentProps<P> {
-//   match: match<P>;
-//   location: H.Location;
-//   history: H.History;
-//   staticContext?: any;
-// }
+
+const input = {
+  password: {
+    elementType: "input",
+    elementConfig: {
+      type: "password",
+      placeholder: "Password",
+    },
+    value: "",
+    label: language.password[1],
+    name: "password",
+    validation: {
+      required: true,
+      minLength: 6,
+    },
+    valid: false,
+    touched: false,
+  },
+};
+
+// style={{ marginTop: "10px" }}
+// label={language.password[1]}
+// name="password"
+// type="password"
+// value={Form.password}
+// key={formElement.id}
+// elementType={formElement.config.elementType}
+// elementConfig={formElement.config.elementConfig}
+// value={formElement.config.value}
+// invalid={!formElement.config.valid}
+// shouldValidate={formElement.config.validation}
+// touched={formElement.config.touched}
 
 type Props = DispatchProps & StateProps & Params;
 const ResetEmployeePassword: React.FC<Props> = (props) => {
@@ -42,10 +68,11 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
   });
 
   const onClickNext = () => {
-    console.log(props.match.params);
+    // if(valida)
     const token = props.match.params.token;
+    console.log(Form);
 
-    props.setNewPasswordEmployee(Form, token);
+    // props.setNewPasswordEmployee(Form, token);
   };
 
   return (
@@ -64,7 +91,9 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
         {!props.loading && (
           <React.Fragment>
             {props.error}
+
             <div className={ManagerRegistrationStyle.Body}>
+              {/* password */}
               <Input
                 style={{ marginTop: "10px" }}
                 label={language.password[1]}
@@ -72,14 +101,24 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
                 type="password"
                 value={Form.password}
                 onChange={(e) => setForm({ ...Form, password: e.target.value })}
+                // key={input.password.id}
+                // elementType={input.password.config.elementType}
+                // elementConfig={formElement.config.elementConfig}
+                // value={formElement.config.value}
+                // invalid={!formElement.config.valid}
+                // shouldValidate={formElement.config.validation}
+                // touched={formElement.config.touched}
               />
+              {/* confirmPassword */}
               <Input
                 style={{ marginTop: "10px" }}
                 label={language.password[1]}
                 name="password"
                 type="password"
-                value={Form.password}
-                onChange={(e) => setForm({ ...Form, password: e.target.value })}
+                value={Form.confirmPassword}
+                onChange={(e) =>
+                  setForm({ ...Form, confirmPassword: e.target.value })
+                }
               />
             </div>
 
