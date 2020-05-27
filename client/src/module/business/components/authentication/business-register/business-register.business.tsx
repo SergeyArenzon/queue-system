@@ -167,6 +167,4 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 });
 
-export default compose<any>(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
-)(BusinessRegister);
+export default compose<any>(connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps))(BusinessRegister);

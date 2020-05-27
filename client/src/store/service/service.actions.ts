@@ -47,7 +47,7 @@ export const getAllServices = () => {
       .catch((error: any) => {
         const msg = error.response.data.message;
         console.log(msg);
-        
+
         return dispatch({
           type: serviceActionsEnum.FALID_SERVICE,
           error: msg,
@@ -89,11 +89,11 @@ export const updateService = (form: Service) => {
 //     const send = { ...form, token };
 //     API.delete(domain + "/business/service/"+form.id,form)
 //       .then(() => {
-    
+
 
 //         return dispatch({
 //           type: serviceActionsEnum.SUCCESS_POST_SERVICE,
-   
+
 //         });
 //       })
 //       .catch((error: any) => {

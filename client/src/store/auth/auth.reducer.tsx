@@ -31,7 +31,7 @@ export const authReducer = (
 ) => {
   switch (action.type) {
     case AuthActionsEnum.START_POST_AUTH:
-      console.log("START_POST_Auth");
+      console.log("START_POST_AUTH");
       return {
         ...state,
         loading: true,
@@ -39,7 +39,7 @@ export const authReducer = (
       };
 
     case AuthActionsEnum.SUCCESS_POST_AUTH:
-      console.log("SUCCESS_POST_Auth");
+      console.log("START_POST_AUTH");
       return {
         ...state,
         loading: false,
@@ -47,7 +47,7 @@ export const authReducer = (
       };
 
     case AuthActionsEnum.FALID_POST_AUTH:
-      console.log("FALID_POST_Auth");
+      console.log("START_POST_AUTH");
       return {
         ...state,
         loading: false,

@@ -41,6 +41,8 @@ exports.register = async (req, res, next) => {
   }
 };
 const mongoose = require("mongoose");
+
+// Employee Login
 exports.employeeLogin = async (req, res, next) => {
   try {
     const { phone, password } = req.body;

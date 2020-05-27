@@ -30,6 +30,9 @@ mongoose
     console.log("DB Connected");
   });
 
+  app.get('/',(req, res, next) => {
+    res.status(200);
+  })
 app.get(
   "/mail",
   require("./controller/business/auth.employee-controller").mail

@@ -123,20 +123,8 @@ exports.employeeSmsResetPassword = async (req, res, next) => {
     //   .then((message) => console.log(message.sid))
     //   .done();
 
-    transpoter.sendMail({
-      to: "igilfu@gmail.com",
-      from: "kavanu@kavanu.com",
-      subject: "reset password",
-      html: `<a>http://localhost:3000/business/resetpassword/${token}</a>
-                <p> click in here </p>
-                <p> phone : ${phone} </p>
-                <p> domain : ${domain} </p>
-               
-                `,
-    });
-
     // transpoter.sendMail({
-    //   to: "dorlevy121@gmail.com",
+    //   to: "igilfu@gmail.com",
     //   from: "kavanu@kavanu.com",
     //   subject: "reset password",
     //   html: `<a>http://localhost:3000/business/resetpassword/${token}</a>
@@ -146,6 +134,20 @@ exports.employeeSmsResetPassword = async (req, res, next) => {
 
     //             `,
     // });
+
+    transpoter.sendMail({
+      to: "dorlevy121@gmail.com",
+      from: "kavanu@kavanu.com",
+      subject: "reset password",
+      html: ` 
+      <div>
+      <a>http://localhost:3000/business/resetpassword/${token}</a>
+                <p> click in here </p>
+                <p> phone : ${phone} </p>
+                <p> domain : ${domain} </p>
+      </div>
+                `,
+    });
 
     res.status(200).json({
       message: "sms for reset sent to" + phone,

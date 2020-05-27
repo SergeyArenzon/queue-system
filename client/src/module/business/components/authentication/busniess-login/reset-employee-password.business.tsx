@@ -71,8 +71,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  resetPasswordEmployee: (phone: string) =>
-    dispatch(resetPasswordEmployee(phone)),
+  resetPasswordEmployee: (phone: string) => dispatch(resetPasswordEmployee(phone)),
 });
 
 export default connect<StateProps, DispatchProps>(
