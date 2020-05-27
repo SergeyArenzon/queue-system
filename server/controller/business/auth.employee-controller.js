@@ -21,15 +21,12 @@ const transpoter = nodemailer.createTransport(
 
 exports.mail = async (req, res, next) => {
   try {
-    console.log("here");
-
     transpoter.sendMail({
       to: "dorlevy121@gmail.com",
       from: "kavanu@kavanu.com",
       subject: "are you ready",
       html: "<p> when you us to speak?</p>",
     });
-    console.log("im here");
 
     res.status(200);
   } catch (error) {
@@ -104,6 +101,8 @@ const client = require("twilio")(accountSid, authToken);
 exports.employeeSmsResetPassword = async (req, res, next) => {
   try {
     const { phone } = req.body;
+    console.log(phone);
+
     const domain = await Domain.findOne({ phone: phone });
     error404(domain);
 
@@ -115,14 +114,38 @@ exports.employeeSmsResetPassword = async (req, res, next) => {
       process.env.JWT_SECRET
     );
 
-    client.messages
-      .create({
-        body: `אנא לחץ על הלינק https://kavanuu.firebaseapp.com/resetPassword/${token}      ${phone}`,
-        from: "+12069845943",
-        to: "+972543055086",
-      })
-      .then((message) => console.log(message.sid))
-      .done();
+    // client.messages
+    //   .create({
+    //     body: `אנא לחץ על הלינק https://kavanuu.firebaseapp.com/resetPassword/${token}      ${phone}`,
+    //     from: "+12069845943",
+    //     to: "+972543055086",
+    //   })
+    //   .then((message) => console.log(message.sid))
+    //   .done();
+
+    transpoter.sendMail({
+      to: "igilfu@gmail.com",
+      from: "kavanu@kavanu.com",
+      subject: "reset password",
+      html: `<a>http://localhost:3000/business/resetpassword/${token}</a>
+                <p> click in here </p>
+                <p> phone : ${phone} </p>
+                <p> domain : ${domain} </p>
+               
+                `,
+    });
+
+    // transpoter.sendMail({
+    //   to: "dorlevy121@gmail.com",
+    //   from: "kavanu@kavanu.com",
+    //   subject: "reset password",
+    //   html: `<a>http://localhost:3000/business/resetpassword/${token}</a>
+    //             <p> click in here </p>
+    //             <p> phone : ${phone} </p>
+    //             <p> domain : ${domain} </p>
+
+    //             `,
+    // });
 
     res.status(200).json({
       message: "sms for reset sent to" + phone,

@@ -1,14 +1,23 @@
 import React, { useState } from "react";
+import { RouteComponentProps } from "react-router";
+
 import BusinessLoginStyle from "./business-login.module.scss";
 import BusinessRegisterStyle from "../business-register/business-register.module.scss";
 import ManagerRegistrationStyle from "../business-register/components/manager-registration/manager-registration.module.scss";
 import { connect } from "react-redux";
 import { getLoading, getError } from "../../../../../store/auth/auth.selectors";
+import { setNewPasswordEmployeeForm } from "../../../../../store/auth/auth.types";
+
 import Button from "../../../../../models/ui/button/button";
-import { resetPasswordEmployee } from "../../../../../store/auth/auth.actions";
+import { setNewPasswordEmployee } from "../../../../../store/auth/auth.actions";
 import AuthenticationHeadrer from "../shared/authentication-header/authentication-headrer";
 import * as language from "../../../../../assets/language/language";
 import Input from "../../../../../models/ui/input/input";
+
+interface MatchParams {
+  token: string;
+}
+interface Params extends RouteComponentProps<MatchParams> {}
 
 interface StateProps {
   loading: boolean;
@@ -16,15 +25,27 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  resetPasswordEmployee: typeof resetPasswordEmployee;
+  setNewPasswordEmployee: typeof setNewPasswordEmployee;
 }
+//  interface RouteComponentProps<P> {
+//   match: match<P>;
+//   location: H.Location;
+//   history: H.History;
+//   staticContext?: any;
+// }
 
-type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps & Params;
 const ResetEmployeePassword: React.FC<Props> = (props) => {
-  const [Phone, setPhone] = useState<string>("");
+  const [Form, setForm] = useState<setNewPasswordEmployeeForm>({
+    password: "",
+    confirmPassword: "",
+  });
 
   const onClickNext = () => {
-    props.resetPasswordEmployee(Phone);
+    console.log(props.match.params);
+    const token = props.match.params.token;
+
+    props.setNewPasswordEmployee(Form, token);
   };
 
   return (
@@ -44,14 +65,21 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
           <React.Fragment>
             {props.error}
             <div className={ManagerRegistrationStyle.Body}>
-              {/* Phone */}
               <Input
-                style={{ width: "50%", marginTop: "10px" }}
-                label={language.phone[1]}
-                name="phone"
-                type="tel"
-                value={Phone}
-                onChange={(e) => setPhone(e.target.value)}
+                style={{ marginTop: "10px" }}
+                label={language.password[1]}
+                name="password"
+                type="password"
+                value={Form.password}
+                onChange={(e) => setForm({ ...Form, password: e.target.value })}
+              />
+              <Input
+                style={{ marginTop: "10px" }}
+                label={language.password[1]}
+                name="password"
+                type="password"
+                value={Form.password}
+                onChange={(e) => setForm({ ...Form, password: e.target.value })}
               />
             </div>
 
@@ -71,8 +99,8 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  resetPasswordEmployee: (phone: string) =>
-    dispatch(resetPasswordEmployee(phone)),
+  setNewPasswordEmployee: (form: setNewPasswordEmployeeForm, token: string) =>
+    dispatch(setNewPasswordEmployee(form, token)),
 });
 
 export default connect<StateProps, DispatchProps>(

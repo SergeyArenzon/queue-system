@@ -68,7 +68,7 @@ app.get("/check/:businessUrl", async (req, res, next) => {
 });
 
 app.use("/:businessUrl", async (req, res, next) => {
-  try {    
+  try {
     const businessUrl = req.params.businessUrl;
     req.mongo = mongoose.connection.useDb(businessUrl);
     next();
@@ -80,7 +80,7 @@ app.use("/:businessUrl", async (req, res, next) => {
 require("./routes/index.route")(app);
 
 app.use((error, req, res, next) => {
-  console.log(error);
+  // console.log(error);
 
   const status = error.statusCode || 500;
   const message = !error.statusCode

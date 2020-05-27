@@ -8,6 +8,9 @@ import {
   startPostResetPasswordActionType,
   successPostResetPasswordActionType,
   faildPostResetPasswordActionType,
+  startPostSetNewPasswordActionType,
+  successPostSetNewPasswordActionType,
+  faildPostSetNewPasswordActionType,
 } from "./auth.types";
 
 type allAuthActionTypes =
@@ -17,7 +20,10 @@ type allAuthActionTypes =
   | signInActionType
   | startPostResetPasswordActionType
   | successPostResetPasswordActionType
-  | faildPostResetPasswordActionType;
+  | faildPostResetPasswordActionType
+  | startPostSetNewPasswordActionType
+  | successPostSetNewPasswordActionType
+  | faildPostSetNewPasswordActionType;
 
 export const authReducer = (
   state = initialAuthState,
@@ -74,6 +80,29 @@ export const authReducer = (
 
     case AuthActionsEnum.FALID_POST_RESET_PASSWORD:
       console.log("FALID_POST_RESET_PASSWORD");
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+    case AuthActionsEnum.START_POST_SET_NEW_PASSWORD:
+      console.log("START_POST_SET_NEW_PASSWORD");
+      return {
+        ...state,
+        loading: true,
+        error: "",
+      };
+
+    case AuthActionsEnum.SUCCESS_POST_SET_NEW_PASSWORD:
+      console.log("SUCCESS_POST_SET_NEW_PASSWORD");
+      return {
+        ...state,
+        loading: false,
+        error: "",
+      };
+
+    case AuthActionsEnum.FALID_POST_SET_NEW_PASSWORD:
+      console.log("FALID_POST_SET_NEW_PASSWORD");
       return {
         ...state,
         loading: false,

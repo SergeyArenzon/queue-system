@@ -16,6 +16,11 @@ export enum AuthActionsEnum {
   POST_RESET_PASSWORD = "POST_RESET_PASSWORD",
   SUCCESS_POST_RESET_PASSWORD = "SUCCESS_POST_RESET_PASSWORD",
   FALID_POST_RESET_PASSWORD = "FALID_POST_RESET_PASSWORD",
+
+  START_POST_SET_NEW_PASSWORD = "START_POST_SET_NEW_PASSWORD",
+  POST_SET_NEW_PASSWORD = "POST_SET_NEW_PASSWORD",
+  SUCCESS_POST_SET_NEW_PASSWORD = "SUCCESS_POST_SET_NEW_PASSWORD",
+  FALID_POST_SET_NEW_PASSWORD = "FALID_POST_SET_NEW_PASSWORD",
 }
 
 export interface AuthActionPattern {
@@ -54,6 +59,19 @@ export interface faildPostResetPasswordActionType extends AuthActionPattern {
   error: Error;
 }
 
+export interface startPostSetNewPasswordActionType extends AuthActionPattern {
+  type: AuthActionsEnum.START_POST_SET_NEW_PASSWORD;
+}
+
+export interface successPostSetNewPasswordActionType extends AuthActionPattern {
+  type: AuthActionsEnum.SUCCESS_POST_SET_NEW_PASSWORD;
+}
+
+export interface faildPostSetNewPasswordActionType extends AuthActionPattern {
+  type: AuthActionsEnum.FALID_POST_SET_NEW_PASSWORD;
+  error: Error;
+}
+
 export type employeeForm = {
   firstName: string;
   lastName: string;
@@ -65,4 +83,9 @@ export type employeeForm = {
 export type loginEmployeeForm = {
   phone: string;
   password: string;
+};
+
+export type setNewPasswordEmployeeForm = {
+  password: string;
+  confirmPassword: string;
 };

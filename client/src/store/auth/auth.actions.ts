@@ -1,16 +1,21 @@
-import {loginEmployeeForm, employeeForm, AuthActionsEnum} from "./auth.types";
+import {
+  loginEmployeeForm,
+  employeeForm,
+  AuthActionsEnum,
+  setNewPasswordEmployeeForm,
+} from "./auth.types";
 import API from "../../models/axios/axios";
 
 export const getDomain = (domain: string) => {
   return (dispatch: any, getState: any) => {
     localStorage.setItem("domain", domain);
-    dispatch({ type: AuthActionsEnum.START_POST_AUTH});
+    dispatch({ type: AuthActionsEnum.START_POST_AUTH });
     API.get("check/" + domain)
       .then((res) => {
         console.log(res.data.message);
       })
       .then(() => {
-        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_AUTH});
+        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_AUTH });
       })
       .catch((error: any) => {
         const msg = error.response.data.message;
@@ -24,7 +29,7 @@ export const getDomain = (domain: string) => {
 
 export const registerEmployee = (form: employeeForm) => {
   return (dispatch: any, getState: any) => {
-    dispatch({ type: AuthActionsEnum.START_POST_AUTH});
+    dispatch({ type: AuthActionsEnum.START_POST_AUTH });
     const domain = localStorage.getItem("domain");
     API.post(domain + "/business/auth/register", form)
       .then((res) => {
@@ -32,7 +37,7 @@ export const registerEmployee = (form: employeeForm) => {
         localStorage.setItem("token", token);
       })
       .then(() => {
-        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_AUTH});
+        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_AUTH });
       })
       .catch((error: any) => {
         const msg = error.response.data.message;
@@ -46,7 +51,7 @@ export const registerEmployee = (form: employeeForm) => {
 
 export const loginEmployee = (form: loginEmployeeForm) => {
   return (dispatch: any, getState: any) => {
-    dispatch({ type: AuthActionsEnum.START_POST_AUTH});
+    dispatch({ type: AuthActionsEnum.START_POST_AUTH });
     API.post("/login", form)
       .then((res) => {
         const token = res.data.token;
@@ -55,7 +60,7 @@ export const loginEmployee = (form: loginEmployeeForm) => {
         localStorage.setItem("domain", domain);
       })
       .then(() => {
-        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_AUTH});
+        return dispatch({ type: AuthActionsEnum.SUCCESS_POST_AUTH });
       })
       .catch((error: any) => {
         const msg = error.response.data.message;
@@ -94,9 +99,11 @@ export const signInCheck = () => {
 };
 
 export const resetPasswordEmployee = (phone: string) => {
+  console.log(phone);
+
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_POST_RESET_PASSWORD });
-    API.post("/sendMessage", phone)
+    API.post("/sendMessage", { phone })
       .then((res) => {
         const token = res.data.token;
         console.log(res.data.message);
@@ -110,6 +117,36 @@ export const resetPasswordEmployee = (phone: string) => {
         const msg = error.response.data.message;
         return dispatch({
           type: AuthActionsEnum.FALID_POST_RESET_PASSWORD,
+          error: msg,
+        });
+      });
+  };
+};
+
+export const setNewPasswordEmployee = (
+  form: setNewPasswordEmployeeForm,
+  token: string
+) => {
+  return (dispatch: any, getState: any) => {
+    dispatch({ type: AuthActionsEnum.START_POST_SET_NEW_PASSWORD });
+    API.post("/resetPassword/" + token, form)
+      .then((res) => {
+        console.log(res.data.message);
+
+        const token = res.data.token;
+        const domain = res.data.domain;
+        localStorage.setItem("token", token);
+        localStorage.setItem("domain", domain);
+      })
+      .then(() => {
+        return dispatch({
+          type: AuthActionsEnum.SUCCESS_POST_SET_NEW_PASSWORD,
+        });
+      })
+      .catch((error: any) => {
+        const msg = error.response.data.message;
+        return dispatch({
+          type: AuthActionsEnum.FALID_POST_SET_NEW_PASSWORD,
           error: msg,
         });
       });
