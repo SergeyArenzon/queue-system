@@ -4,7 +4,7 @@ import Dropdown from './components/dropdown/dropdown.menu';
 import { NavLink } from 'react-router-dom';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import { BsGraphUp } from 'react-icons/bs';
-import { MdSettings, MdKeyboardArrowLeft, MdPeople, MdDashboard } from 'react-icons/md';
+import {MdKeyboardArrowLeft, MdPeople, MdDashboard } from 'react-icons/md';
 
 
 const MenuUser = () => {
@@ -104,8 +104,8 @@ const MenuUser = () => {
                                 style={ShowDropdownSettins ? { transform: ' rotate(-90deg)' } : {}} />
                         </div>
 
-                        <Dropdown items={[{ title: 'שירותים', url: '/business/allcustomers' }, { title: 'שעות', url: '/business/customerweek' },
-                        { title: 'עובדים', url: '/business/customerweek' }, { title: 'הגדות כלליות', url: '/business/customerweek' }]}
+                        <Dropdown items={[{ title: 'שירותים', url: '/business/:domain/settings/services' }, { title: 'שעות', url: '/business/customerweek' },
+                        { title: 'עובדים', url: '/business/customerweek' }, { title: 'הגדות עסק', url: '/business/customerweek' }]}
                             show={ShowDropdownSettins} />
                     </div>
                 </div>

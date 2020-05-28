@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/mongoose": "^5.7.21",
+    "@types/react-router": "^5.1.7",
     "concurrently": "^5.2.0"
   },
   "dependencies": {}

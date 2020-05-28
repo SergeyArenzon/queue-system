@@ -29,7 +29,8 @@ console.log(props.isSignIn);
   return (
     <BrowserRouter>
       {
-        props.isSignIn && <MainUser />
+        //props.isSignIn && 
+        <MainUser />
       }
       <Routing />
     </BrowserRouter>
