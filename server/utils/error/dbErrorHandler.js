@@ -1,6 +1,6 @@
 "use strict";
 const { validationResult } = require("express-validator");
-const hebrewErrorValidator = require("../validator/hebrewErrorValidator");
+const hebrewErrorValidator = require("../language/hebrew/hebrewErrorValidator");
 
 exports.errorDomain401 = (isDomainExist) => {
   if (!isDomainExist) {

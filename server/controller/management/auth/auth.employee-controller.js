@@ -1,74 +1,81 @@
+const mongoose = require("mongoose");
+
 const {
   errorPassword401: error401,
   error404,
   error422,
-} = require("../../helper/dbErrorHandler");
-const Domain = require("../../models/domain.model");
+} = require("../../../utils/error/dbErrorHandler");
+const Domain = require("../../../models/domain.model");
+const { createToken } = require("../../helper/helper.controller");
+const {
+  employeeValidator,
+} = require("../../../validator/management/employee.validator");
 
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken"); // to generate signed token
 
 exports.register = async (req, res, next) => {
-  const { firstName, lastName, phone, email, password, isAdmin } = req.body;
-
   try {
+    const domainUrl = req.get("domain");
+    console.log(domainUrl);
+
+    req.mongo = mongoose.connection.useDb(domainUrl);
+    employeeValidator;
     error422(req);
-    const Employee = require("../../models/employee.model")(req.mongo);
+    const employeeBody = { ...req.body };
+    const Employee = require("../../../models/employee.model")(req.mongo);
 
     const domain = new Domain({
-      phone,
+      phone: employeeBody.phone,
       domain: req.mongo.name,
     });
+
     await domain.save();
 
-    const hashedPw = await bcrypt.hash(password, 12);
+    const hashedPw = await bcrypt.hash(employeeBody.password, 12);
 
     const employee = new Employee({
-      firstName,
-      lastName,
-      phone,
-      email,
-      isAdmin,
+      ...employeeBody,
       password: hashedPw,
     });
+
     await employee.save();
     const token = createToken(employee);
     res.status(201).json({ message: "create new business", token: token });
   } catch (error) {
-    console.log(error);
-
     return next(error);
   }
 };
+<<<<<<< HEAD:server/controller/business/auth.business-controller.js
 const mongoose = require("mongoose");
 
 // Employee Login
+=======
+
+>>>>>>> 1cb295a5cbe5df94d9e0e87f3d5340a7fcd05e54:server/controller/management/auth/auth.employee-controller.js
 exports.employeeLogin = async (req, res, next) => {
   try {
     const { phone, password } = req.body;
     const domain = await Domain.findOne({ phone: phone });
+
     error404(domain);
 
     req.mongo = mongoose.connection.useDb(domain.domain);
-    const Employee = require("../../models/employee.model")(req.mongo);
+    const Employee = require("../../../models/employee.model")(req.mongo);
 
     const employee = await Employee.findOne({ phone: phone });
     error404(employee);
 
     const isEqual = await bcrypt.compare(password, employee.password);
     error401(isEqual);
+
     const token = createToken(employee);
-    res.status(200).json({ message: "employee login success", token: token });
+
+    res.status(200).json({
+      message: "employee login success",
+      token,
+      domain: domain.domain,
+    });
   } catch (error) {
     return next(error);
   }
-};
-
-const createToken = (employee) => {
-  return jwt.sign(
-    {
-      employeeId: employee._id.toString(),
-    },
-    process.env.JWT_SECRET
-  );
 };

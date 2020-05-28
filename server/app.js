@@ -9,15 +9,13 @@ const cors = require("cors");
 // import routes
 const mongoose = require("mongoose");
 
-const { errorDomain401 } = require("./helper/dbErrorHandler");
+const { errorDomain401 } = require("./utils/error/dbErrorHandler");
 const app = express();
 
 // Middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cors());
-
-app.listen(process.env.PORT);
 
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -28,8 +26,10 @@ mongoose
   })
   .then(() => {
     console.log("DB Connected");
+    app.listen(process.env.PORT);
   });
 
+<<<<<<< HEAD
   app.get('/',(req, res, next) => {
     res.status(200);
   })
@@ -96,3 +96,6 @@ app.use((error, req, res, next) => {
 app.use(function (req, res, next) {
   res.status(404).json({ message: "כתובת לא נמצאה" });
 });
+=======
+require("./routes/index.route")(app, mongoose);
+>>>>>>> 1cb295a5cbe5df94d9e0e87f3d5340a7fcd05e54

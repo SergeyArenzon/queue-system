@@ -6,6 +6,7 @@ export default axios.create({
 
   headers: {
     "Access-Control-Allow-Origin": true,
-    Authorization: "" + localStorage.getItem("token"),
+    token: "" + localStorage.getItem("token"),
+    domain: "" + localStorage.getItem("domain"),
   },
 });

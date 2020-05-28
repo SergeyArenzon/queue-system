@@ -1,7 +1,7 @@
 const { body } = require("express-validator");
-const Emplyee = require("../models/employee.model");
-const Domain = require("../models/domain.model");
-const hebrewErrorValidator = require("./hebrewErrorValidator");
+const Emplyee = require("../../models/employee.model");
+const Domain = require("../../models/domain.model");
+const hebrewErrorValidator = require("../../utils/language/hebrew/hebrewErrorValidator");
 
 exports.employeeValidator = [
   body("firstName", hebrewErrorValidator.firstNameHebError)
