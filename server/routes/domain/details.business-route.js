@@ -6,6 +6,7 @@ const {
   businessDetailsValidator,
   // businessHoursValidator,
 } = require("../../validator/management/business.validator");
+router.get("/", businessDetailsController.getBuisnessDetails);
 
 router.post(
   "/",
@@ -23,6 +24,5 @@ router.post(
 
 router.post("/defualthours", businessDetailsController.postDefualtHours);
 
-router.get("/", businessDetailsController.getBuisnessDetails);
 
 module.exports = router;

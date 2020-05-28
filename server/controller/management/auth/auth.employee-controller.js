@@ -45,13 +45,7 @@ exports.register = async (req, res, next) => {
     return next(error);
   }
 };
-<<<<<<< HEAD:server/controller/business/auth.business-controller.js
-const mongoose = require("mongoose");
 
-// Employee Login
-=======
-
->>>>>>> 1cb295a5cbe5df94d9e0e87f3d5340a7fcd05e54:server/controller/management/auth/auth.employee-controller.js
 exports.employeeLogin = async (req, res, next) => {
   try {
     const { phone, password } = req.body;

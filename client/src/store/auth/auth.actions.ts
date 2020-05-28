@@ -79,14 +79,16 @@ export const signInCheck = () => {
     return { type: AuthActionsEnum.SIGN_IN, ans: false, isAdmin: false };
   }
   return (dispatch: any, getState: any) => {
-    API.post(domain + "/business", { token })
+    API.get(domain)
       .then((res) => {
-        const isAdmin = res.data.employee.isAdmin;
-        return dispatch({
-          type: AuthActionsEnum.SIGN_IN,
-          ans: true,
-          isAdmin: isAdmin,
-        });
+        const businessDeatails = res.data.business;
+        console.log(businessDeatails);
+        
+        // return dispatch({
+        //   type: AuthActionsEnum.SIGN_IN,
+        //   ans: true,
+        //   isAdmin: isAdmin,
+        // });
       })
       .catch((error: any) => {
         return dispatch({
