@@ -19,4 +19,8 @@
   &:focus {
     outline: none;
   }
+  &:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
 }
