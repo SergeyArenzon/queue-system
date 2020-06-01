@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { RouteComponentProps } from "react-router";
 
 import BusinessLoginStyle from "./business-login.module.scss";
@@ -12,12 +12,15 @@ import Button from "../../../../../models/ui/button/button";
 import { setNewPasswordEmployee } from "../../../../../store/auth/auth.actions";
 import AuthenticationHeadrer from "../shared/authentication-header/authentication-headrer";
 import * as language from "../../../../../assets/language/language";
+
 import Input from "../../../../../models/ui/input/input";
+import Inp from "./inp/inp";
+import { inputChanged, password, phone, firstName } from "./utility";
 
 interface MatchParams {
   token: string;
 }
-interface Params extends RouteComponentProps<MatchParams> {}
+interface Params extends RouteComponentProps<MatchParams> { }
 
 interface StateProps {
   loading: boolean;
@@ -28,52 +31,51 @@ interface DispatchProps {
   setNewPasswordEmployee: typeof setNewPasswordEmployee;
 }
 
-const input = {
-  password: {
-    elementType: "input",
-    elementConfig: {
-      type: "password",
-      placeholder: "Password",
-    },
-    value: "",
-    label: language.password[1],
-    name: "password",
-    validation: {
-      required: true,
-      minLength: 6,
-    },
-    valid: false,
-    touched: false,
-  },
-};
-
-// style={{ marginTop: "10px" }}
-// label={language.password[1]}
-// name="password"
-// type="password"
-// value={Form.password}
-// key={formElement.id}
-// elementType={formElement.config.elementType}
-// elementConfig={formElement.config.elementConfig}
-// value={formElement.config.value}
-// invalid={!formElement.config.valid}
-// shouldValidate={formElement.config.validation}
-// touched={formElement.config.touched}
-
 type Props = DispatchProps & StateProps & Params;
 const ResetEmployeePassword: React.FC<Props> = (props) => {
   const [Form, setForm] = useState<setNewPasswordEmployeeForm>({
     password: "",
     confirmPassword: "",
   });
+  const inputRef = useRef();
+  const [otherForm, setOtherForm] = useState<any>({
+    password,
+    phone,
+    name: {
+      ...firstName, validation: {
+        required: false,
+      }
+    },
+  });
 
+  const [formIsValid, setFormIsValid] = useState(false);
   const onClickNext = () => {
-    // if(valida)
     const token = props.match.params.token;
-    console.log(Form);
+
+    let ansForm = Object.assign(
+      {},
+      ...Object.keys(otherForm).map((k) => ({ [k]: otherForm[k].value }))
+    );
+
+    console.log(ansForm);
 
     // props.setNewPasswordEmployee(Form, token);
   };
+  const inputChangedHandler = (event: any, inputIdentifier: any) => {
+
+    const ans = inputChanged(otherForm, event, inputIdentifier);
+    setOtherForm(ans.updatedForm);
+    setFormIsValid(ans.formIsValid);
+
+  };
+
+
+  const formElementsArray = Object.keys(otherForm).map((key) => {
+    return {
+      id: key,
+      config: otherForm[key],
+    };
+  });
 
   return (
     <div className={BusinessRegisterStyle.Register}>
@@ -93,22 +95,23 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
             {props.error}
 
             <div className={ManagerRegistrationStyle.Body}>
-              {/* password */}
-              <Input
-                style={{ marginTop: "10px" }}
-                label={language.password[1]}
-                name="password"
-                type="password"
-                value={Form.password}
-                onChange={(e) => setForm({ ...Form, password: e.target.value })}
-                // key={input.password.id}
-                // elementType={input.password.config.elementType}
-                // elementConfig={formElement.config.elementConfig}
-                // value={formElement.config.value}
-                // invalid={!formElement.config.valid}
-                // shouldValidate={formElement.config.validation}
-                // touched={formElement.config.touched}
-              />
+              {formElementsArray.map((formElement) => (
+                <Inp
+                  ref={inputRef}
+                  key={formElement.id}
+                  label={formElement.config.label}
+                  style={formElement.config.style}
+                  elementType={formElement.config.elementType}
+                  elementConfig={formElement.config.elementConfig}
+                  value={formElement.config.value}
+                  invalid={!formElement.config.valid}
+                  shouldValidate={formElement.config.validation}
+                  touched={formElement.config.touched}
+                  changed={(event) =>
+                    inputChangedHandler(event, formElement.id)
+                  }
+                />
+              ))}
               {/* confirmPassword */}
               <Input
                 style={{ marginTop: "10px" }}
@@ -123,7 +126,9 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
             </div>
 
             <div onClick={onClickNext} className={BusinessLoginStyle.Button}>
-              <Button color="purple-register">שלח קוד איפוס</Button>
+              <Button color="purple-register" disabled={formIsValid}>
+                שלח קוד איפוס
+              </Button>
             </div>
           </React.Fragment>
         )}

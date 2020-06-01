@@ -30,7 +30,8 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "validator": "^13.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -54,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/validator": "^13.0.0",
     "nodemon": "^2.0.4"
   }
 }
