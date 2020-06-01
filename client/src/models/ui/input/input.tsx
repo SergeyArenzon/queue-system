@@ -12,7 +12,6 @@ interface OwnProps {
 }
 
 const Input: React.FC<OwnProps> = (props) => {
-    console.log(props.style);
     
     return (
         <div style={props.style} className={inputStyle.Input}>

@@ -1,14 +1,12 @@
 const express = require("express");
-// import mongoose
 // HTTP request logger
 const morgan = require("morgan");
-const bodyParser = require("body-parser");
 
+const bodyParser = require("body-parser");
 // Connect to the client side that run on diffrent port
 const cors = require("cors");
-// import routes
+// import mongoose
 const mongoose = require("mongoose");
-
 
 const app = express();
 
@@ -27,9 +25,12 @@ mongoose
   .then(() => {
     console.log("DB Connected");
     app.listen(process.env.PORT);
+    require("./routes/index.route")(app, mongoose);
   });
 
 
-require("./routes/index.route")(app, mongoose);
+  app.get("/", async (req, res, next) => {
+    res.status(200).json({ message: "get only the address" });
+  });
 
 // fuser -n tcp -k 8080

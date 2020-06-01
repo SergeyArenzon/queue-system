@@ -4,7 +4,7 @@ import * as language from '../../../../../../../assets/language/language'
 import Button from '../../../../../../../models/ui/button/button';
 import { connect } from 'react-redux';
 import { getLoading, getError } from '../../../../../../../store/auth/auth.selectors';
-import { getDomain } from '../../../../../../../store/auth/auth.actions';
+import { setDomain } from '../../../../../../../store/auth/auth.actions';
 import AuthenticationHeadrer from '../../../shared/authentication-header/authentication-headrer';
 import Input from '../../../../../../../models/ui/input/input';
 
@@ -20,7 +20,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    getDomain: typeof getDomain
+    setDomain: typeof setDomain
 }
 
 // Become true when user click on next in the first time
@@ -42,7 +42,7 @@ const Domain: React.FC<Props> = (props) => {
         }
         else {
             setError("");
-            props.getDomain(props.values.domain);
+            props.setDomain(props.values.domain);
             nextPage = true;
         }
     };
@@ -75,7 +75,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getDomain: (domain: string) => dispatch(getDomain(domain))
+    setDomain: (domain: string) => dispatch(setDomain(domain))
 });
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Domain,

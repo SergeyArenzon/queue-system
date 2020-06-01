@@ -4,17 +4,11 @@ import API from "../../models/axios/axios";
 
 export const postService = (form: Service) => {
   return (dispatch: any, getState: any) => {
-    dispatch({ type: serviceActionsEnum.START_POST_SERVICE });
-    const token = localStorage.getItem("token");
-    const send = { ...form, token };
+    dispatch({ type: serviceActionsEnum.START_SERVICE });
     const domain = localStorage.getItem("domain");
 
-
-    API.post(domain + "/business/service", send)
-
+    API.post(domain + "/business/service")
       .then((res) => {
-        console.log(res.data);
-
         return dispatch({
           type: serviceActionsEnum.SUCCESS_POST_SERVICE,
           service: res.data.service,
@@ -32,13 +26,12 @@ export const postService = (form: Service) => {
 
 export const getAllServices = () => {
   return (dispatch: any, getState: any) => {
-    dispatch({ type: serviceActionsEnum.START_GET_ALL_SERVICES });
-
+    dispatch({ type: serviceActionsEnum.START_SERVICE });
     const domain = localStorage.getItem("domain");
+
     API.get(domain + "/business/service")
       .then((res) => {
         console.log(res.data);
-
         return dispatch({
           type: serviceActionsEnum.SUCCESS_GET_ALL_SERVICES,
           service: res.data.services,
@@ -47,7 +40,6 @@ export const getAllServices = () => {
       .catch((error: any) => {
         const msg = error.response.data.message;
         console.log(msg);
-
         return dispatch({
           type: serviceActionsEnum.FALID_SERVICE,
           error: msg,
@@ -57,16 +49,14 @@ export const getAllServices = () => {
 };
 
 
-export const updateService = (form: Service) => {
+export const updateService = (service: Service) => {
   return (dispatch: any, getState: any) => {
+    dispatch({ type: serviceActionsEnum.START_SERVICE });
     const domain = localStorage.getItem("domain");
-    dispatch({ type: serviceActionsEnum.START_UPDATE_SERVICE });
-    const token = localStorage.getItem("token");
-    const send = { ...form, token };
-    API.post(domain + "/business/service" + form.id, send)
+
+    API.post(domain + "/business/service/" + service.id)
       .then((res) => {
         console.log(res.data);
-
         return dispatch({
           type: serviceActionsEnum.SUCCESS_UPDATE_SERVICE,
           service: res.data.service,

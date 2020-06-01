@@ -3,17 +3,14 @@ import { Service } from "./../../models/system/service";
 export interface serviceState {
   error: string;
   loading: boolean;
-  services: Service[];
+  services: any[];
 }
 
 export enum serviceActionsEnum {
-  START_POST_SERVICE = "START_POST_SERVICE",
-  POST_SERVICE = "POST_SERVICE",
-  SUCCESS_POST_SERVICE = "SUCCESS_POST_SERVICE",
+  START_SERVICE = "START_SERVICE",
   FALID_SERVICE = "FALID_SERVICE",
-  START_GET_ALL_SERVICES = "START_GET_ALL_SERVICES",
+  SUCCESS_POST_SERVICE = "SUCCESS_POST_SERVICE",
   SUCCESS_GET_ALL_SERVICES = "SUCCESS_GET_ALL_SERVICES",
-  START_UPDATE_SERVICE = "START_UPDATE_SERVICE",
   SUCCESS_UPDATE_SERVICE = "SUCCESS_UPDATE_SERVICE"
 }
 
@@ -21,13 +18,8 @@ export interface serviceActionPattern {
   type: serviceActionsEnum; //Action Type
 }
 
-export interface startPostServicectionType extends serviceActionPattern {
-  type: serviceActionsEnum.START_POST_SERVICE;
-}
-
-export interface postServicectionType extends serviceActionPattern {
-  type: serviceActionsEnum.POST_SERVICE;
-  form: Service;
+export interface startServicectionType extends serviceActionPattern {
+  type: serviceActionsEnum.START_SERVICE;
 }
 
 export interface successPostServicesActionType extends serviceActionPattern {
@@ -40,17 +32,9 @@ export interface faildServiceActionType extends serviceActionPattern {
   error: Error;
 }
 
-export interface startGetAllServicesctionType extends serviceActionPattern {
-  type: serviceActionsEnum.START_GET_ALL_SERVICES;
-}
-
 export interface successGetAllServicesActionType extends serviceActionPattern {
   type: serviceActionsEnum.SUCCESS_GET_ALL_SERVICES;
   services: Service[];
-}
-
-export interface startUpdateServicectionType extends serviceActionPattern {
-  type: serviceActionsEnum.START_UPDATE_SERVICE;
 }
 
 export interface successUpdateServiceActionType extends serviceActionPattern {

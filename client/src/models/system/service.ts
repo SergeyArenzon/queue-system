@@ -4,5 +4,5 @@ export type Service = {
 	title: string,
 	price: number,
 	duration: number,
-	available?: boolean 
+	available?: boolean
 }

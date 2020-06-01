@@ -4,6 +4,7 @@ const authController = require("../../../controller/management/auth/auth.employe
 
 const {employeeValidator} =require('../../../validator/management/employee.validator')
 router.post("/login", authController.employeeLogin);
+router.get("/check/:domain", authController.check);
 
 router.post("/register",employeeValidator, authController.register);
 module.exports = router;

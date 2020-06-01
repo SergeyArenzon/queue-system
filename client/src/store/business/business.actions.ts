@@ -1,18 +1,12 @@
-import {
-  BusinessActionsEnum,
-  businessForm,
-  businesHourForm,
-} from "./business.types";
+import { BusinessActionsEnum, businessForm, businesHourForm, } from "./business.types";
 import API from "../../models/axios/axios";
 
 export const registerBusiness = (form: businessForm) => {
   return (dispatch: any, getState: any) => {
-    dispatch({ type: BusinessActionsEnum.START_POST_BUSINESS });
-    const token = localStorage.getItem("token");
-    const send = { ...form, token };
+    dispatch({ type: BusinessActionsEnum.START_BUSINESS });
     const domain = localStorage.getItem("domain");
 
-    API.post(domain + "/business/details", send)
+    API.post(domain + "/business/details")
       .then((res) => {
         console.log(res.data.msg, "test");
       })
@@ -22,7 +16,7 @@ export const registerBusiness = (form: businessForm) => {
       .catch((error: any) => {
         const msg = error.response.data.message;
         return dispatch({
-          type: BusinessActionsEnum.FALID_POST_BUSINESS,
+          type: BusinessActionsEnum.FALID_BUSINESS,
           error: msg,
         });
       });
@@ -31,13 +25,10 @@ export const registerBusiness = (form: businessForm) => {
 
 export const postBuisnessHours = (form: businesHourForm) => {
   return (dispatch: any, getState: any) => {
+    dispatch({ type: BusinessActionsEnum.START_BUSINESS });
     const domain = localStorage.getItem("domain");
 
-    dispatch({ type: BusinessActionsEnum.START_POST_BUSINESS });
-    const token = localStorage.getItem("token");
-    const send = { schedule: { ...form }, token };
-
-    API.post(domain + "/business/details/hours", send)
+    API.post(domain + "/business/details/hours")
       .then((res) => {
         console.log(res.data.msg, "test");
       })
@@ -49,7 +40,7 @@ export const postBuisnessHours = (form: businesHourForm) => {
         console.log(msg);
 
         return dispatch({
-          type: BusinessActionsEnum.FALID_POST_BUSINESS,
+          type: BusinessActionsEnum.FALID_BUSINESS,
           error: msg,
         });
       });

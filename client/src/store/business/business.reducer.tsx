@@ -1,25 +1,21 @@
 import { initialAuthState } from "./business.state";
 import {
-  startPostBusinessActionType,
+  startBusinessActionType,
   postBusinessActionType,
   successPostBusinesActionType,
-  faildPostBusinesActionType,
+  faildBusinesActionType,
   BusinessActionsEnum,
+  getBusinessActionType
 } from "./business.types";
 
-type allAuthActionTypes =
-  | startPostBusinessActionType
-  | postBusinessActionType
-  | successPostBusinesActionType
-  | faildPostBusinesActionType;
+type allAuthActionTypes = startBusinessActionType | postBusinessActionType | successPostBusinesActionType
+  | faildBusinesActionType | getBusinessActionType;
 
-export const businessReducer = (
-  state = initialAuthState,
-  action: allAuthActionTypes
-) => {
+export const businessReducer = (state = initialAuthState, action: allAuthActionTypes) => {
   switch (action.type) {
-    case BusinessActionsEnum.START_POST_BUSINESS:
-      console.log("START_POST_BUSINESS");
+    
+    case BusinessActionsEnum.START_BUSINESS:
+      console.log("START_BUSINESS");
       return {
         ...state,
         loading: true,
@@ -34,12 +30,19 @@ export const businessReducer = (
         error: "",
       };
 
-    case BusinessActionsEnum.FALID_POST_BUSINESS:
-      console.log("FALID_POST_BUSINESS");
+    case BusinessActionsEnum.FALID_BUSINESS:
+      console.log("FALID_BUSINESS");
       return {
         ...state,
         loading: false,
         error: action.error,
+      };
+
+    case BusinessActionsEnum.GET_BUSINESS:
+      console.log("GET_BUSINESS");
+      return {
+        ...state,
+        deatils: action.deatils
       };
   }
   return state;

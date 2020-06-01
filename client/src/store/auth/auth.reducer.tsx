@@ -1,37 +1,19 @@
 import { initialAuthState } from "./auth.state";
 import {
-  startPostAuthActionType,
-  successPostAuthActionType,
-  faildPostAuthActionType,
-  AuthActionsEnum,
-  signInActionType,
-  startPostResetPasswordActionType,
-  successPostResetPasswordActionType,
-  faildPostResetPasswordActionType,
-  startPostSetNewPasswordActionType,
-  successPostSetNewPasswordActionType,
-  faildPostSetNewPasswordActionType,
+  startAuthActionType, faildAuthActionType, successPostAuthActionType, successPostResetPasswordActionType, successPostSetNewPasswordActionType,
+  signInCheckActionType,
+  AuthActionsEnum
 } from "./auth.types";
 
-type allAuthActionTypes =
-  | startPostAuthActionType
-  | successPostAuthActionType
-  | faildPostAuthActionType
-  | signInActionType
-  | startPostResetPasswordActionType
-  | successPostResetPasswordActionType
-  | faildPostResetPasswordActionType
-  | startPostSetNewPasswordActionType
-  | successPostSetNewPasswordActionType
-  | faildPostSetNewPasswordActionType;
+type allAuthActionTypes = startAuthActionType | faildAuthActionType | successPostAuthActionType |
+  successPostResetPasswordActionType | successPostSetNewPasswordActionType | signInCheckActionType;
 
-export const authReducer = (
-  state = initialAuthState,
-  action: allAuthActionTypes
-) => {
+
+export const authReducer = (state = initialAuthState, action: allAuthActionTypes) => {
   switch (action.type) {
-    case AuthActionsEnum.START_POST_AUTH:
-      console.log("START_POST_AUTH");
+
+    case AuthActionsEnum.START_AUTH:
+      console.log("START_AUTH");
       return {
         ...state,
         loading: true,
@@ -39,35 +21,27 @@ export const authReducer = (
       };
 
     case AuthActionsEnum.SUCCESS_POST_AUTH:
-      console.log("START_POST_AUTH");
+      console.log("SUCCESS_POST_AUTH");
       return {
         ...state,
         loading: false,
         error: "",
       };
 
-    case AuthActionsEnum.FALID_POST_AUTH:
-      console.log("START_POST_AUTH");
+    case AuthActionsEnum.FALID_AUTH:
+      console.log("FALID_AUTH");
       return {
         ...state,
         loading: false,
         error: action.error,
       };
 
-    case AuthActionsEnum.SIGN_IN:
-      console.log("SIGN_IN");
+    case AuthActionsEnum.SIGN_IN_CHECK:
+      console.log("SIGN_IN_CHECK");
       return {
         ...state,
         isSignIn: action.ans,
         isAdmin: action.isAdmin,
-      };
-
-    case AuthActionsEnum.START_POST_RESET_PASSWORD:
-      console.log("START_POST_RESET_PASSWORD");
-      return {
-        ...state,
-        loading: true,
-        error: "",
       };
 
     case AuthActionsEnum.SUCCESS_POST_RESET_PASSWORD:
@@ -75,21 +49,6 @@ export const authReducer = (
       return {
         ...state,
         loading: false,
-        error: "",
-      };
-
-    case AuthActionsEnum.FALID_POST_RESET_PASSWORD:
-      console.log("FALID_POST_RESET_PASSWORD");
-      return {
-        ...state,
-        loading: false,
-        error: action.error,
-      };
-    case AuthActionsEnum.START_POST_SET_NEW_PASSWORD:
-      console.log("START_POST_SET_NEW_PASSWORD");
-      return {
-        ...state,
-        loading: true,
         error: "",
       };
 
@@ -101,13 +60,6 @@ export const authReducer = (
         error: "",
       };
 
-    case AuthActionsEnum.FALID_POST_SET_NEW_PASSWORD:
-      console.log("FALID_POST_SET_NEW_PASSWORD");
-      return {
-        ...state,
-        loading: false,
-        error: action.error,
-      };
     default:
       return state;
   }

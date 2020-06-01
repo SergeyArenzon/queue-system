@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const {
-  errorPassword401: error401,
+  errorPassword401: error401,errorDomain401,
   error404,
   error422,
 } = require("../../../utils/error/dbErrorHandler");
@@ -73,3 +73,20 @@ exports.employeeLogin = async (req, res, next) => {
     return next(error);
   }
 };
+
+
+exports.check = async (req, res, next) => {
+  // const domain =req.get("domain");
+  const domain =req.params.domain;
+    
+  try {
+    console.log(domain);
+    
+    let ans = await require("../../../models/domain.model").find();
+    ans = ans.every((e) => e.domain !== domain);
+    errorDomain401(ans);
+    res.status(200).json({ message: "Domain is free" });
+  } catch (error) {
+    next(error);
+  }
+}
