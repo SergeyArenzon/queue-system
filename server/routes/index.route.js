@@ -1,13 +1,9 @@
 module.exports = (app, mongoose) => {
 
   app.use("/business", require("./business/index.business-route"));
-  
- 
-
-
 
   app.use("/:domain", async (req, res, next) => {    
-    try {
+    try {      
       const domain = req.params.domain;
       req.mongo = mongoose.connection.useDb(domain);
       next();
@@ -17,8 +13,6 @@ module.exports = (app, mongoose) => {
   });
 
   app.use("/:domain", require("./domain/index.domain-route"));
-
-
 
   require("../utils/error/index.error")(app);
 };

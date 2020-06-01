@@ -6,7 +6,7 @@ export const registerBusiness = (form: businessForm) => {
     dispatch({ type: BusinessActionsEnum.START_BUSINESS });
     const domain = localStorage.getItem("domain");
 
-    API.post(domain + "/business/details")
+    API.post(domain + "/details")
       .then((res) => {
         console.log(res.data.msg, "test");
       })
@@ -28,7 +28,7 @@ export const postBuisnessHours = (form: businesHourForm) => {
     dispatch({ type: BusinessActionsEnum.START_BUSINESS });
     const domain = localStorage.getItem("domain");
 
-    API.post(domain + "/business/details/hours")
+    API.post(domain + "/details/hours")
       .then((res) => {
         console.log(res.data.msg, "test");
       })

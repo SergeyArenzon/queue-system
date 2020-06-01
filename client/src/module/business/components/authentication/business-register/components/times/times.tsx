@@ -111,7 +111,7 @@ const Times: React.FC<Props> = (props) => {
 
   // Checks the information in front of the server
   const onClickNext = () => {
-    //props.step('increment');
+    props.step('increment');
     if (Object.keys(props.values.workTimes).length === 0) {
       setError("לא הוזנו ימים");
       return;
@@ -122,7 +122,7 @@ const Times: React.FC<Props> = (props) => {
       schdule[key] = [];
       schdule[key].push(props.values.workTimes[key]);
     }
-    props.postBuisnessHours(schdule);
+    //props.postBuisnessHours(schdule);
     nextPage = true;
   };
 

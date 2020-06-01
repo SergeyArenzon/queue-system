@@ -36,7 +36,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
 
   // Checks the information in front of the server
   const onClickNext = () => {
-    //props.step('increment');
+    props.step('increment');
     const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
 
     if (props.values.password !== props.values.validatePassword) {
@@ -52,7 +52,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
         email: props.values.managerEmail,
         password: props.values.password,
       };
-      props.registerEmployee(form);
+     // props.registerEmployee(form);
       nextPage = true;
     }
   };
@@ -152,11 +152,10 @@ export default connect<StateProps, DispatchProps>(
 )(
   memo(ManagerRegistration, (prevProps, nextProps) => {
     console.log("ManagerRegistration");
-    //if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
-
-    if (!nextProps.loading && nextPage && Error.length <= 1) {
-      //nextProps.step('increment');
-      prevProps.openModal();
+    //if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {    
+    if (!nextProps.loading && nextPage && Error.length <= 1 && !nextProps.error) {
+      nextProps.step('increment');
+      //prevProps.openModal();
       return true;
     }
     return false;

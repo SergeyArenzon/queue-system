@@ -46,7 +46,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
 
   // Checks the information in front of the server
   const onClickNext = () => {
-    // props.step('increment');
+    props.step('increment');
     const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
     const url = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
@@ -73,7 +73,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
         about: props.values.about,
         domain: props.values.domain,
       };
-      props.registerBusiness(form);
+     // props.registerBusiness(form);
       nextPage = true;
     }
   };

@@ -32,7 +32,7 @@ const Domain: React.FC<Props> = (props) => {
 
     // Checks the information in the server
     const onClickNext = () => {
-        //props.step('increment');
+        props.step('increment');
         const english = /^[a-zA-Z]+$/;
         if (props.values.domain.length < 2) {
             setError(language.domainLengthError[1]);
@@ -42,7 +42,7 @@ const Domain: React.FC<Props> = (props) => {
         }
         else {
             setError("");
-            props.setDomain(props.values.domain);
+            //props.setDomain(props.values.domain);
             nextPage = true;
         }
     };

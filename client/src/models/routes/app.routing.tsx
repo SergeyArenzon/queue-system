@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Route,
-  Switch,
-  RouteComponentProps,
-  withRouter,
-} from "react-router-dom";
+import { Route, Switch, RouteComponentProps, withRouter } from "react-router-dom";
 //import MainUser from "../../module/business/core/main-user.user";
 import Home from "../../module/business/components/home/home.business";
 import Customers from "../../module/business/components/customers/customers.business";
@@ -13,12 +8,12 @@ import BusinessRegister from "../../module/business/components/authentication/bu
 import BusinessLogin from "../../module/business/components/authentication/busniess-login/business-login.business";
 import EmployeeReset from "../../module/business/components/authentication/busniess-login/reset-employee-password.business";
 import SetNewEmployeePassword from "../../module/business/components/authentication/busniess-login/setNew-employee-password.business";
-
 import PrivateRoute from "./private-route.routes";
 import AdminRoute from "./admin-route.routes";
 import SerivcesSettings from "../../module/business/components/settings/services/serivces.settings";
 
 const Routing: React.FC<RouteComponentProps<{}>> = (props) => {
+
   const renderShirts = (routerProps: any) => {
     const domain = routerProps.match.params.domain;
     console.log(domain);
@@ -38,31 +33,39 @@ const Routing: React.FC<RouteComponentProps<{}>> = (props) => {
       {/* Home */}
       <Route
         exact
-        path="/business/:domain"
+        path="/business/"
         render={(a: any) => renderShirts(a)}
       />
       {/* Settings */}
       <Route
-        path="/business/:domain/settings/services"
+        path="/business/settings/services"
         render={() => <SerivcesSettings />}
       />
       <Route
-        path="/business/:domain/settings/hours"
+        path="/business//settings/hours"
         render={(a: any) => renderShirts(a)}
       />
       <Route
-        path="/business/:domain/settings/employees"
+        path="/business/settings/employees"
         render={(a: any) => renderShirts(a)}
       />
       <Route
-        path="/business/:domain/settings/businesssettings"
+        path="/business/settings/businesssettings"
         render={(a: any) => renderShirts(a)}
       />
-      {/* Cosumers */}
+      {/* Cosumers
       <PrivateRoute path="/business/allcustomers" component={Customers} />
       {/* Calander */}
-      <AdminRoute path="/business/calander" component={CalendarUser} />
+      {/* <AdminRoute path="/business/calander" component={CalendarUser} /> */} */}
+      <Route
+        path="/business/allcustomers"
+        component={Customers}
+      />
 
+      <Route
+        path="/business/calander"
+        component={CalendarUser}
+      />
     </Switch>
   );
 };

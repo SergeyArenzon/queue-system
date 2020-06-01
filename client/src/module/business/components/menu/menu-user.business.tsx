@@ -104,8 +104,8 @@ const MenuUser = () => {
                                 style={ShowDropdownSettins ? { transform: ' rotate(-90deg)' } : {}} />
                         </div>
 
-                        <Dropdown items={[{ title: 'שירותים', url: '/business/:domain/settings/services' }, { title: 'שעות', url: '/business/customerweek' },
-                        { title: 'עובדים', url: '/business/customerweek' }, { title: 'הגדות עסק', url: '/business/customerweek' }]}
+                        <Dropdown items={[{ title: 'שירותים', url: '/business/settings/services' }, { title: 'שעות', url: '/business/settings/hours' },
+                        { title: 'עובדים', url: '/business/settings/employees' }, { title: 'הגדות עסק', url: '/business/settings/settings' }]}
                             show={ShowDropdownSettins} />
                     </div>
                 </div>

@@ -7,7 +7,7 @@ export const postService = (form: Service) => {
     dispatch({ type: serviceActionsEnum.START_SERVICE });
     const domain = localStorage.getItem("domain");
 
-    API.post(domain + "/business/service")
+    API.post(domain + "/service")
       .then((res) => {
         return dispatch({
           type: serviceActionsEnum.SUCCESS_POST_SERVICE,

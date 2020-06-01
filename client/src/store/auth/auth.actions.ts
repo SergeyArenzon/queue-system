@@ -8,7 +8,7 @@ export const setDomain = (domain: string) => {
     dispatch({ type: AuthActionsEnum.START_AUTH });
     localStorage.setItem("domain", domain);
     
-    API.get("check/" + domain)
+    API.get("business/auth/check/" + domain)
       .then((res) => {
         console.log(res.data.message);
       })
@@ -28,9 +28,9 @@ export const setDomain = (domain: string) => {
 export const registerEmployee = (employee: employeeForm) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_AUTH });
-    const domain = localStorage.getItem("domain");
+   // const domain = localStorage.getItem("domain");
 
-    API.post(domain + "/business/auth/register", employee)
+    API.post("/business/auth/register", employee)
       .then((res) => {
         const token = res.data.token;
         localStorage.setItem("token", token);

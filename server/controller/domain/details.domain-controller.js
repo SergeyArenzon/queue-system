@@ -1,10 +1,6 @@
 const moment = require("moment");
 
-const {
-  error422,
-  error404,
-  error403Admin,
-} = require("../../utils/error/dbErrorHandler");
+const { error422, error404, error403Admin } = require("../../utils/error/dbErrorHandler");
 
 exports.postBuisnessDetails = async (req, res, next) => {
   try {
