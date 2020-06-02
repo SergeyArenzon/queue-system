@@ -11,6 +11,7 @@ import SetNewEmployeePassword from "../../module/business/components/authenticat
 import PrivateRoute from "./private-route.routes";
 import AdminRoute from "./admin-route.routes";
 import SerivcesSettings from "../../module/business/components/settings/services/serivces.settings";
+import OpeningHours from "../../module/business/components/settings/opening-hours/opening-hours.settings";
 
 const Routing: React.FC<RouteComponentProps<{}>> = (props) => {
 
@@ -42,8 +43,8 @@ const Routing: React.FC<RouteComponentProps<{}>> = (props) => {
         render={() => <SerivcesSettings />}
       />
       <Route
-        path="/business//settings/hours"
-        render={(a: any) => renderShirts(a)}
+        path="/business/settings/hours"
+        component={OpeningHours}
       />
       <Route
         path="/business/settings/employees"

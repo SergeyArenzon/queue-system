@@ -68,7 +68,8 @@ export default function SerivcesSettings() {
                 s.category = service.category;
                 s.duration = service.duration;
                 s.price = service.price;
-                s.title = s.title;
+                s.title = service.title;
+                s.available = service.available;
                 setServiceToUpdate(null)
             }
             else {
@@ -81,7 +82,6 @@ export default function SerivcesSettings() {
     }
 
     const deleteService = (service: Service) => {
-
     }
 
     const updateService = (service: Service) => {
@@ -102,7 +102,6 @@ export default function SerivcesSettings() {
                 <Button onClick={() => setModal(true)} color="purple"> הוסף שירות חדש</Button>
 
                 <div className={SerivcesSettingsStyle.Services}>
-
                     <table>
                         <thead className={SerivcesSettingsStyle.TableHeader}>
                             <tr>
@@ -134,7 +133,6 @@ export default function SerivcesSettings() {
                                             <MdDelete onClick={() => deleteService(s)} color="#e62163" />
                                             <MdModeEdit onClick={() => updateService(s)} color="#7467ef" />
                                         </td>
-
                                     </tr>
                                 )
                             }

@@ -33,8 +33,6 @@ const AddService: React.FC<OwnProps> = (props) => {
 
     // Invoke when user click on category name in autocomplete
     const onChangeBySpecificName = (name: string, value: any) => {
-        console.log(value);
-        
         setNewService({
             ...NewService, [name]: value
         });
@@ -46,8 +44,6 @@ const AddService: React.FC<OwnProps> = (props) => {
             <Button onClick={() => props.addNewService(NewService)} color="purple">הוסף שירות</Button>
         </div>
     )
-
-    console.log(NewService);
 
     return (
         <Modal title="הוספת שירות" close={props.close} footer={<Footer />}>
@@ -67,7 +63,7 @@ const AddService: React.FC<OwnProps> = (props) => {
 
                 <div className={AddServiceStyle.Available}>
                     <p style={NewService.available ? { color: '#7467ef' } : { color: 'rgba(52, 49, 76, 1)' }}>
-                    {NewService.available ? "זמין": "לא זמין"}
+                        {NewService.available ? "זמין" : "לא זמין"}
                     </p>
                     <SwitchButton state={NewService.available !== undefined ? NewService.available : true} onChange={onChangeBySpecificName} />
                 </div>
