@@ -2,11 +2,15 @@ const jwt = require("jsonwebtoken");
 const Employee = require("../models/employee.model");
 const { error401auth, error404 } = require("../utils/error/dbErrorHandler");
 
-const Client = require("../models/client.model");
+// const Client = require("../models/client.model");
 
 module.exports = (kind, mongoose = null) => {
   return async (req, res, next) => {
-    console.log(req.get("token"));
+    if (kind === "client" && !req.get("token")) {
+      req.guest = true;
+      return next();
+
+    }
 
     let token = kind === "resetPassword" ? req.params.token : req.body.token;
 
@@ -20,13 +24,13 @@ module.exports = (kind, mongoose = null) => {
       switch (kind) {
         case "employee":
           req.employee = await Employee(req.mongo).findById(
-            decodedToken.employeeId
-          );
+            decodedToken.employeeId);
 
           error404(req.employee);
           break;
         case "client":
-          req.client = await Client.findById(decodedToken.clientId);
+          req.client = await Employee(req.mongo).findById(
+            decodedToken.employeeId);
           error404(req.client);
           break;
 

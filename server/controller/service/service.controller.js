@@ -1,7 +1,7 @@
 const {
   error422,
   error404,
-  error403Admin,
+  error403Admin, error401guest
 } = require("../../utils/error/dbErrorHandler");
 
 exports.postService = async (req, res, next) => {
@@ -33,6 +33,14 @@ exports.postService = async (req, res, next) => {
 
 exports.getServices = async (req, res, next) => {
   try {
+    //guset check
+    const Business = require("../../models/details.model")(req.mongo);
+    const buisnessDetails = await Business.findOne();
+    error404(buisnessDetails);
+    error401guest(req.guest, req.mongo)
+
+
+
     const Service = require("../../models/service.model");
 
     const services = await Service(req.mongo).find();

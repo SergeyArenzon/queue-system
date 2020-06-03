@@ -1,12 +1,12 @@
 const router = require("express").Router();
-const serviceController = require("../../controller/domain/service.domain-controller");
-const isAuth = require("../../middleware/is-auth");
+const serviceController = require("../../../controller/service/service.controller");
+const isAuth = require("../../../middleware/is-auth");
 
 const {
   serviceValidator,
-} = require("../../validator/management/service.validator");
+} = require("../../../validator/business/service.validator");
 
-router.get("/", serviceController.getServices);
+router.get("/", isAuth("employee"), serviceController.getServices);
 
 router.post(
   "/",

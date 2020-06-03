@@ -1,6 +1,6 @@
 const moment = require("moment");
 
-const { error422, error404, error403Admin } = require("../../utils/error/dbErrorHandler");
+const { error422, error404, error403Admin, error401guest } = require("../../utils/error/dbErrorHandler");
 
 exports.postBuisnessDetails = async (req, res, next) => {
   try {
@@ -9,7 +9,7 @@ exports.postBuisnessDetails = async (req, res, next) => {
     error403Admin(req);
 
     const updatdeDetail = { ...req.body };
-    const Business = require("../../models/business-details.model")(req.mongo);
+    const Business = require("../../models/details.model")(req.mongo);
 
     const detailsExist = await Business.findOneAndUpdate(updatdeDetail);
     if (!detailsExist) await new Business(updatdeDetail).save();
@@ -23,6 +23,24 @@ exports.postBuisnessDetails = async (req, res, next) => {
   }
 };
 
+exports.getBuisnessDetails = async (req, res, next) => {
+  try {
+    const Business = require("../../models/details.model")(req.mongo);
+    const buisnessDetails = await Business.findOne();
+    error404(buisnessDetails);
+    error401guest(req.guest, req.mongo)
+
+
+    res.status(200).json({
+      msg: "buisness details",
+      buisnessDetails,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+
 exports.postBuisnessHours = async (req, res, next) => {
   try {
     // error422(req);
@@ -30,7 +48,7 @@ exports.postBuisnessHours = async (req, res, next) => {
     error403Admin(req);
     const schedule = { ...req.body.schedule };
 
-    const Business = require("../../models/business-details.model")(req.mongo);
+    const Business = require("../../models/details.model")(req.mongo);
 
     const buisness = await Business.findOne();
     buisness.schedule = schedule;
@@ -60,7 +78,7 @@ exports.postDefualtHours = async (req, res, next) => {
   console.log(a);
 
   try {
-    const Business = require("../../models/business-details.model")(req.mongo);
+    const Business = require("../../models/details.model")(req.mongo);
 
     const buisness = await Business.findOne();
 
@@ -77,17 +95,3 @@ exports.postDefualtHours = async (req, res, next) => {
   }
 };
 
-exports.getBuisnessDetails = async (req, res, next) => {
-  try {
-    const Business = require("../../models/business-details.model")(req.mongo);
-
-    const buisnessDetails = await Business.findOne();
-    error404(buisnessDetails);
-    res.status(200).json({
-      msg: "buisness details",
-      buisnessDetails,
-    });
-  } catch (err) {
-    return next(err);
-  }
-};

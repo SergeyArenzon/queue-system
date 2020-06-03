@@ -40,11 +40,20 @@ exports.error404 = (obj) => {
 
 exports.error401auth = (token) => {
   if (!token) {
-    const error = new Error(hebrewErrorValidator.notAuth404HebError);
+    const error = new Error(hebrewErrorValidator.notAuth401HebError);
     error.statusCode = 401;
     throw error;
   }
 };
+exports.error401guest = (guest, buisnessDetails) => {
+  if (guest && !buisnessDetails.guestPermission) {
+    const error = new Error(hebrewErrorValidator.notAuthGuest401HebError);
+    error.statusCode = 401;
+    throw error;
+
+  }
+};
+
 
 exports.error403Admin = (req) => {
   if (!req.employee.isAdmin) {
