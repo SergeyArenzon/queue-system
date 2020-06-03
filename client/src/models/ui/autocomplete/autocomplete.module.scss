@@ -17,9 +17,9 @@
 
 .Options {
   position: absolute;
-  width: 200px;
-  left: 900px;
-  top: 300px;
+  width: 180px;
+  left: 895px;
+  top: 295px;
   box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.2);
 
   @include respond(phone) {
