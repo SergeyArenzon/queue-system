@@ -12,6 +12,7 @@ import PrivateRoute from "./private-route.routes";
 import AdminRoute from "./admin-route.routes";
 import SerivcesSettings from "../../module/business/components/settings/services/serivces.settings";
 import OpeningHours from "../../module/business/components/settings/opening-hours/opening-hours.settings";
+import BusinessSettings from "../../module/business/components/settings/business-settings/business-settings.settings";
 
 const Routing: React.FC<RouteComponentProps<{}>> = (props) => {
 
@@ -52,7 +53,7 @@ const Routing: React.FC<RouteComponentProps<{}>> = (props) => {
       />
       <Route
         path="/business/settings/businesssettings"
-        render={(a: any) => renderShirts(a)}
+        component={BusinessSettings}
       />
       {/* Cosumers
       <PrivateRoute path="/business/allcustomers" component={Customers} />

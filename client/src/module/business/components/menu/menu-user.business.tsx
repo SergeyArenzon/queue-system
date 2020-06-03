@@ -105,7 +105,7 @@ const MenuUser = () => {
                         </div>
 
                         <Dropdown items={[{ title: 'שירותים', url: '/business/settings/services' }, { title: 'שעות', url: '/business/settings/hours' },
-                        { title: 'עובדים', url: '/business/settings/employees' }, { title: 'הגדות עסק', url: '/business/settings/settings' }]}
+                        { title: 'עובדים', url: '/business/settings/employees' }, { title: 'הגדות עסק', url: '/business/settings/businesssettings' }]}
                             show={ShowDropdownSettins} />
                     </div>
                 </div>

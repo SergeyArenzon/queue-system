@@ -38,7 +38,6 @@ const AddService: React.FC<OwnProps> = (props) => {
         });
     };
 
-
     const Footer = () => (
         <div className={AddServiceStyle.Button}>
             <Button onClick={() => props.addNewService(NewService)} color="purple">הוסף שירות</Button>
@@ -50,6 +49,7 @@ const AddService: React.FC<OwnProps> = (props) => {
             <div className={AddServiceStyle.Body}>
                 <Input name="category  " type="text" value={NewService.category}
                     onChange={(e) => onChange(e, "category")} label="קטגוריה" style={{ width: '300px' }} class="line" />
+
                 <Autocomplete wordsList={props.categories} word={NewService.category} onCategoryClick={onChangeBySpecificName} />
 
                 <Input name="title" type="text" value={NewService.title}

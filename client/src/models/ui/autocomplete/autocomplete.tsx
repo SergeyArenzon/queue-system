@@ -28,6 +28,7 @@ const Autocomplete: React.FC<OwnProps> = (props) => {
 
     // Initial filteredOptions array in options
     const onChange = () => {
+        console.log(AutoComplete.showOptions, 'change');
         const filteredOptions = props.wordsList.filter(
             (optionName) =>
                 optionName.toLowerCase().indexOf(props.word.toLowerCase()) > -1
@@ -70,18 +71,10 @@ const Autocomplete: React.FC<OwnProps> = (props) => {
         }
     }
     if (!props.word) optionList = undefined;
-    console.log(props.word);
-
 
     return (
         <div className={AutocompleteStyle.Options}>{optionList}</div>
     )
 }
 
-export default memo(Autocomplete,
-    (prevProps, nextProps) => {
-        if (nextProps.word !== prevProps.word) {
-            return false;
-        }
-        return false;
-    });
+export default Autocomplete;
