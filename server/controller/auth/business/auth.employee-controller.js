@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const { errorPassword401: error401,errorDomain401, error404, error422 } = require("../../../utils/error/dbErrorHandler");
+const { errorPassword401: error401, errorDomain401, error404, error422 } = require("../../../utils/error/dbErrorHandler");
 const Domain = require("../../../models/domain.model");
 const { createToken } = require("../../helper/helper.controller");
 const {
   employeeValidator,
-} = require("../../../validator/management/employee.validator");
+} = require("../../../validator/business/employee.validator");
 const bcrypt = require("bcrypt");
 
 exports.register = async (req, res, next) => {
@@ -72,9 +72,9 @@ exports.employeeLogin = async (req, res, next) => {
 
 exports.check = async (req, res, next) => {
   // const domain =req.get("domain");
-  const domain =req.params.domain;
-    
-  try {    
+  const domain = req.params.domain;
+
+  try {
     let ans = await require("../../../models/domain.model").find();
     ans = ans.every((e) => e.domain !== domain);
     errorDomain401(ans);

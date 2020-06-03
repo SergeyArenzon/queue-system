@@ -26,5 +26,7 @@ module.exports.businessAdressHebError = "כתובת העסק הוא שדה חו�
 
 module.exports.notFound404HebError = "פריט לא נמצא";
 module.exports.notAuth401HebError = "חסרה הרשאה מתאימה";
+module.exports.notAuthGuest401HebError = "אורח לא רשאי אנא התחבר";
+
 module.exports.wrongPassword401HebError = "סיסמה נוכחית לא נכונה";
 module.exports.wrongDomain401HebError = "כתובת עסק תפוסה";

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const resetPasswordController = require("../../../controller/business/auth/reset-password.employee-controller");
+const resetPasswordController = require("../../../controller/auth/business/reset-password.employee-controller");
 const {
   passwordIsEqualValidator,
 } = require("../../../validator/business/employee.validator");

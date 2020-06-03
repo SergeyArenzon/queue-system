@@ -44,6 +44,8 @@ export const serviceReducer = (state = initialserviceState, action: allserviceAc
     case serviceActionsEnum.SUCCESS_UPDATE_SERVICE:
       console.log("SUCCESS_UPDATE_SERVICE");
       const s = [...state.services];
+      console.log(s);
+
       for (let index = 0; index < s.length; index++) {
         if (action.service.id === s[index].id) {
           s.splice(index, 1, action.service);

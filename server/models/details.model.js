@@ -57,9 +57,12 @@ const SingletonBusinessSchema = (() => {
         domain: {
           type: String,
           require: true,
-        
-        },
 
+        },
+        guestPermission: {
+          type: Boolean,
+          default: true
+        },
         schedule: {
           type: Map,
           require: false,
