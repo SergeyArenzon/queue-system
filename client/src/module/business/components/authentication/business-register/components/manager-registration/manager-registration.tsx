@@ -73,6 +73,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
           type="text"
           value={props.values.managerFirstName}
           onChange={(e) => props.onChange(e, "managerFirstName")}
+          class="border"
         />
 
         {/* Last Name */}
@@ -82,6 +83,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
           type="text"
           value={props.values.managerLastName}
           onChange={(e) => props.onChange(e, "managerLastName")}
+          class="border"
         />
 
         {/* Phone */}
@@ -91,6 +93,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
           type="tel"
           value={props.values.managerPhone}
           onChange={(e) => props.onChange(e, "managerPhone")}
+          class="border"
         />
 
         {/* Email */}
@@ -100,6 +103,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
           type="email"
           value={props.values.managerEmail}
           onChange={(e) => props.onChange(e, "managerEmail")}
+          class="border"
         />
 
         {/* Password */}
@@ -109,6 +113,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
           type="password"
           value={props.values.password}
           onChange={(e) => props.onChange(e, "password")}
+          class="border"
         />
 
         {/* Confirm Password */}
@@ -118,6 +123,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
           type="password"
           value={props.values.validatePassword}
           onChange={(e) => props.onChange(e, "validatePassword")}
+          class="border"
         />
       </div>
 

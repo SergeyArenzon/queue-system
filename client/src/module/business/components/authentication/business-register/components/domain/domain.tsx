@@ -54,7 +54,7 @@ const Domain: React.FC<Props> = (props) => {
 
             <div className={ManagerRegistrationStyle.Body} style={{ marginTop: '50px' }}>
                 <Input label={language.domainTitle[1]} name="domain" type="text"
-                    value={props.values.domain} onChange={(e) => props.onChange(e, 'domain')} />
+                    value={props.values.domain} onChange={(e) => props.onChange(e, 'domain')} class="border" />
             </div>
 
             {
@@ -80,7 +80,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Domain,
     (prevProps, nextProps) => {
-        console.log('Domain');        
+        console.log('Domain');
         if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
             nextProps.step('increment');
             return true;

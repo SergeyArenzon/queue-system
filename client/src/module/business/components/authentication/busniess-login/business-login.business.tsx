@@ -70,6 +70,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
               type="tel"
               value={Form.phone}
               onChange={(e) => setForm({ ...Form, phone: e.target.value })}
+              class="border"
             />
 
             {/* Password */}
@@ -80,6 +81,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
               type="password"
               value={Form.password}
               onChange={(e) => setForm({ ...Form, password: e.target.value })}
+              class="border"
             />
           </div>
           {!props.loading ? (

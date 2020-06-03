@@ -6,7 +6,7 @@
   }
 
   & .Available{
-    width: 350px;
+    width: 300px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,7 +25,7 @@
 
 .Button {
   margin: auto;
-  width: 350px;
+  width: 300px;
   text-align: left;
 
   @include respond(phone) {

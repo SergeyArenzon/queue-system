@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AddServiceStyle from './add-service.module.scss';
 import Modal from '../../../../../../../models/ui/modal/modal';
-import InputAnimation from '../../../../../../../models/ui/input-animation/input-animation';
+import Input from '../../../../../../../models/ui/input/input';
 import Button from '../../../../../../../models/ui/button/button';
 import { Service } from '../../../../../../../models/system/service';
 import Autocomplete from '../../../../../../../models/ui/autocomplete/autocomplete';
@@ -48,18 +48,18 @@ const AddService: React.FC<OwnProps> = (props) => {
     return (
         <Modal title="הוספת שירות" close={props.close} footer={<Footer />}>
             <div className={AddServiceStyle.Body}>
-                <InputAnimation name="category  " type="text" value={NewService.category}
-                    onChange={(e) => onChange(e, "category")} placeholder="קטגוריה" />
+                <Input name="category  " type="text" value={NewService.category}
+                    onChange={(e) => onChange(e, "category")} label="קטגוריה" style={{ width: '300px' }} class="line" />
                 <Autocomplete wordsList={props.categories} word={NewService.category} onCategoryClick={onChangeBySpecificName} />
 
-                <InputAnimation name="title" type="text" value={NewService.title}
-                    onChange={(e) => onChange(e, "title")} placeholder="שם השירות" />
+                <Input name="title" type="text" value={NewService.title}
+                    onChange={(e) => onChange(e, "title")} label="שם השירות" style={{ width: '300px' }} class="line" />
 
-                <InputAnimation name="price" type="number" value={NewService.price == 0 ? "" : NewService.price}
-                    onChange={(e) => onChange(e, "price")} placeholder="מחיר" />
+                <Input name="price" type="number" value={NewService.price == 0 ? "" : NewService.price}
+                    onChange={(e) => onChange(e, "price")} label="מחיר" style={{ width: '300px' }} class="line" />
 
-                <InputAnimation name="duration" type="number" value={NewService.duration == 0 ? "" : NewService.duration}
-                    onChange={(e) => onChange(e, "duration")} placeholder="זמן" />
+                <Input name="duration" type="number" value={NewService.duration == 0 ? "" : NewService.duration}
+                    onChange={(e) => onChange(e, "duration")} label="זמן" style={{ width: '300px' }} class="line" />
 
                 <div className={AddServiceStyle.Available}>
                     <p style={NewService.available ? { color: '#7467ef' } : { color: 'rgba(52, 49, 76, 1)' }}>

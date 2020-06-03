@@ -42,7 +42,8 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
     password,
     phone,
     name: {
-      ...firstName, validation: {
+      ...firstName,
+      validation: {
         required: false,
       }
     },
@@ -122,6 +123,7 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
                 onChange={(e) =>
                   setForm({ ...Form, confirmPassword: e.target.value })
                 }
+                class="border"
               />
             </div>
 

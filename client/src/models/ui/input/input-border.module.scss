@@ -1,19 +1,25 @@
 @import '../../style/main.scss';
 
 .Input {
+  position: relative;
     width: 40%;
     @include respond(phone) {
       width: 80%;
     }
 
     & label {
-      color: $text-body;
-      text-align: right !important;
-      font-size: 0.9rem;
-      font-weight: 200;
-      padding-bottom: 7px;
-      padding-top: 12px;
-      display: inline-block;
+      position: absolute;
+      pointer-events: none;
+      top: 10px;
+      left: 100px;
+      text-align: center;
+      font-size: $small-size;
+      font-family: inherit;
+      opacity: 0;
+      background-color: $white;
+      padding: 0 2px;
+      -webkit-transition: 0.2s ease-in-out;
+      transition: 0.2s ease-in-out;
     }
 
     & input,
@@ -72,4 +78,11 @@
         bottom: 5px;
       }
     }
+  }
+
+  input:not(:placeholder-shown) + label,  textarea:not(:placeholder-shown) + label{
+    opacity: 1;
+    top: -10px;
+    left: 10px;
+    color: $text-body;
   }

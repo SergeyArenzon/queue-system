@@ -5,7 +5,6 @@ interface OwnProps {
   ref: any;
   label?: string;
   name?: string;
-
   value: any;
   key: string;
   elementType: string;

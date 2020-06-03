@@ -146,22 +146,22 @@ const Services: React.FC<Props> = (props) => {
       <div className={ManagerRegistrationStyle.Body}>
         {/* Category Name */}
         <Input label={language.categoryName[1]} name="category" type="text"
-          value={Service.category} onChange={onCategoryChange} />
+          value={Service.category} onChange={onCategoryChange} class="border" />
 
         {/* AutoComplete */}
         <div className={ServicesStyle.Options}>{optionList}</div>
 
         {/* Service Name */}
         <Input label={language.serviceName[1]} name="title" type="text"
-          value={Service.title} onChange={(e) => setService({ ...Service, title: e.target.value })} />
+          value={Service.title} onChange={(e) => setService({ ...Service, title: e.target.value })} class="border" />
 
         {/* Service Price */}
         <Input label={language.price[1]} name="price" type="number"
-          value={Service.price} onChange={(e) => setService({ ...Service, price: parseInt(e.target.value) })} />
+          value={Service.price} onChange={(e) => setService({ ...Service, price: parseInt(e.target.value) })} class="border" />
 
         {/* Service Duration */}
         <Input label={language.duration[1]} name="duration" type="number"
-          value={Service.duration} onChange={(e) => setService({ ...Service, duration: parseInt(e.target.value) })} />
+          value={Service.duration} onChange={(e) => setService({ ...Service, duration: parseInt(e.target.value) })} class="border" />
       </div>
 
       <div className={ServicesStyle.ServicesList}>{AllServices()}</div>

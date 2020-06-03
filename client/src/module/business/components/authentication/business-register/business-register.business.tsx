@@ -113,11 +113,11 @@ const BusinessRegister: React.FC<Props> = (props) => {
                         }
                         {
                             ChangePhone ?
-                                <Input  label="מספר טלפון" name="phone" type="tel" style={{width: '60%'}}
-                                    value={Form.managerPhone} onChange={(e) => onChange(e, "managerPhone")} />
+                                <Input label="מספר טלפון" name="phone" type="tel" style={{ width: '60%' }}
+                                    value={Form.managerPhone} onChange={(e) => onChange(e, "managerPhone")} class="border" />
                                 :
-                                <Input label="קוד אימות" name="phone" type="text" style={{width: '60%'}}
-                                    value={phoneVerification} onChange={(e) => setphoneVerification(e.target.value)} />
+                                <Input label="קוד אימות" name="phone" type="text" style={{ width: '60%' }}
+                                    value={phoneVerification} onChange={(e) => setphoneVerification(e.target.value)} class="border" />
                         }
 
                         <div className={BusinessRegisterStyle.Buttons}>

@@ -52,6 +52,7 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
                 type="tel"
                 value={Phone}
                 onChange={(e) => setPhone(e.target.value)}
+                class="border"
               />
             </div>
 

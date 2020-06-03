@@ -14,7 +14,7 @@ import { registerBusiness } from "../../../../../../../store/business/business.a
 import { businessForm } from "../../../../../../../store/business/business.types";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Input from "../../../../../../../models/ui/input/input";
-import InputStyle from "../../../../../../../models/ui/input/input.module.scss";
+import InputStyle from "../../../../../../../models/ui/input/input-border.module.scss";
 
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
@@ -73,7 +73,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
         about: props.values.about,
         domain: props.values.domain,
       };
-     // props.registerBusiness(form);
+      // props.registerBusiness(form);
       nextPage = true;
     }
   };
@@ -94,6 +94,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           type="text"
           value={props.values.businessName}
           onChange={(e) => props.onChange(e, "businessName")}
+          class="border"
         />
 
         {/* Address */}
@@ -103,6 +104,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           type="text"
           value={props.values.businessAddress}
           onChange={(e) => props.onChange(e, "businessAddress")}
+          class="border"
         />
 
         {/* Business Phone */}
@@ -112,6 +114,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           type="tel"
           value={props.values.businessPhone}
           onChange={(e) => props.onChange(e, "businessPhone")}
+          class="border"
         />
 
         {/* Email */}
@@ -121,18 +124,20 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           type="email"
           value={props.values.businessEmail}
           onChange={(e) => props.onChange(e, "businessEmail")}
+          class="border"
         />
 
         {/* About */}
         <div className={InputStyle.Input}>
-          <label htmlFor="about">{language.about[1]}</label>
           <textarea
             id="about"
             name="about"
             value={props.values.about}
             style={{ height: "100px" }}
             onChange={(e) => props.onChange(e, "about")}
+            placeholder={language.about[1]}
           />
+          <label htmlFor="about">{language.about[1]}</label>
         </div>
 
         {/* Links */}
@@ -185,8 +190,8 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           </Button>
         </div>
       ) : (
-        <div>Loading...</div>
-      )}
+          <div>Loading...</div>
+        )}
     </div>
   );
 };
