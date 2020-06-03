@@ -12,7 +12,46 @@
 
   & .Body {
     @include settingsBody;
-    height: 40vh;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    height: 400px;
 
+    @include respond(phone) {
+      height: 100%;
+    }
+
+    & .Details {
+      width: 60%;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 30px;
+
+      @include respond(phone) {
+        width: 100%;
+      }
+    }
+
+    & .Photo {
+      width: 39%;
+      margin: auto;
+      text-align: center;
+
+      @include respond(phone) {
+        display: none;
+      }
+      & img {
+        width: 350px;
+      }
+    }
+  }
+
+  & .Button {
+    @include settingsButton;
+    
+    @include respond(phone) {
+      text-align: center;
+    }
   }
 }

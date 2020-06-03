@@ -1,7 +1,9 @@
-import { BusinessActionsEnum, businessForm, businesHourForm, } from "./business.types";
+import { BusinessActionsEnum } from "./business.types";
 import API from "../../models/axios/axios";
+import { BusinessDetails } from "../../models/system/business-details";
+import { BusinesHours } from "../../models/system/busines-hours";
 
-export const registerBusiness = (form: businessForm) => {
+export const registerBusiness = (form: BusinessDetails) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: BusinessActionsEnum.START_BUSINESS });
     const domain = localStorage.getItem("domain");
@@ -23,7 +25,7 @@ export const registerBusiness = (form: businessForm) => {
   };
 };
 
-export const postBuisnessHours = (form: businesHourForm) => {
+export const postBuisnessHours = (form: BusinesHours) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: BusinessActionsEnum.START_BUSINESS });
     const domain = localStorage.getItem("domain");

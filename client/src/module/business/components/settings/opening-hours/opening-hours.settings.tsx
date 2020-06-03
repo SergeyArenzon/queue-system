@@ -4,13 +4,15 @@ import * as days from '../../../../../assets/days/days';
 import * as hours from '../../../../../assets/hours/hours';
 import Header from '../../shared/header/header.shared';
 import Breadcrumbs from '../../../../../models/ui/breadcrumbs/breadcrumbs';
-import { businesHourForm } from '../../../../../store/business/business.types';
 import SwitchButton from '../../../../../models/ui/switch-button/switch-button';
 import Options from '../../../../../models/ui/options/options';
+import { BusinesHours } from '../../../../../models/system/busines-hours';
+import { ArrowNext } from '../../../../../assets/icons/icons';
+import Button from '../../../../../models/ui/button/button';
 
 const OpeningHours = () => {
     const [IsMobile, setIsMobile] = useState<any>(false);
-    const [Hours, setHours] = useState<businesHourForm>({
+    const [Hours, setHours] = useState<BusinesHours>({
         "sunday": [
             { start: "09:00", end: "18:00" }
         ],
@@ -111,6 +113,10 @@ const OpeningHours = () => {
                             )
                         })}
                     </div>
+                </div>
+
+                <div className={HoursStyle.Button}>
+                    <Button color="purple">שמירה שינויים <ArrowNext /></Button>
                 </div>
             </div>
         </React.Fragment>

@@ -57,3 +57,15 @@
     border: none;
   }
 }
+
+
+@mixin settingsButton{
+  width: 95%;
+  margin: auto;
+  margin-top: 30px;
+  text-align: left;
+
+  @include respond(phone) {
+
+  }
+}

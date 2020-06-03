@@ -105,7 +105,7 @@
     margin-right: 2%;
     border-radius: 50%;
     z-index: 2;
-    text-align: center;
+    text-align: center !important;
     cursor: pointer;
 
     @include respond(phone) {

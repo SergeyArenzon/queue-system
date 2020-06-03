@@ -1,7 +1,9 @@
+import { BusinessDetails } from "../../models/system/business-details";
+
 export interface BusinessState {
   error: string;
   loading: boolean;
-  deatils: businessForm | null
+  deatils: BusinessDetails | null
 }
 
 export enum BusinessActionsEnum {
@@ -22,7 +24,7 @@ export interface startBusinessActionType extends AuthActionPattern {
 
 export interface postBusinessActionType extends AuthActionPattern {
   type: BusinessActionsEnum.POST_BUSINESS;
-  form: businessForm;
+  form: BusinessDetails;
 }
 
 export interface successPostBusinesActionType extends AuthActionPattern {
@@ -36,22 +38,5 @@ export interface faildBusinesActionType extends AuthActionPattern {
 
 export interface getBusinessActionType extends AuthActionPattern {
   type: BusinessActionsEnum.GET_BUSINESS;
-  deatils: businessForm;
+  deatils: BusinessDetails;
 }
-
-export type businessForm = {
-  id?: string;
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-  about: string;
-  links: { [key: string]: string };
-  logo?: string;
-  domain: string;
-  hours?: businesHourForm
-};
-
-export type businesHourForm = {
-  [day: string]: { start: string; end: string }[];
-};

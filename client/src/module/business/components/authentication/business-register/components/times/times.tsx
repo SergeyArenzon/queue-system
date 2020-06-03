@@ -9,11 +9,10 @@ import {
   getError,
 } from "../../../../../../../store/business/business.selectors";
 import { connect } from "react-redux";
-import { businesHourForm } from "../../../../../../../store/business/business.types";
-
 import { postBuisnessHours } from "../../../../../../../store/business/business.actions";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Checkbox from "../../../../../../../models/ui/checkbox/checkbox";
+import { BusinesHours } from "../../../../../../../models/system/busines-hours";
 
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
@@ -117,7 +116,7 @@ const Times: React.FC<Props> = (props) => {
       return;
     }
     setError("");
-    let schdule: businesHourForm = {};
+    let schdule: BusinesHours = {};
     for (const [key, value] of Object.entries(props.values.workTimes)) {
       schdule[key] = [];
       schdule[key].push(props.values.workTimes[key]);
@@ -241,7 +240,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  postBuisnessHours: (form: businesHourForm) =>
+  postBuisnessHours: (form: BusinesHours) =>
     dispatch(postBuisnessHours(form)),
 });
 

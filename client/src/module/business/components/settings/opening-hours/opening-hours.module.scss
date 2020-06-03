@@ -12,7 +12,11 @@
 
   & .Body {
     @include settingsBody;
-    height: 40vh;
+    height: 400px;
+
+    @include respond(phone) {
+      height: 100%;
+    }
 
     & .Days {
       display: flex;
@@ -52,12 +56,21 @@
 
         & .Day {
           display: none;
+
           @include respond(phone) {
             display: block;
             text-align: center;
           }
         }
       }
+    }
+  }
+
+  & .Button {
+    @include settingsButton;
+
+    @include respond(phone) {
+      text-align: center;
     }
   }
 }

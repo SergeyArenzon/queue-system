@@ -6,6 +6,7 @@ interface OwnProps {
   color: "purple" | "orange" | "purple-register";
   border?: boolean;
   disabled?: boolean;
+  style?: {}
 }
 
 const Button: React.FC<OwnProps> = (props) => {
@@ -13,8 +14,8 @@ const Button: React.FC<OwnProps> = (props) => {
     props.color === "purple"
       ? "#7467ef"
       : props.color === "orange"
-      ? "#ff9e43"
-      : "#7b1fa2";
+        ? "#ff9e43"
+        : "#7b1fa2";
 
   return (
     <button
@@ -27,7 +28,9 @@ const Button: React.FC<OwnProps> = (props) => {
       className={ButtonStyle.Button}
       onClick={props.onClick}
     >
-      {props.children}
+      <div className={ButtonStyle.Children}>
+        {props.children}
+      </div>
     </button>
   );
 };

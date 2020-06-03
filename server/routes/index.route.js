@@ -2,7 +2,7 @@ module.exports = (app, mongoose) => {
 
   app.use("/business", require("./business/index.business-route"));
 
-  app.use("/:domain", async (req, res, next) => {    
+  app.use(async (req, res, next) => {    
     try {      
       const domain = req.params.domain;
       req.mongo = mongoose.connection.useDb(domain);

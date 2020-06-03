@@ -7,6 +7,7 @@ import Button from '../../../../../models/ui/button/button';
 import Breadcrumbs from '../../../../../models/ui/breadcrumbs/breadcrumbs';
 import AddService from './components/add-service/add-service.services';
 import { validationService } from '../../../../../models/validation/service.validation';
+import { ArrowNext } from '../../../../../assets/icons/icons';
 
 export default function SerivcesSettings() {
     const [Categories, setCategories] = useState(['תספורת', 'צבע', 'חפיפה']);
@@ -138,6 +139,9 @@ export default function SerivcesSettings() {
                             }
                         </tbody>
                     </table>
+                </div>
+                <div className={SerivcesSettingsStyle.Button}>
+                    <Button color="purple">שמירה שינויים <ArrowNext /></Button>
                 </div>
             </div>
         </React.Fragment>

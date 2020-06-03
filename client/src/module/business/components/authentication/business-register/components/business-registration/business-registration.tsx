@@ -3,18 +3,16 @@ import BusinessRegistrationStyle from "./business-registration.module.scss";
 import ManagerRegistrationStyle from "../manager-registration/manager-registration.module.scss";
 import * as language from "../../../../../../../assets/language/language";
 import Button from "../../../../../../../models/ui/button/button";
-import { AiOutlineLink } from "react-icons/ai";
-import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import {
   getError,
   getLoading,
 } from "../../../../../../../store/business/business.selectors";
 import { connect } from "react-redux";
 import { registerBusiness } from "../../../../../../../store/business/business.actions";
-import { businessForm } from "../../../../../../../store/business/business.types";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Input from "../../../../../../../models/ui/input/input";
-import InputStyle from "../../../../../../../models/ui/input/input-border.module.scss";
+import { BusinessDetails } from "../../../../../../../models/system/business-details";
+import SocialMediaLinks from "./components/social-media-links/social-media-links";
 
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
@@ -63,7 +61,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
       setError(language.urlError[1]);
     } else {
       setError("");
-      const form: businessForm = {
+      const form: BusinessDetails = {
         name: props.values.businessName,
         address: props.values.businessAddress,
         phone: props.values.businessPhone,
@@ -95,6 +93,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           value={props.values.businessName}
           onChange={(e) => props.onChange(e, "businessName")}
           class="border"
+          style={{ width: '40%' }}
         />
 
         {/* Address */}
@@ -105,6 +104,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           value={props.values.businessAddress}
           onChange={(e) => props.onChange(e, "businessAddress")}
           class="border"
+          style={{ width: '40%' }}
         />
 
         {/* Business Phone */}
@@ -115,6 +115,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           value={props.values.businessPhone}
           onChange={(e) => props.onChange(e, "businessPhone")}
           class="border"
+          style={{ width: '40%' }}
         />
 
         {/* Email */}
@@ -125,59 +126,23 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           value={props.values.businessEmail}
           onChange={(e) => props.onChange(e, "businessEmail")}
           class="border"
+          style={{ width: '40%' }}
         />
 
         {/* About */}
-        <div className={InputStyle.Input}>
-          <textarea
-            id="about"
-            name="about"
-            value={props.values.about}
-            style={{ height: "100px" }}
-            onChange={(e) => props.onChange(e, "about")}
-            placeholder={language.about[1]}
-          />
-          <label htmlFor="about">{language.about[1]}</label>
-        </div>
+        <Input
+          label={language.about[1]}
+          name="about"
+          value={props.values.about}
+          style={{ width: '40%' }}
+          onChange={(e) => props.onChange(e, "about")}
+          class="border"
+          type="text"
+          textArea={true}
+        />
 
         {/* Links */}
-        <div className={BusinessRegistrationStyle.Links}>
-          <div className={BusinessRegistrationStyle.Link}>
-            <AiOutlineLink />
-            <input
-              type="url"
-              name="website"
-              id="website"
-              value={props.values.socialMediaLinks["website"]}
-              placeholder={" " + language.website[1]}
-              onChange={(e) => changeLinks(e, "website")}
-            />
-          </div>
-
-          <div className={BusinessRegistrationStyle.Link}>
-            <FaFacebookF />
-            <input
-              type="url"
-              name="facebook"
-              id="facebook"
-              value={props.values.socialMediaLinks["facebook"]}
-              placeholder={" " + language.facebook[1]}
-              onChange={(e) => changeLinks(e, "facebook")}
-            />
-          </div>
-
-          <div className={BusinessRegistrationStyle.Link}>
-            <FaInstagram />
-            <input
-              type="url"
-              name="instagram"
-              id="instagram"
-              value={props.values.socialMediaLinks["instagram"]}
-              placeholder={" " + language.instagram[1]}
-              onChange={(e) => changeLinks(e, "instagram")}
-            />
-          </div>
-        </div>
+        <SocialMediaLinks onChange={changeLinks} values={props.values.socialMediaLinks} style={{ marginTop: '-15px' }} />
       </div>
 
       {!props.loading ? (
@@ -202,7 +167,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  registerBusiness: (form: businessForm) => dispatch(registerBusiness(form)),
+  registerBusiness: (form: BusinessDetails) => dispatch(registerBusiness(form)),
 });
 
 export default connect<StateProps, DispatchProps>(

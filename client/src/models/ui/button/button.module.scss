@@ -23,4 +23,9 @@
     color: #ccc;
     cursor: not-allowed;
   }
+
+  & .Children {
+    display: flex;
+    align-items: center ;
+  }
 }

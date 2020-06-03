@@ -6,14 +6,22 @@ const {
   businessDetailsValidator,
   // businessHoursValidator,
 } = require("../../validator/management/business.validator");
-router.get("/", businessDetailsController.getBuisnessDetails);
 
-// router.post(
-//   "/",
-//   businessDetailsValidator,
-//   isAuth("employee"),
-//   businessDetailsController.postBuisnessDetails
-// );
+router.get(":domain/details ", businessDetailsController.getBuisnessDetails);
+
+router.post(
+  "buiness/details",
+  businessDetailsValidator,
+  isAuth("employee"),
+  businessDetailsController.postBuisnessDetails
+);
+
+router.delete(
+  "buiness/details",
+  businessDetailsValidator,
+  isAuth("employee"),
+  businessDetailsController.postBuisnessDetails
+);
 
 // router.post(
 //   "/hours",

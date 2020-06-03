@@ -1,4 +1,5 @@
 const moment = require("moment");
+const mongoose = require("mongoose");
 
 const { error422, error404, error403Admin } = require("../../utils/error/dbErrorHandler");
 
@@ -22,6 +23,28 @@ exports.postBuisnessDetails = async (req, res, next) => {
     return next(err);
   }
 };
+
+
+
+
+exports.getBuisnessDetails = async (req, res, next) => {
+  try {
+    const Business = require("../../models/business-details.model")(req.mongo);
+
+    const buisnessDetails = await Business.findOne();
+    error404(buisnessDetails);
+    res.status(200).json({
+      msg: "buisness details",
+      buisnessDetails,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+
+
+
 
 exports.postBuisnessHours = async (req, res, next) => {
   try {
@@ -71,21 +94,6 @@ exports.postDefualtHours = async (req, res, next) => {
     res.status(200).json({
       msg: "update buisness hours",
       buisness,
-    });
-  } catch (err) {
-    return next(err);
-  }
-};
-
-exports.getBuisnessDetails = async (req, res, next) => {
-  try {
-    const Business = require("../../models/business-details.model")(req.mongo);
-
-    const buisnessDetails = await Business.findOne();
-    error404(buisnessDetails);
-    res.status(200).json({
-      msg: "buisness details",
-      buisnessDetails,
     });
   } catch (err) {
     return next(err);

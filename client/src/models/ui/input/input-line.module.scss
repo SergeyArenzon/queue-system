@@ -8,7 +8,7 @@
     width: 300px;
   }
 
-  & input {
+  & .InputItem {
     border: 0;
     outline: 0;
     background: transparent;
@@ -56,7 +56,7 @@
   }
 }
 
-input:not(:placeholder-shown) + .Label {
+.InputItem:not(:placeholder-shown) + .Label {
   opacity: 1;
   top: 2px !important;
   color: $text-body;
