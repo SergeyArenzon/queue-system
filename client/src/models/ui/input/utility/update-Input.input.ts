@@ -1,13 +1,12 @@
 import { checkValidity } from "./validator.input";
 
 export const updateObject = (oldObject: any, updatedProperties: any) => {
-    return {
-      ...oldObject,
-      ...updatedProperties,
-    };
+  return {
+    ...oldObject,
+    ...updatedProperties,
   };
+};
 
-  
 export const inputChanged = (form: any, e: any, inputIdentifier: any) => {
   const updatedFormElement = updateObject(form[inputIdentifier], {
     value: e.target.value,
@@ -18,9 +17,11 @@ export const inputChanged = (form: any, e: any, inputIdentifier: any) => {
     [inputIdentifier]: updatedFormElement,
   });
 
-  const formIsValid = Object.keys(updatedForm).every(e =>
-    updatedForm[e].valid
-
+  const formIsValid = Object.keys(updatedForm).every(
+    (e) => updatedForm[e].valid
   );
+  let ans = "";
+  // if (!formIsValid) console.log(updatedForm);
+
   return { updatedForm, formIsValid };
 };

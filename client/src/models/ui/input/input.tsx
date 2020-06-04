@@ -4,19 +4,22 @@ import InputLinetyle from './input-line.module.scss';
 
 
 interface OwnProps {
-    label?: string;
+    label?: any;
     name?: string;
-    value: any;
-    key: string;
-    elementType: string;
-    elementConfig: { type: string; placeholder: string };
-    shouldValidate: {};
-    invalid: boolean;
-    touched: boolean;
+    value?: any;
+    key?: string;
+    elementType?: string;
+    elementConfig?: { type: string; placeholder: string };
+    shouldValidate?: {};
+    invalid?: boolean;
+    touched?: boolean;
     changed?: (e: any) => void;
     placeholder?: string;
+    type?: any;
+    onChange?: (e: any) => void;
     style?: {};
-    class?: "line" | "border",
+    class?: "line" | "border";
+    textArea?: boolean;
 }
 const Input: React.FC<OwnProps> = (props) => {
 
@@ -25,7 +28,7 @@ const Input: React.FC<OwnProps> = (props) => {
     let error = null;
 
     if (props.invalid && props.shouldValidate && props.touched) {
-        console.log(props.invalid, props.shouldValidate, props.touched);
+        // console.log(props.invalid, props.shouldValidate, props.touched);
 
         //inputClasses.push(classes.Invalid);
         error = <p> בבקשה תרשום {props.label} כמו שצריך </p>;

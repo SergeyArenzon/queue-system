@@ -55,14 +55,21 @@ export const timesHeaderSubTitle = [
 ];
 
 // Errors
-export const domainLengthError = ["Add New Business", "שם חייב להכיל לפחות 2 תווים"];
-export const englishOnlyError = ["Add New Business", "שם העסק חייב להכיל תווים באנגלית בלבד",];
+export const domainLengthError = [
+  "Add New Business",
+  "שם חייב להכיל לפחות 2 תווים",
+];
+export const englishOnlyError = [
+  "Add New Business",
+  "שם העסק חייב להכיל תווים באנגלית בלבד",
+];
 export const confirmPasswordError = ["Add New Business", "סיסמאות לא תואמות"];
 export const phoneError = ["Add New Business", "מספר טלפון לא תקין"];
 export const urlError = ["Add New Business", "כתובת אתר לא תקינה"];
 export const priceError = ["Add New Business", "לא הוזן מחיר"];
 export const durationError = ["Add New Business", "לא הוזן זמן"];
-
+export const generalError = ["Add New Business", "לא הוזן שדה"];
+export const emailError = ["Add New Business", "שגיאה באימיל"];
 
 // ** Buttons ** //
 export const next = ["Add New Business", "המשך"];
@@ -70,8 +77,14 @@ export const back = ["Add New Business", "חזור"];
 
 // ** Login ** //
 export const loginTitle = ["Add New Business", "התחברות עובד"];
-export const loginSubTitle = ["Add New Business", "ברוך שובך למערכת, נא הכנס את פרטי ההתחברות שלך."];
+export const loginSubTitle = [
+  "Add New Business",
+  "ברוך שובך למערכת, נא הכנס את פרטי ההתחברות שלך.",
+];
 
 // Reset Password
 export const restPasswordTitle = ["Add New Business", "שחזור סיסמא"];
-export const restPasswordSubTitle = ["Add New Business", "הכנס את מספר הטלפון שלך בכדי לקבל סיסמא חדשה - SMS"];
+export const restPasswordSubTitle = [
+  "Add New Business",
+  "הכנס את מספר הטלפון שלך בכדי לקבל סיסמא חדשה - SMS",
+];
