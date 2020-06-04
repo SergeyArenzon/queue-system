@@ -11,6 +11,9 @@ import AuthenticationHeadrer from "../shared/authentication-header/authenticatio
 import * as language from "../../../../../assets/language/language";
 import Input from "../../../../../models/ui/input/input";
 
+import { password, phone } from "../../../../../models/ui/input/utility/input-types.input";
+import { inputChanged } from "../../../../../models/ui/input/utility/update-Input.input";
+
 interface FormState {
   phone: string;
   password: string;
@@ -25,28 +28,55 @@ interface DispatchProps {
   loginEmployee: typeof loginEmployee;
 }
 
-// Become true when user click on next in the first time
-let nextPage = false;
+
 
 type Props = DispatchProps & StateProps;
 const BusinessLogin: React.FC<Props> = (props) => {
-  const [Form, setForm] = useState<FormState>({
-    phone: "",
-    password: "",
-  });
-  const [Error, setError] = useState<string>("");
+  const [Form, setForm] = useState<any>({
+    phone,
+    password,
 
-  // Checks the information in front of the server
+  });
+
+  const [timeOut, setTimeOut] = useState<any>(null);
+
+  const [error, setError] = useState<string>("");
+
   const onClickNext = () => {
-    const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-    if (!phone.test(Form.phone)) {
-      setError(language.phoneError[1]);
-    } else { 
-      setError("");
-      props.loginEmployee(Form);
-      nextPage = true;
-    }
+    let ansForm = Object.assign(
+      {},
+      ...Object.keys(Form).map((k) => ({ [k]: Form[k].value }))
+    );
+
+    props.loginEmployee(ansForm);
+
+
   };
+  const inputChangedHandler = (e: any, inputIdentifier: any) => {
+
+    const ans = inputChanged(Form, e, inputIdentifier);
+    setForm(ans.updatedForm);
+    setError("")
+
+
+    if (timeOut) clearTimeout(timeOut);
+    setTimeOut(setTimeout(() => {
+      if (!ans.formIsValid) {
+        const index = Object.keys(ans.updatedForm).
+          filter(it => !ans.updatedForm[it].valid && ans.updatedForm[it].touched).pop();
+        !index ? setError("") : setError(ans.updatedForm[index].error)
+      }
+    }, 1000))
+
+
+  };
+
+  const formElementsArray = Object.keys(Form).map((key) => {
+    return {
+      id: key,
+      config: Form[key],
+    };
+  });
 
 
   return (
@@ -57,32 +87,28 @@ const BusinessLogin: React.FC<Props> = (props) => {
         <AuthenticationHeadrer
           title={language.loginTitle[1]}
           subTitle={language.loginSubTitle[1]}
-          error={Error ? Error : props.error}
+          error={error ? error : props.error}
         />
 
         <React.Fragment>
           <div className={ManagerRegistrationStyle.Body}>
-            {/* Phone */}
-            <Input
-              style={{ marginTop: '10px' }}
-              label={language.phone[1]}
-              name="phone"
-              type="tel"
-              value={Form.phone}
-              onChange={(e) => setForm({ ...Form, phone: e.target.value })}
-              class="border"
-            />
+            {formElementsArray.map((formElement) => (
+              <Input
+                key={formElement.id}
+                label={formElement.config.label}
+                style={formElement.config.style}
+                elementType={formElement.config.elementType}
+                elementConfig={formElement.config.elementConfig}
+                value={formElement.config.value}
+                invalid={!formElement.config.valid}
+                shouldValidate={formElement.config.validation}
+                touched={formElement.config.touched}
+                changed={(event) =>
+                  inputChangedHandler(event, formElement.id)
+                }
+              />
+            ))}
 
-            {/* Password */}
-            <Input
-              style={{ marginTop: '10px' }}
-              label={language.password[1]}
-              name="password"
-              type="password"
-              value={Form.password}
-              onChange={(e) => setForm({ ...Form, password: e.target.value })}
-              class="border"
-            />
           </div>
           {!props.loading ? (
             <React.Fragment>

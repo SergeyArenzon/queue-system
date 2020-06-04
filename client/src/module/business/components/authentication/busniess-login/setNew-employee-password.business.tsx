@@ -13,8 +13,9 @@ import AuthenticationHeadrer from "../shared/authentication-header/authenticatio
 import * as language from "../../../../../assets/language/language";
 
 import Input from "../../../../../models/ui/input/input";
-import Inp from "./inp/inp";
-import { inputChanged, password, phone,  inputField } from "./utility";
+
+import { password } from "../../../../../models/ui/input/utility/input-types.input";
+import { inputChanged } from "../../../../../models/ui/input/utility/update-Input.input";
 
 interface MatchParams {
   token: string;
@@ -34,16 +35,12 @@ type Props = DispatchProps & StateProps & Params;
 const ResetEmployeePassword: React.FC<Props> = (props) => {
   const [Form, setForm] = useState<any>({
     password,
-    phone,
-    name: {
-      ...inputField,
-      validation: {
-        required: false,
-      }
-    },
+    confirmPassword: password
   });
 
-  const [formIsValid, setFormIsValid] = useState(false);
+  const [timeOut, setTimeOut] = useState<any>(null);
+
+  const [error, setError] = useState<string>("");
   const onClickNext = () => {
     const token = props.match.params.token;
 
@@ -56,14 +53,24 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
 
     // props.setNewPasswordEmployee(Form, token);
   };
-  const inputChangedHandler = (event: any, inputIdentifier: any) => {
+  const inputChangedHandler = (e: any, inputIdentifier: any) => {
 
-    const ans = inputChanged(Form, event, inputIdentifier);
+    const ans = inputChanged(Form, e, inputIdentifier);
     setForm(ans.updatedForm);
-    setFormIsValid(ans.formIsValid);
+    setError("")
+
+
+    if (timeOut) clearTimeout(timeOut);
+    setTimeOut(setTimeout(() => {
+      if (!ans.formIsValid) {
+        const index = Object.keys(ans.updatedForm).
+          filter(it => !ans.updatedForm[it].valid && ans.updatedForm[it].touched).pop();
+        !index ? setError("") : setError(ans.updatedForm[index].error)
+      }
+    }, 500))
+
 
   };
-
 
   const formElementsArray = Object.keys(Form).map((key) => {
     return {
@@ -80,7 +87,7 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
         <AuthenticationHeadrer
           title={language.restPasswordTitle[1]}
           subTitle={language.restPasswordSubTitle[1]}
-          error={props.error}
+          error={error ? error : props.error}
         />
 
         {props.loading && <div>Loading...</div>}
@@ -91,7 +98,7 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
 
             <div className={ManagerRegistrationStyle.Body}>
               {formElementsArray.map((formElement) => (
-                <Inp
+                <Input
                   key={formElement.id}
                   label={formElement.config.label}
                   style={formElement.config.style}
@@ -106,22 +113,11 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
                   }
                 />
               ))}
-              {/* confirmPassword */}
-              <Input
-                style={{ marginTop: "10px" }}
-                label={language.password[1]}
-                name="password"
-                type="password"
-                value={Form.confirmPassword}
-                onChange={(e) =>
-                  setForm({ ...Form, confirmPassword: e.target.value })
-                }
-                class="border"
-              />
+
             </div>
 
             <div onClick={onClickNext} className={BusinessLoginStyle.Button}>
-              <Button color="purple-register" disabled={formIsValid}>
+              <Button color="purple-register">
                 שלח קוד איפוס
               </Button>
             </div>

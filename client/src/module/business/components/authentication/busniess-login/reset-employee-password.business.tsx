@@ -9,6 +9,8 @@ import { resetPasswordEmployee } from "../../../../../store/business/auth/auth.a
 import AuthenticationHeadrer from "../shared/authentication-header/authentication-headrer";
 import * as language from "../../../../../assets/language/language";
 import Input from "../../../../../models/ui/input/input";
+import { phone } from "../../../../../models/ui/input/utility/input-types.input";
+import { inputChanged } from "../../../../../models/ui/input/utility/update-Input.input";
 
 interface StateProps {
   loading: boolean;
@@ -21,11 +23,46 @@ interface DispatchProps {
 
 type Props = DispatchProps & StateProps;
 const ResetEmployeePassword: React.FC<Props> = (props) => {
-  const [Phone, setPhone] = useState<string>("");
+  const [Form, setForm] = useState<any>({
+    phone
+  });
+  const [timeOut, setTimeOut] = useState<any>(null);
 
+  const [error, setError] = useState<string>("");
   const onClickNext = () => {
-    props.resetPasswordEmployee(Phone);
+    let ansForm = Object.assign(
+      {},
+      ...Object.keys(Form).map((k) => ({ [k]: Form[k].value }))
+    );
+
+    console.log(ansForm);
+    props.resetPasswordEmployee(ansForm.phone);
   };
+  const inputChangedHandler = (e: any, inputIdentifier: any) => {
+
+    const ans = inputChanged(Form, e, inputIdentifier);
+    setForm(ans.updatedForm);
+    setError("")
+
+
+    if (timeOut) clearTimeout(timeOut);
+    setTimeOut(setTimeout(() => {
+      if (!ans.formIsValid) {
+        const index = Object.keys(ans.updatedForm).
+          filter(it => !ans.updatedForm[it].valid && ans.updatedForm[it].touched).pop();
+        !index ? setError("") : setError(ans.updatedForm[index].error)
+      }
+    }, 500))
+
+
+  };
+
+  const formElementsArray = Object.keys(Form).map((key) => {
+    return {
+      id: key,
+      config: Form[key],
+    };
+  });
 
   return (
     <div className={BusinessRegisterStyle.Register}>
@@ -35,7 +72,7 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
         <AuthenticationHeadrer
           title={language.restPasswordTitle[1]}
           subTitle={language.restPasswordSubTitle[1]}
-          error={props.error}
+          error={error ? error : props.error}
         />
 
         {props.loading && <div>Loading...</div>}
@@ -44,16 +81,22 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
           <React.Fragment>
             {props.error}
             <div className={ManagerRegistrationStyle.Body}>
-              {/* Phone */}
-              <Input
-                style={{ width: "50%", marginTop: "10px" }}
-                label={language.phone[1]}
-                name="phone"
-                type="tel"
-                value={Phone}
-                onChange={(e) => setPhone(e.target.value)}
-                class="border"
-              />
+              {formElementsArray.map((formElement) => (
+                <Input
+                  key={formElement.id}
+                  label={formElement.config.label}
+                  style={formElement.config.style}
+                  elementType={formElement.config.elementType}
+                  elementConfig={formElement.config.elementConfig}
+                  value={formElement.config.value}
+                  invalid={!formElement.config.valid}
+                  shouldValidate={formElement.config.validation}
+                  touched={formElement.config.touched}
+                  changed={(event) =>
+                    inputChangedHandler(event, formElement.id)
+                  }
+                />
+              ))}
             </div>
 
             <div onClick={onClickNext} className={BusinessLoginStyle.Button}>

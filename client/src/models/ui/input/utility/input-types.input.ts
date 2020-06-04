@@ -11,7 +11,7 @@ export const password = {
   name: language.password[1],
   validation: {
     required: true,
-    minLength: 6,
+    minLen: 6,
   },
   valid: false,
   touched: false,
