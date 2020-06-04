@@ -2,7 +2,7 @@ import React from "react";
 import classes from "./inp.module.scss";
 
 interface OwnProps {
-  ref: any;
+  ref?: any;
   label?: string;
   name?: string;
   value: any;

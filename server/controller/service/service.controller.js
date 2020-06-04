@@ -4,6 +4,32 @@ const {
   error403Admin, error401guest
 } = require("../../utils/error/dbErrorHandler");
 
+
+
+exports.getServices = async (req, res, next) => {
+  try {
+    //guset check
+    const Business = require("../../models/details.model")(req.mongo);
+    const buisnessDetails = await Business.findOne();
+    error404(buisnessDetails);
+    error401guest(req.guest, req.mongo)
+
+
+
+    const Service = require("../../models/service.model");
+
+    const services = await Service(req.mongo).find();
+    error404(services);
+    res.status(201).json({
+      msg: "all the services",
+      services,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+
 exports.postService = async (req, res, next) => {
   try {
     error422(req);
@@ -28,29 +54,6 @@ exports.postService = async (req, res, next) => {
     });
   } catch (err) {
     return next(err);
-  }
-};
-
-exports.getServices = async (req, res, next) => {
-  try {
-    //guset check
-    const Business = require("../../models/details.model")(req.mongo);
-    const buisnessDetails = await Business.findOne();
-    error404(buisnessDetails);
-    error401guest(req.guest, req.mongo)
-
-
-
-    const Service = require("../../models/service.model");
-
-    const services = await Service(req.mongo).find();
-    error404(services);
-    res.status(201).json({
-      msg: "all the services",
-      services,
-    });
-  } catch (error) {
-    return next(error);
   }
 };
 

@@ -7,9 +7,9 @@ import Button from "../../../../../../../models/ui/button/button";
 import {
   getLoading,
   getError,
-} from "../../../../../../../store/business/business.selectors";
+} from "../../../../../../../store/business/details/details.selectors";
 import { connect } from "react-redux";
-import { postBuisnessHours } from "../../../../../../../store/business/business.actions";
+import { postBuisnessHours } from "../../../../../../../store/business/details/details.actions";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Checkbox from "../../../../../../../models/ui/checkbox/checkbox";
 import { BusinesHours } from "../../../../../../../models/system/busines-hours";

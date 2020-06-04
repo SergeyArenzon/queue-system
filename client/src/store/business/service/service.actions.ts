@@ -1,13 +1,12 @@
-import { Service } from "./../../models/system/service";
+import { Service } from "../../../models/system/service";
 import { serviceActionsEnum } from "./service.types";
-import API from "../../models/axios/axios";
+import API from "../../../models/axios/axios";
 
-export const postService = (form: Service) => {
+export const postService = (service: Service) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: serviceActionsEnum.START_SERVICE });
-    const domain = localStorage.getItem("domain");
 
-    API.post(domain + "/service")
+    API.post("business/service", service)
       .then((res) => {
         return dispatch({
           type: serviceActionsEnum.SUCCESS_POST_SERVICE,
@@ -27,9 +26,8 @@ export const postService = (form: Service) => {
 export const getAllServices = () => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: serviceActionsEnum.START_SERVICE });
-    const domain = localStorage.getItem("domain");
 
-    API.get(domain + "/business/service")
+    API.get("business/service")
       .then((res) => {
         console.log(res.data);
         return dispatch({
@@ -39,7 +37,6 @@ export const getAllServices = () => {
       })
       .catch((error: any) => {
         const msg = error.response.data.message;
-        console.log(msg);
         return dispatch({
           type: serviceActionsEnum.FALID_SERVICE,
           error: msg,
@@ -52,11 +49,9 @@ export const getAllServices = () => {
 export const updateService = (service: Service) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: serviceActionsEnum.START_SERVICE });
-    const domain = localStorage.getItem("domain");
 
-    API.post(domain + "/business/service/" + service.id)
+    API.put("business/service", service)
       .then((res) => {
-        console.log(res.data);
         return dispatch({
           type: serviceActionsEnum.SUCCESS_UPDATE_SERVICE,
           service: res.data.service,
@@ -72,26 +67,23 @@ export const updateService = (service: Service) => {
   };
 };
 
-// export const deleteService = (form: Service, domain: string) => {
-//   return (dispatch: any, getState: any) => {
-//     dispatch({ type: serviceActionsEnum.START_POST_SERVICE });
-//     const token = localStorage.getItem("token");
-//     const send = { ...form, token };
-//     API.delete(domain + "/business/service/"+form.id,form)
-//       .then(() => {
+export const deleteService = (service: Service) => {
+  return (dispatch: any, getState: any) => {
+    dispatch({ type: serviceActionsEnum.START_SERVICE });
 
-
-//         return dispatch({
-//           type: serviceActionsEnum.SUCCESS_POST_SERVICE,
-
-//         });
-//       })
-//       .catch((error: any) => {
-//         const msg = error.response.data.message;
-//         return dispatch({
-//           type: serviceActionsEnum.FALID_SERVICE,
-//           error: msg,
-//         });
-//       });
-//   };
-// };
+    API.delete("business/service/" + service.id)
+      .then(() => {
+        return dispatch({
+          type: serviceActionsEnum.SUCCESS_DELETE_SERVICE,
+          serviceId: service.id
+        });
+      })
+      .catch((error: any) => {
+        const msg = error.response.data.message;
+        return dispatch({
+          type: serviceActionsEnum.FALID_SERVICE,
+          error: msg,
+        });
+      });
+  };
+};

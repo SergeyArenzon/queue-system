@@ -3,9 +3,9 @@ import BusinessLoginStyle from "./business-login.module.scss";
 import BusinessRegisterStyle from "../business-register/business-register.module.scss";
 import ManagerRegistrationStyle from "../business-register/components/manager-registration/manager-registration.module.scss";
 import { connect } from "react-redux";
-import { getLoading, getError } from "../../../../../store/auth/auth.selectors";
+import { getLoading, getError } from "../../../../../store/business/auth/auth.selectors";
 import Button from "../../../../../models/ui/button/button";
-import { loginEmployee } from "../../../../../store/auth/auth.actions";
+import { loginEmployee } from "../../../../../store/business/auth/auth.actions";
 import { Link } from "react-router-dom";
 import AuthenticationHeadrer from "../shared/authentication-header/authentication-headrer";
 import * as language from "../../../../../assets/language/language";
@@ -41,7 +41,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
     const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
     if (!phone.test(Form.phone)) {
       setError(language.phoneError[1]);
-    } else {
+    } else { 
       setError("");
       props.loginEmployee(Form);
       nextPage = true;

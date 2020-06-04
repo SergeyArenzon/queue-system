@@ -5,12 +5,13 @@ import {
   faildServiceActionType,
   serviceActionsEnum,
   successGetAllServicesActionType,
-  successUpdateServiceActionType
+  successUpdateServiceActionType,
+  successDeleteServiceActionType
 } from "./service.types";
 
 type allserviceActionTypes =
   startServicectionType | successPostServicesActionType | successUpdateServiceActionType
-  | faildServiceActionType | successGetAllServicesActionType;
+  | faildServiceActionType | successGetAllServicesActionType | successDeleteServiceActionType;
 
 export const serviceReducer = (state = initialserviceState, action: allserviceActionTypes) => {
   switch (action.type) {
@@ -67,6 +68,16 @@ export const serviceReducer = (state = initialserviceState, action: allserviceAc
         error: "",
         services: action.services
       };
+
+      case serviceActionsEnum.SUCCESS_DELETE_SERVICE:
+        const servicesUpdate = [...state.services].filter(ser => ser.id === action.serviceId);
+        console.log("SUCCESS_DELETE_SERVICE");
+        return {
+          ...state,
+          loading: false,
+          error: "",
+          services:servicesUpdate
+        };
   }
   return state;
 };

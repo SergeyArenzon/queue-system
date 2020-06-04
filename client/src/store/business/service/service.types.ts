@@ -1,4 +1,4 @@
-import { Service } from "./../../models/system/service";
+import { Service } from "../../../models/system/service";
 
 export interface serviceState {
   error: string;
@@ -11,7 +11,9 @@ export enum serviceActionsEnum {
   FALID_SERVICE = "FALID_SERVICE",
   SUCCESS_POST_SERVICE = "SUCCESS_POST_SERVICE",
   SUCCESS_GET_ALL_SERVICES = "SUCCESS_GET_ALL_SERVICES",
-  SUCCESS_UPDATE_SERVICE = "SUCCESS_UPDATE_SERVICE"
+  SUCCESS_UPDATE_SERVICE = "SUCCESS_UPDATE_SERVICE",
+  SUCCESS_DELETE_SERVICE = "SUCCESS_DELETE_SERVICE"
+
 }
 
 export interface serviceActionPattern {
@@ -40,4 +42,9 @@ export interface successGetAllServicesActionType extends serviceActionPattern {
 export interface successUpdateServiceActionType extends serviceActionPattern {
   type: serviceActionsEnum.SUCCESS_UPDATE_SERVICE;
   service: Service;
+}
+
+export interface successDeleteServiceActionType extends serviceActionPattern {
+  type: serviceActionsEnum.SUCCESS_DELETE_SERVICE;
+  serviceId: string;
 }

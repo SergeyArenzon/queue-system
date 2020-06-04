@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 //import MainUser from './module/business/core/main-user.user';
 import Routing from './models/routes/app.routing';
 import { BrowserRouter, Redirect } from 'react-router-dom';
-import { signInCheck } from './store/auth/auth.actions';
-import { getIsSignIn } from './store/auth/auth.selectors';
 import { connect } from "react-redux";
 import MainUser from './module/business/core/main-user.user';
+import { signInCheck } from './store/business/auth/auth.actions';
+import { getIsSignIn } from './store/business/auth/auth.selectors';
 
 
 interface DispatchProps {

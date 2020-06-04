@@ -18,12 +18,12 @@ router.post(
   businessDetailsController.postBuisnessDetails
 );
 
-// router.post(
-//   "/hours",
-//   // businessHoursValidator,
-//   isAuth("employee"),
-//   businessDetailsController.postBuisnessHours
-// );
+router.post(
+  "/hours",
+  // businessHoursValidator,
+  isAuth("employee"),
+  businessDetailsController.postBuisnessHours
+);
 
 // router.post("/defualthours", businessDetailsController.postDefualtHours);
 

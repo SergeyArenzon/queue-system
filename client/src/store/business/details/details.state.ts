@@ -1,7 +1,8 @@
-import { BusinessState } from "./business.types";
+import { BusinessState } from "./details.types";
 
 export const initialAuthState: BusinessState = {
   error: "",
   loading: false,
-  deatils: null
+  deatils: null,
+  hours: {} 
 };

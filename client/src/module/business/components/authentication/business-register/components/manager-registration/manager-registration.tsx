@@ -4,14 +4,16 @@ import * as language from "../../../../../../../assets/language/language";
 import ManagerRegistrationStyle from "./manager-registration.module.scss";
 import BusinessRegistrationStyle from "../business-registration/business-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
-import { registerEmployee } from "../../../../../../../store/auth/auth.actions";
+import { registerEmployee } from "../../../../../../../store/business/auth/auth.actions";
 import {
   getLoading,
   getError,
-} from "../../../../../../../store/auth/auth.selectors";
+} from "../../../../../../../store/business/auth/auth.selectors";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Input from "../../../../../../../models/ui/input/input";
-
+import { Employee } from "../../../../../../../models/system/employee";
+import Inp from "../../../busniess-login/inp/inp";
+import { inputChanged, password, phone, firstName } from "../../../busniess-login/utility";
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
   onChange: (e: any, name: string) => void;
@@ -33,10 +35,10 @@ let nextPage = false;
 type Props = DispatchProps & StateProps & OwnProps;
 const ManagerRegistration: React.FC<Props> = (props) => {
   const [Error, setError] = useState<string>("");
-
+  
   // Checks the information in front of the server
   const onClickNext = () => {
-    props.step('increment');
+    //props.step('increment');
     const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
 
     if (props.values.password !== props.values.validatePassword) {
@@ -45,14 +47,14 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       setError(language.phoneError[1]);
     } else {
       setError("");
-      const form = {
+      const form: Employee = {
         firstName: props.values.managerFirstName,
         lastName: props.values.managerLastName,
         phone: props.values.managerPhone,
         email: props.values.managerEmail,
         password: props.values.password,
       };
-     // props.registerEmployee(form);
+      props.registerEmployee(form);
       nextPage = true;
     }
   };
@@ -137,8 +139,8 @@ const ManagerRegistration: React.FC<Props> = (props) => {
           </Button>
         </div>
       ) : (
-        <div>Loading...</div>
-      )}
+          <div>Loading...</div>
+        )}
     </div>
   );
 };

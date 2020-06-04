@@ -39,7 +39,7 @@ module.exports = (kind, mongoose = null) => {
 
           req.mongo = mongoose.connection.useDb(req.domain);
           req.employee = await Employee(req.mongo).findOne({
-            phone: decodedToken.phone,
+            email: decodedToken.email,
           });
           error404(req.employee);
           break;

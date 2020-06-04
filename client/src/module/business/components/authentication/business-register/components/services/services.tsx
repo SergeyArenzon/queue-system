@@ -6,14 +6,14 @@ import * as language from '../../../../../../../assets/language/language'
 import Button from "../../../../../../../models/ui/button/button";
 import { Service } from "../../../../../../../models/system/service";
 import { connect } from "react-redux";
-import { postService, updateService, getAllServices } from "../../../../../../../store/service/service.actions";
 import {
   getLoading,
   getError,
   getServices,
-} from "../../../../../../../store/service/service.selectors";
+} from "../../../../../../../store/business/service/service.selectors";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Input from "../../../../../../../models/ui/input/input";
+import { postService, getAllServices } from "../../../../../../../store/business/service/service.actions";
 
 interface AutoCompleteState {
   showOptions: boolean;
@@ -29,7 +29,6 @@ interface OwnProps {
 
 interface DispatchProps {
   postService: typeof postService;
-  updateService: typeof updateService;
   getAllServices: typeof getAllServices;
 }
 
@@ -107,7 +106,7 @@ const Services: React.FC<Props> = (props) => {
   // Add new service
   const addNewService = (e: any, service: Service) => {
     if (EditMode) {
-      props.updateService(Service);
+     // props.updateService(Service);
       setEditMode(false);
     }
     else {
@@ -195,7 +194,6 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   postService: (form: Service) => dispatch(postService(form)),
-  updateService: (service: Service) => dispatch(updateService(service)),
   getAllServices: () => dispatch(getAllServices())
 
 });

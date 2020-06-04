@@ -1,8 +1,8 @@
 import React from 'react'
 import { Redirect, Route, RouteProps, RouteComponentProps } from 'react-router-dom';
-import { signInCheck } from '../../store/auth/auth.actions';
+import { signInCheck } from '../../store/business/auth/auth.actions';
 import { connect } from 'react-redux';
-import { getIsSignIn } from '../../store/auth/auth.selectors';
+import { getIsSignIn } from '../../store/business/auth/auth.selectors';
 
 interface DispatchProps {
     signInCheck: typeof signInCheck

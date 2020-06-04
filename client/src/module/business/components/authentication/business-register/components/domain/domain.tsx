@@ -3,8 +3,8 @@ import ManagerRegistrationStyle from "../manager-registration/manager-registrati
 import * as language from '../../../../../../../assets/language/language'
 import Button from '../../../../../../../models/ui/button/button';
 import { connect } from 'react-redux';
-import { getLoading, getError } from '../../../../../../../store/auth/auth.selectors';
-import { setDomain } from '../../../../../../../store/auth/auth.actions';
+import { getLoading, getError } from '../../../../../../../store/business/auth/auth.selectors';
+import { setDomain } from '../../../../../../../store/business/auth/auth.actions';
 import AuthenticationHeadrer from '../../../shared/authentication-header/authentication-headrer';
 import Input from '../../../../../../../models/ui/input/input';
 
@@ -32,7 +32,7 @@ const Domain: React.FC<Props> = (props) => {
 
     // Checks the information in the server
     const onClickNext = () => {
-        props.step('increment');
+        //props.step('increment');
         const english = /^[a-zA-Z]+$/;
         if (props.values.domain.length < 2) {
             setError(language.domainLengthError[1]);
@@ -42,7 +42,7 @@ const Domain: React.FC<Props> = (props) => {
         }
         else {
             setError("");
-            //props.setDomain(props.values.domain);
+            props.setDomain(props.values.domain);
             nextPage = true;
         }
     };
@@ -81,6 +81,10 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Domain,
     (prevProps, nextProps) => {
         console.log('Domain');
+        console.log(!nextProps.loading, !nextProps.error , nextPage , Error.length);
+        console.log(nextProps.error);
+        
+        
         if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
             nextProps.step('increment');
             return true;

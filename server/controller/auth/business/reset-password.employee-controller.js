@@ -29,16 +29,16 @@ exports.mail = async (req, res, next) => {
 
 exports.employeeSmsResetPassword = async (req, res, next) => {
   try {
-    const { phone } = req.body;
-    console.log(phone);
+    const { phone: email } = req.body;
+    console.log(email);
 
-    const domain = await Domain.findOne({ phone: phone });
+    const domain = await Domain.findOne({ email: email });
     error404(domain);
 
     const token = jwt.sign(
       {
         domain,
-        phone,
+        email: email,
       },
       process.env.JWT_SECRET
     );
@@ -65,21 +65,21 @@ exports.employeeSmsResetPassword = async (req, res, next) => {
     // });
 
     transpoter.sendMail({
-      to: "dorlevy121@gmail.com",
+      to: email,
       from: "kavanu@kavanu.com",
       subject: "reset password",
       html: ` 
       <div>
       <a>http://localhost:3000/business/resetpassword/${token}</a>
                 <p> click in here </p>
-                <p> phone : ${phone} </p>
+                <p> phone : ${email} </p>
                 <p> domain : ${domain} </p>
       </div>
                 `,
     });
 
     res.status(200).json({
-      message: "sms for reset sent to" + phone,
+      message: "sms for reset sent to" + email,
       token,
     });
   } catch (error) {

@@ -3,7 +3,7 @@ import BusinessRegisterStyle from './business-register.module.scss';
 import * as language from '../../../../../assets/language/language';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { getLoading, getError } from '../../../../../store/auth/auth.selectors';
+import { getLoading, getError } from '../../../../../store/business/auth/auth.selectors';
 import { Service } from '../../../../../models/system/service';
 import ManagerRegistration from './components/manager-registration/manager-registration';
 import BusinessRegistration from './components/business-registration/business-registration';
@@ -66,7 +66,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
         workTimes: {}
     });
 
-    const [Step, setStep] = useState<number>(3);
+    const [Step, setStep] = useState<number>(1);
 
     const step = (step: 'decrement' | 'increment') => {
         if (step === "decrement") {

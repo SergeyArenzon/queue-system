@@ -6,13 +6,13 @@ import Button from "../../../../../../../models/ui/button/button";
 import {
   getError,
   getLoading,
-} from "../../../../../../../store/business/business.selectors";
+} from "../../../../../../../store/business/details/details.selectors";
 import { connect } from "react-redux";
-import { registerBusiness } from "../../../../../../../store/business/business.actions";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Input from "../../../../../../../models/ui/input/input";
 import { BusinessDetails } from "../../../../../../../models/system/business-details";
 import SocialMediaLinks from "./components/social-media-links/social-media-links";
+import { postDetails } from "../../../../../../../store/business/details/details.actions";
 
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
@@ -26,7 +26,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  registerBusiness: typeof registerBusiness;
+  postDetails: typeof postDetails;
 }
 
 // Become true when user click on next in the first time
@@ -44,7 +44,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
 
   // Checks the information in front of the server
   const onClickNext = () => {
-    props.step('increment');
+   // props.step('increment');
     const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
     const url = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
@@ -71,7 +71,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
         about: props.values.about,
         domain: props.values.domain,
       };
-      // props.registerBusiness(form);
+       props.postDetails(form);
       nextPage = true;
     }
   };
@@ -167,7 +167,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  registerBusiness: (form: BusinessDetails) => dispatch(registerBusiness(form)),
+  postDetails: (form: BusinessDetails) => dispatch(postDetails(form)),
 });
 
 export default connect<StateProps, DispatchProps>(

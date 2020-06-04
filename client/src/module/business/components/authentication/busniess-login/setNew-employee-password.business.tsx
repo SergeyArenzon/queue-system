@@ -5,11 +5,10 @@ import BusinessLoginStyle from "./business-login.module.scss";
 import BusinessRegisterStyle from "../business-register/business-register.module.scss";
 import ManagerRegistrationStyle from "../business-register/components/manager-registration/manager-registration.module.scss";
 import { connect } from "react-redux";
-import { getLoading, getError } from "../../../../../store/auth/auth.selectors";
-import { setNewPasswordEmployeeForm } from "../../../../../store/auth/auth.types";
+import { getLoading, getError } from "../../../../../store/business/auth/auth.selectors";
 
 import Button from "../../../../../models/ui/button/button";
-import { setNewPasswordEmployee } from "../../../../../store/auth/auth.actions";
+import { setNewPasswordEmployee } from "../../../../../store/business/auth/auth.actions";
 import AuthenticationHeadrer from "../shared/authentication-header/authentication-headrer";
 import * as language from "../../../../../assets/language/language";
 
@@ -33,12 +32,7 @@ interface DispatchProps {
 
 type Props = DispatchProps & StateProps & Params;
 const ResetEmployeePassword: React.FC<Props> = (props) => {
-  const [Form, setForm] = useState<setNewPasswordEmployeeForm>({
-    password: "",
-    confirmPassword: "",
-  });
-  const inputRef = useRef();
-  const [otherForm, setOtherForm] = useState<any>({
+  const [Form, setForm] = useState<any>({
     password,
     phone,
     name: {
@@ -55,7 +49,7 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
 
     let ansForm = Object.assign(
       {},
-      ...Object.keys(otherForm).map((k) => ({ [k]: otherForm[k].value }))
+      ...Object.keys(Form).map((k) => ({ [k]: Form[k].value }))
     );
 
     console.log(ansForm);
@@ -64,17 +58,17 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
   };
   const inputChangedHandler = (event: any, inputIdentifier: any) => {
 
-    const ans = inputChanged(otherForm, event, inputIdentifier);
-    setOtherForm(ans.updatedForm);
+    const ans = inputChanged(Form, event, inputIdentifier);
+    setForm(ans.updatedForm);
     setFormIsValid(ans.formIsValid);
 
   };
 
 
-  const formElementsArray = Object.keys(otherForm).map((key) => {
+  const formElementsArray = Object.keys(Form).map((key) => {
     return {
       id: key,
-      config: otherForm[key],
+      config: Form[key],
     };
   });
 
@@ -98,7 +92,6 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
             <div className={ManagerRegistrationStyle.Body}>
               {formElementsArray.map((formElement) => (
                 <Inp
-                  ref={inputRef}
                   key={formElement.id}
                   label={formElement.config.label}
                   style={formElement.config.style}
@@ -145,7 +138,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  setNewPasswordEmployee: (form: setNewPasswordEmployeeForm, token: string) =>
+  setNewPasswordEmployee: (form: { password: string }, token: string) =>
     dispatch(setNewPasswordEmployee(form, token)),
 });
 
