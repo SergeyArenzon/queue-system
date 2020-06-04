@@ -23,14 +23,14 @@ const PhoneValidation: React.FC<OwnProps> = (props) => {
                     :
                     <p>שלחנו אלייך עכשיו SMS עם קוד אימות למספר {props.email} </p>
             }
-            {
+            {/* {
                 ChangePhone ?
                     <Input label="מספר טלפון" name="phone" type="tel" style={{ width: '50%', margin: 'auto' }}
                         value={props.email} onChange={(e) => props.onChangePhone(e, "email")} class="border" />
                     :
                     <Input label="קוד אימות" name="phone" type="text" style={{ width: '50%', margin: 'auto' }}
                         value={VerificationCode} onChange={(e) => setVerificationCode(e.target.value)} class="border" />
-            }
+            } */}
 
             <div className={PhoneValidationStyle.Buttons}>
                 {

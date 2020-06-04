@@ -106,7 +106,7 @@ const Services: React.FC<Props> = (props) => {
   // Add new service
   const addNewService = (e: any, service: Service) => {
     if (EditMode) {
-     // props.updateService(Service);
+      // props.updateService(Service);
       setEditMode(false);
     }
     else {

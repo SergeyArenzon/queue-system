@@ -28,45 +28,45 @@ mongoose
     require("./routes/index.route")(app, mongoose);
   });
 
-  
-
-  app.post("/", async (req, res, next) => {
-    const dbToNoRemove = ['local', 'admin', 'config','manager', 'dorlevi','guest'];
-    try {
-  
-  
-      const databases = await mongoose.connections[0].db
-        .admin()
-        .listDatabases({ listDatabases: 1, nameOnly: true });
-      console.log(databases.databases);
-      databases.databases.forEach(dbName => {
-        console.log(dbName.name);
-        if (dbToNoRemove.indexOf(dbName.name) < 0)
-  
-          mongoose
-            .connect(process.env.MONGO_URI + dbName.name, {
-              useNewUrlParser: true,
-              useUnifiedTopology: true,
-              useFindAndModify: false,
-              useCreateIndex: true,
-            })
-            .then(() => {
-              return mongoose.connection.db.dropDatabase();
-  
-            });
-      })
-      res.status(205).json({ message: "delete", databases: databases.databases });
-    } catch (error) {
-      console.log(error);
-      res.status(400).json({ message: "admin error" });
-  
-    }
-  });
 
 
+app.post("/", async (req, res, next) => {
+  const dbToNoRemove = ['local', 'admin', 'config', 'manager', 'dorlevi', 'guest'];
+  try {
 
-  app.get("/", async (req, res, next) => {
-    res.status(200).json({ message: "get only the address" });
-  });
+
+    const databases = await mongoose.connections[0].db
+      .admin()
+      .listDatabases({ listDatabases: 1, nameOnly: true });
+    console.log(databases.databases);
+    databases.databases.forEach(dbName => {
+      console.log(dbName.name);
+      if (dbToNoRemove.indexOf(dbName.name) < 0)
+
+        mongoose
+          .connect(process.env.MONGO_URI + dbName.name, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+            useCreateIndex: true,
+          })
+          .then(() => {
+            return mongoose.connection.db.dropDatabase();
+
+          });
+    })
+    res.status(205).json({ message: "delete", databases: databases.databases });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: "admin error" });
+
+  }
+});
+
+
+
+app.get("/", async (req, res, next) => {
+  res.status(200).json({ message: "get only the address" });
+});
 
 // fuser -n tcp -k 8080

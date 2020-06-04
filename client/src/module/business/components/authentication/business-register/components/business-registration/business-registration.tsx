@@ -13,8 +13,8 @@ import Input from "../../../../../../../models/ui/input/input";
 import { BusinessDetails } from "../../../../../../../models/system/business-details";
 import SocialMediaLinks from "./components/social-media-links/social-media-links";
 import { postDetails } from "../../../../../../../store/business/details/details.actions";
-import { inputChanged, password, phone, inputField, email, domain } from "../../../busniess-login/utility";
-import Inp from "../../../busniess-login/inp/inp";
+import { password, phone, plainText, email, domain } from "../../../../../../../models/ui/input/utility/input-types.input";
+import { inputChanged } from "../../../../../../../models/ui/input/utility/update-Input.input";
 
 
 interface OwnProps {
@@ -36,8 +36,7 @@ let nextPage = false;
 type Props = DispatchProps & StateProps & OwnProps;
 const BusinessRegistration: React.FC<Props> = (props) => {
   const [Error, setError] = useState<string>("");
-
-
+  const [timeOut, setTimeOut] = useState<any>(null);
   // const [BusinessDetails, setstate] = useState<BusinessDetails>({
   //   name: "",
   //   address: "",
@@ -50,7 +49,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
   // })
   const [Form, setForm] = useState<any>({
     name: {
-      ...inputField, elementConfig: {
+      ...plainText, elementConfig: {
         type: "text",
         placeholder: "שם העסק",
       },
@@ -58,7 +57,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
       label: "שם העסק",
     },
     address: {
-      ...inputField, elementConfig: {
+      ...plainText, elementConfig: {
         type: "text",
         placeholder: "כתובת",
       },
@@ -70,10 +69,9 @@ const BusinessRegistration: React.FC<Props> = (props) => {
     },
     phone
     , email,
-    about: { ...inputField, label: "אודות", elementType: 'textArea' },
+    about: { ...plainText, label: "אודות", elementType: 'textArea' },
     domain
   });
-  const [formIsValid, setFormIsValid] = useState(false);
 
   // const changeLinks = (e: any, name: string) => {
   //   const links = props.values.socialMediaLinks;
@@ -119,7 +117,18 @@ const BusinessRegistration: React.FC<Props> = (props) => {
 
     const ans = inputChanged(Form, e, inputIdentifier);
     setForm(ans.updatedForm);
-    setFormIsValid(ans.formIsValid);
+    setError("")
+
+
+    if (timeOut) clearTimeout(timeOut);
+    setTimeOut(setTimeout(() => {
+      if (!ans.formIsValid) {
+        const index = Object.keys(ans.updatedForm).
+          filter(it => !ans.updatedForm[it].valid && ans.updatedForm[it].touched).pop();
+        !index ? setError("") : setError(ans.updatedForm[index].error)
+      }
+    }, 500))
+
 
   };
 
@@ -140,7 +149,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
 
       <div className={ManagerRegistrationStyle.Body}>
         {formElementsArray.map((formElement) => (
-          <Inp
+          <Input
             key={formElement.id}
             label={formElement.config.label}
             style={formElement.config.style}
