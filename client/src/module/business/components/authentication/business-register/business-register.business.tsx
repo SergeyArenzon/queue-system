@@ -64,7 +64,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
         workTimes: {}
     });
 
-    const [Step, setStep] = useState<number>(3);
+    const [Step, setStep] = useState<number>(1);
 
     const step = (step: 'decrement' | 'increment') => {
         if (step === "decrement") {

@@ -48,7 +48,7 @@ const Domain: React.FC<Props> = (props) => {
 
     // Checks the information in the server
     const onClickNext = () => {
-        props.step('increment');
+        //props.step('increment');
         // const error = validationDomain(Domain);
         // if (error || props.error) {
         //     setError(error)
