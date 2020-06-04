@@ -29,14 +29,24 @@ let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const Domain: React.FC<Props> = (props) => {
-    const [Error, setError] = useState<string>("");
     const [Form, setForm] = useState<any>({ domain });
-    const [formIsValid, setFormIsValid] = useState(false);
+    const [timeOut, setTimeOut] = useState<any>(null);
+    const [error, setError] = useState<string>("");
 
     const inputChangedHandler = (e: any, inputIdentifier: any) => {
         const ans = inputChanged(Form, e, inputIdentifier);
         setForm(ans.updatedForm);
-        setFormIsValid(ans.formIsValid);
+        setError("")
+
+
+        if (timeOut) clearTimeout(timeOut);
+        setTimeOut(setTimeout(() => {
+            if (!ans.formIsValid) {
+                const index = Object.keys(ans.updatedForm).
+                    filter(it => !ans.updatedForm[it].valid && ans.updatedForm[it].touched).pop();
+                !index ? setError("") : setError(ans.updatedForm[index].error)
+            }
+        }, 500))
     };
 
     const formElementsArray = Object.keys(Form).map((key) => {
@@ -49,6 +59,13 @@ const Domain: React.FC<Props> = (props) => {
     // Checks the information in the server
     const onClickNext = () => {
         props.step('increment');
+        let ansForm = Object.assign(
+            {},
+            ...Object.keys(Form).map((k) => ({ [k]: Form[k].value }))
+        );
+
+        console.log(ansForm);
+
         // const error = validationDomain(Domain);
         // if (error || props.error) {
         //     setError(error)
@@ -63,7 +80,7 @@ const Domain: React.FC<Props> = (props) => {
     return (
         <React.Fragment>
             <AuthenticationHeadrer title={language.domainHeaderTitle[1]} subTitle={language.domainHeaderSubTitle[1]}
-                error={Error ? Error : props.error} />
+                error={error ? error : props.error} />
 
             <div className={DomainStyle.Body}>
                 {formElementsArray.map((formElement) => (
