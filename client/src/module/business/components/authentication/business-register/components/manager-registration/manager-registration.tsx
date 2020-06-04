@@ -8,9 +8,10 @@ import { registerEmployee } from "../../../../../../../store/business/auth/auth.
 import { getLoading, getError } from "../../../../../../../store/business/auth/auth.selectors";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Input from "../../../../../../../models/ui/input/input";
-import { Employee } from "../../../../../../../models/system/employee";
 import { validationEmployee } from "../../../../../../../models/validation/employee.validation";
 import PhoneValidation from './components/phone-validation/phone-validation'
+import { plainText, phone, email, password } from "../../../../../../../models/ui/input/utility/input-types.input";
+import { inputChanged } from "../../../../../../../models/ui/input/utility/update-Input.input";
 
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
@@ -31,21 +32,36 @@ type Props = DispatchProps & StateProps & OwnProps;
 const ManagerRegistration: React.FC<Props> = (props) => {
 
   const [Error, setError] = useState<string>("");
-  const [EmployeeDetails, setEmployeeDetails] = useState<Employee>({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    password: ""
+  const [Form, setForm] = useState<any>({
+    firstName: {
+      ...plainText, elementConfig: {
+        type: "text",
+        placeholder: language.firstName[1],
+      },
+      value: "",
+      label: language.firstName[1],
+    },
+    lastName: {
+      ...plainText, elementConfig: {
+        type: "text",
+        placeholder: language.lastName[1],
+      },
+      value: "",
+      label: language.lastName[1],
+    },
+    phone
+    , email,
+    password
   });
+  const [formIsValid, setFormIsValid] = useState(false);
+
+  const inputChangedHandler = (e: any, inputIdentifier: any) => {
+    const ans = inputChanged(Form, e, inputIdentifier);
+    setForm(ans.updatedForm);
+    setFormIsValid(ans.formIsValid);
+  };
   const [ValidPassword, setValidPassword] = useState<string>("");
   const [CheckPhoneValidation, setCheckPhoneValidation] = useState<boolean>(false);
-
-  const onChange = (e: any, name: string) => {
-    setEmployeeDetails({
-      ...EmployeeDetails, [name]: e.target.value
-    });
-  }
 
   const verificationPhone = (verificationCode: string) => {
     console.log('verificationPhone', verificationCode);
