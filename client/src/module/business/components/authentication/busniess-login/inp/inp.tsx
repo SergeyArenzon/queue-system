@@ -1,8 +1,9 @@
 import React from "react";
 import classes from "./inp.module.scss";
+import inputStyle from '../../../../../../models/ui/input/input-border.module.scss';
+import InputLinetyle from '../../../../../../models/ui/input/input-line.module.scss';
 
 interface OwnProps {
-  ref?: any;
   label?: string;
   name?: string;
   value: any;
@@ -15,24 +16,32 @@ interface OwnProps {
   changed?: (e: any) => void;
   placeholder?: string;
   style?: {};
+  class?: "line" | "border",
 }
 
 const Inp: React.FC<OwnProps> = (props) => {
-  console.log(props.style);
+
   let inputElement = null;
   const inputClasses = [classes.InputElement];
   let error = null;
+
   if (props.invalid && props.shouldValidate && props.touched) {
+    console.log(props.invalid, props.shouldValidate, props.touched);
+
     inputClasses.push(classes.Invalid);
     error = <p> בבקשה תרשום {props.label} כמו שצריך </p>;
   }
+
+  const scssFile = props.class === "line" ? InputLinetyle.Input : inputStyle.Input;
+
 
   switch (props.elementType) {
     case "input":
       inputElement = (
         <input
-          className={inputClasses.join(" ")}
+          className={props.class === "line" ? InputLinetyle.InputItem : inputStyle.InputItem}
           {...props.elementConfig}
+          placeholder={props.label}
           value={props.value}
           onChange={props.changed}
         />
@@ -41,44 +50,20 @@ const Inp: React.FC<OwnProps> = (props) => {
     case "textarea":
       inputElement = (
         <textarea
-          className={inputClasses.join(" ")}
           {...props.elementConfig}
+          placeholder={props.label}
           value={props.value}
           onChange={props.changed}
         />
       );
       break;
-    //   case "select":
-    //     inputElement = (
-    //       <select
-    //         className={inputClasses.join(" ")}
-    //         value={props.value}
-    //         onChange={props.changed}
-    //       >
-    //         {props.elementConfig.options.map((option) => (
-    //           <option key={option.value} value={option.value}>
-    //             {option.displayValue}
-    //           </option>
-    //         ))}
-    //       </select>
-    //     );
-    //     break;
-    default:
-      inputElement = (
-        <input
-          className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.changed}
-        />
-      );
   }
 
   return (
-    <div className={classes.Input}>
-      <label className={classes.Label}>{props.label}</label>
+    <div style={props.style} className={scssFile}>
+      {/* {error} */}
       {inputElement}
-      {error}
+      <label className={props.class === "line" ? InputLinetyle.Label : inputStyle.Label} htmlFor={props.name}>{props.label}</label>
     </div>
   );
 };

@@ -2,7 +2,6 @@
 
 .Header {
   text-align: center;
-  margin-bottom: 50px;
   animation: fade 0.5s ease-in-out;
 
   & .Title {
@@ -22,7 +21,6 @@
   color: $error;
   margin: 0;
   margin-right: 30px;
-  margin-top: 10px;
   animation: fade-right .3s linear;
 
   &::before {

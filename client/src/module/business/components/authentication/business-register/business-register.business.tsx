@@ -11,9 +11,7 @@ import Services from './components/services/services';
 import Times from './components/times/times';
 import Timeline from './components/timeline/timeline';
 import Domain from './components/domain/domain';
-import Modal from '../../../../../models/ui/modal/modal';
-import Input from '../../../../../models/ui/input/input';
-import Button from '../../../../../models/ui/button/button';
+
 
 interface FormState {
     domain: string,
@@ -66,7 +64,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
         workTimes: {}
     });
 
-    const [Step, setStep] = useState<number>(1);
+    const [Step, setStep] = useState<number>(3);
 
     const step = (step: 'decrement' | 'increment') => {
         if (step === "decrement") {
@@ -96,58 +94,18 @@ const BusinessRegister: React.FC<Props> = (props) => {
         businessPhone, businessEmail, logo, socialMediaLinks, about, services, workTimes
     }
 
-    const [phoneVerification, setphoneVerification] = useState<string>("");
-    const [ChangePhone, setChangePhone] = useState<boolean>(false);
-
     return (
         <div className={BusinessRegisterStyle.Register}>
-            {
-                OpenModal &&
-                <Modal title="אימות טלפון" color="purple-register">
-                    <div className={BusinessRegisterStyle.Modal}>
-                        {
-                            ChangePhone ?
-                                <p>נא הזן מספר טלפון תקין </p>
-                                :
-                                <p>שלחנו אלייך עכשיו SMS עם קוד אימות למספר {Form.managerPhone} </p>
-                        }
-                        {
-                            ChangePhone ?
-                                <Input label="מספר טלפון" name="phone" type="tel" style={{ width: '60%' }}
-                                    value={Form.managerPhone} onChange={(e) => onChange(e, "managerPhone")} class="border" />
-                                :
-                                <Input label="קוד אימות" name="phone" type="text" style={{ width: '60%' }}
-                                    value={phoneVerification} onChange={(e) => setphoneVerification(e.target.value)} class="border" />
-                        }
-
-                        <div className={BusinessRegisterStyle.Buttons}>
-                            {
-                                ChangePhone ?
-                                    <React.Fragment>
-                                        <Button color="orange" onClick={() => setChangePhone(false)}>החלף מספר</Button>
-                                    </React.Fragment>
-                                    :
-                                    <React.Fragment>
-                                        <Button color="orange" onClick={() => setChangePhone(true)}>החלף מספר</Button>
-                                        <Button color="purple-register">{language.next[1]}</Button>
-
-                                    </React.Fragment>
-                            }
-                        </div>
-                    </div>
-
-                </Modal>
-            }
             <div className={BusinessRegisterStyle.Timeline}>
                 <Timeline step={Step} />
             </div>
 
             <div className={BusinessRegisterStyle.Form}>
-                {Step === 1 && <Domain step={step} onChange={onChange} values={values} />}
+                {Step === 1 && <Domain step={step} />}
 
-                {Step === 2 && <ManagerRegistration openModal={() => setOpenModal(!OpenModal)} step={step} onChange={onChange} values={values} />}
+                {Step === 2 && <ManagerRegistration step={step} />}
 
-                {Step === 3 && <BusinessRegistration step={step} onChange={onChange} values={values} />}
+                {Step === 3 && <BusinessRegistration step={step}/>}
 
                 {Step === 4 && <Times step={step} onChange={onChange} values={values} />}
 

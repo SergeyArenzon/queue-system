@@ -5,20 +5,15 @@ import ManagerRegistrationStyle from "./manager-registration.module.scss";
 import BusinessRegistrationStyle from "../business-registration/business-registration.module.scss";
 import Button from "../../../../../../../models/ui/button/button";
 import { registerEmployee } from "../../../../../../../store/business/auth/auth.actions";
-import {
-  getLoading,
-  getError,
-} from "../../../../../../../store/business/auth/auth.selectors";
+import { getLoading, getError } from "../../../../../../../store/business/auth/auth.selectors";
 import AuthenticationHeadrer from "../../../shared/authentication-header/authentication-headrer";
 import Input from "../../../../../../../models/ui/input/input";
 import { Employee } from "../../../../../../../models/system/employee";
-import Inp from "../../../busniess-login/inp/inp";
-import { inputChanged, password, phone, firstName } from "../../../busniess-login/utility";
+import { validationEmployee } from "../../../../../../../models/validation/employee.validation";
+import PhoneValidation from './components/phone-validation/phone-validation'
+
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
-  onChange: (e: any, name: string) => void;
-  values: any;
-  openModal: () => void;
 }
 
 interface StateProps {
@@ -34,30 +29,47 @@ let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const ManagerRegistration: React.FC<Props> = (props) => {
+
   const [Error, setError] = useState<string>("");
-  
+  const [EmployeeDetails, setEmployeeDetails] = useState<Employee>({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    password: ""
+  });
+  const [ValidPassword, setValidPassword] = useState<string>("");
+  const [CheckPhoneValidation, setCheckPhoneValidation] = useState<boolean>(false);
+
+  const onChange = (e: any, name: string) => {
+    setEmployeeDetails({
+      ...EmployeeDetails, [name]: e.target.value
+    });
+  }
+
+  const verificationPhone = (verificationCode: string) => {
+    console.log('verificationPhone', verificationCode);
+    if (verificationCode === "123") {
+      props.step('increment');
+    }
+  }
+
   // Checks the information in front of the server
   const onClickNext = () => {
     //props.step('increment');
-    const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-
-    if (props.values.password !== props.values.validatePassword) {
-      setError(language.confirmPasswordError[1]);
-    } else if (!phone.test(props.values.managerPhone)) {
-      setError(language.phoneError[1]);
+    const error = validationEmployee(EmployeeDetails, ValidPassword);
+    if (error) {
+      setError(error);
     } else {
       setError("");
-      const form: Employee = {
-        firstName: props.values.managerFirstName,
-        lastName: props.values.managerLastName,
-        phone: props.values.managerPhone,
-        email: props.values.managerEmail,
-        password: props.values.password,
-      };
-      props.registerEmployee(form);
+      // props.registerEmployee(EmployeeDetails);
       nextPage = true;
     }
   };
+
+  if (!props.loading && nextPage && Error.length <= 1 && !props.error && !CheckPhoneValidation) {
+    setCheckPhoneValidation(true);
+  }
 
   return (
     <div className={ManagerRegistrationStyle.Manager}>
@@ -66,81 +78,88 @@ const ManagerRegistration: React.FC<Props> = (props) => {
         subTitle={language.managerHeaderSubTitle[1]}
         error={Error ? Error : props.error}
       />
+      {
+        CheckPhoneValidation ?
+          <PhoneValidation email={EmployeeDetails.email} onChangePhone={onChange} verificationPhone={verificationPhone} />
+          :
 
-      <div className={ManagerRegistrationStyle.Body}>
-        {/* First Name */}
-        <Input
-          label={language.firstName[1]}
-          name="firstname"
-          type="text"
-          value={props.values.managerFirstName}
-          onChange={(e) => props.onChange(e, "managerFirstName")}
-          class="border"
-        />
+          <React.Fragment>
+            <div className={ManagerRegistrationStyle.Body}>
+              {/* First Name */}
+              <Input
+                label={language.firstName[1]}
+                name="firstname"
+                type="text"
+                value={EmployeeDetails.firstName}
+                onChange={(e) => onChange(e, "firstName")}
+                class="border"
+              />
 
-        {/* Last Name */}
-        <Input
-          label={language.lastName[1]}
-          name="lastname"
-          type="text"
-          value={props.values.managerLastName}
-          onChange={(e) => props.onChange(e, "managerLastName")}
-          class="border"
-        />
+              {/* Last Name */}
+              <Input
+                label={language.lastName[1]}
+                name="lastname"
+                type="text"
+                value={EmployeeDetails.lastName}
+                onChange={(e) => onChange(e, "lastName")}
+                class="border"
+              />
 
-        {/* Phone */}
-        <Input
-          label={language.phone[1]}
-          name="phone"
-          type="tel"
-          value={props.values.managerPhone}
-          onChange={(e) => props.onChange(e, "managerPhone")}
-          class="border"
-        />
+              {/* Phone */}
+              <Input
+                label={language.phone[1]}
+                name="phone"
+                type="tel"
+                value={EmployeeDetails.phone}
+                onChange={(e) => onChange(e, "phone")}
+                class="border"
+              />
 
-        {/* Email */}
-        <Input
-          label={language.email[1]}
-          name="email"
-          type="email"
-          value={props.values.managerEmail}
-          onChange={(e) => props.onChange(e, "managerEmail")}
-          class="border"
-        />
+              {/* Email */}
+              <Input
+                label={language.email[1]}
+                name="email"
+                type="email"
+                value={EmployeeDetails.email}
+                onChange={(e) => onChange(e, "email")}
+                class="border"
+              />
 
-        {/* Password */}
-        <Input
-          label={language.password[1]}
-          name="password"
-          type="password"
-          value={props.values.password}
-          onChange={(e) => props.onChange(e, "password")}
-          class="border"
-        />
+              {/* Password */}
+              <Input
+                label={language.password[1]}
+                name="password"
+                type="password"
+                value={EmployeeDetails.password}
+                onChange={(e) => onChange(e, "password")}
+                class="border"
+              />
 
-        {/* Confirm Password */}
-        <Input
-          label={language.confirmPassword[1]}
-          name="password"
-          type="password"
-          value={props.values.validatePassword}
-          onChange={(e) => props.onChange(e, "validatePassword")}
-          class="border"
-        />
-      </div>
+              {/* Confirm Password */}
+              <Input
+                label={language.confirmPassword[1]}
+                name="password"
+                type="password"
+                value={ValidPassword}
+                onChange={(e) => setValidPassword(e.target.value)}
+                class="border"
+              />
+            </div>
 
-      {!props.loading ? (
-        <div className={BusinessRegistrationStyle.Buttons}>
-          <Button onClick={() => props.step("decrement")} color="orange">
-            {language.back[1]}
-          </Button>
-          <Button onClick={onClickNext} color="purple-register">
-            {language.next[1]}
-          </Button>
-        </div>
-      ) : (
-          <div>Loading...</div>
-        )}
+            {!props.loading ?
+              <div className={BusinessRegistrationStyle.Buttons}>
+                <Button onClick={() => props.step("decrement")} color="orange">
+                  {language.back[1]}
+                </Button>
+                <Button onClick={onClickNext} color="purple-register">
+                  {language.next[1]}
+                </Button>
+              </div>
+              :
+              <div>Loading...</div>
+            }
+          </React.Fragment>
+      }
     </div>
   );
 };
@@ -154,18 +173,16 @@ const mapDispatchToProps = (dispatch: any) => ({
   registerEmployee: (form: any) => dispatch(registerEmployee(form)),
 });
 
-export default connect<StateProps, DispatchProps>(
-  mapStateToProps,
-  mapDispatchToProps
-)(
-  memo(ManagerRegistration, (prevProps, nextProps) => {
-    console.log("ManagerRegistration");
-    //if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {    
-    if (!nextProps.loading && nextPage && Error.length <= 1 && !nextProps.error) {
-      nextProps.step('increment');
-      //prevProps.openModal();
-      return true;
-    }
-    return false;
-  })
-);
+
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(ManagerRegistration)
+// (
+//   memo(ManagerRegistration, (prevProps, nextProps) => {
+//     console.log("ManagerRegistration");
+//     if (!nextProps.loading && nextPage && Error.length <= 1 && !nextProps.error) {
+//       //nextProps.step('increment');
+//       //prevProps.openModal();
+//       return false;
+//     }
+//     return false;
+//   })
+// );

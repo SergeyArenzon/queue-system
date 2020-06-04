@@ -14,7 +14,7 @@ import * as language from "../../../../../assets/language/language";
 
 import Input from "../../../../../models/ui/input/input";
 import Inp from "./inp/inp";
-import { inputChanged, password, phone, firstName } from "./utility";
+import { inputChanged, password, phone,  inputField } from "./utility";
 
 interface MatchParams {
   token: string;
@@ -36,7 +36,7 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
     password,
     phone,
     name: {
-      ...firstName,
+      ...inputField,
       validation: {
         required: false,
       }

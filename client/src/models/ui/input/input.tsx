@@ -4,45 +4,69 @@ import InputLinetyle from './input-line.module.scss';
 
 
 interface OwnProps {
-    label: string,
-    name: string,
-    type: string,
-    value: any,
-    class: "line" | "border",
-    onChange?: (e: any) => void,
-    style?: {},
-    textArea?: boolean
+    label?: string;
+    name?: string;
+    value: any;
+    key: string;
+    elementType: string;
+    elementConfig: { type: string; placeholder: string };
+    shouldValidate: {};
+    invalid: boolean;
+    touched: boolean;
+    changed?: (e: any) => void;
+    placeholder?: string;
+    style?: {};
+    class?: "line" | "border",
 }
-
 const Input: React.FC<OwnProps> = (props) => {
 
+    let inputElement = null;
+    // const inputClasses = [classes.InputElement];
+    let error = null;
+
+    if (props.invalid && props.shouldValidate && props.touched) {
+        console.log(props.invalid, props.shouldValidate, props.touched);
+
+        //inputClasses.push(classes.Invalid);
+        error = <p> בבקשה תרשום {props.label} כמו שצריך </p>;
+    }
+
     const scssFile = props.class === "line" ? InputLinetyle.Input : inputStyle.Input;
+
+
+    switch (props.elementType) {
+        case "input":
+            inputElement =
+                (
+                    <input
+                        className={props.class === "line" ? InputLinetyle.InputItem : inputStyle.InputItem}
+                        {...props.elementConfig}
+                        placeholder={props.label}
+                        value={props.value}
+                        onChange={props.changed}
+                    />
+                );
+            break;
+        case "textArea":
+            inputElement =
+                (
+                    <textarea
+                        {...props.elementConfig}
+                        placeholder={props.label}
+                        value={props.value}
+                        onChange={props.changed}
+                    />
+                );
+            break;
+    }
+
     return (
         <div style={props.style} className={scssFile}>
-            {props.textArea ?
-                <textarea
-                    autoComplete="off"
-                    id={props.name}
-                    name={props.name}
-                    placeholder={props.label}
-                    value={props.value}
-                    onChange={props.onChange}
-                />
-                :
-                <input
-                    className={props.class === "line" ? InputLinetyle.InputItem : inputStyle.InputItem}
-                    autoComplete={props.type === "file" ? "on" : "off"}
-                    id={props.name}
-                    name={props.name}
-                    type={props.type}
-                    placeholder={props.type === "file" ? "" : props.label}
-                    value={props.type === "file" ? "" : props.value}
-                    onChange={props.onChange}
-                />
-            }
+            {/* {error} */}
+            {inputElement}
             <label className={props.class === "line" ? InputLinetyle.Label : inputStyle.Label} htmlFor={props.name}>{props.label}</label>
         </div>
-    )
-}
+    );
+};
 
 export default Input;

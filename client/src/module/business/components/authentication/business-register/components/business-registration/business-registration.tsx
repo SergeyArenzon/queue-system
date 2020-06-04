@@ -13,11 +13,12 @@ import Input from "../../../../../../../models/ui/input/input";
 import { BusinessDetails } from "../../../../../../../models/system/business-details";
 import SocialMediaLinks from "./components/social-media-links/social-media-links";
 import { postDetails } from "../../../../../../../store/business/details/details.actions";
+import { inputChanged, password, phone, inputField, email, domain } from "../../../busniess-login/utility";
+import Inp from "../../../busniess-login/inp/inp";
+
 
 interface OwnProps {
   step: (step: "decrement" | "increment") => void;
-  onChange: (e: any, name: string, value?: any) => void;
-  values: any;
 }
 
 interface StateProps {
@@ -36,45 +37,98 @@ type Props = DispatchProps & StateProps & OwnProps;
 const BusinessRegistration: React.FC<Props> = (props) => {
   const [Error, setError] = useState<string>("");
 
-  const changeLinks = (e: any, name: string) => {
-    const links = props.values.socialMediaLinks;
-    links[name] = e.target.value;
-    props.onChange(e, "socialMediaLinks", links);
-  };
+
+  // const [BusinessDetails, setstate] = useState<BusinessDetails>({
+  //   name: "",
+  //   address: "",
+  //   phone: "",
+  //   email: "",
+  //   about: "",
+  //   links: {},
+  //   hours: {},
+  //   domain: ""
+  // })
+  const [Form, setForm] = useState<any>({
+    name: {
+      ...inputField, elementConfig: {
+        type: "text",
+        placeholder: "שם העסק",
+      },
+      value: "",
+      label: "שם העסק",
+    },
+    address: {
+      ...inputField, elementConfig: {
+        type: "text",
+        placeholder: "כתובת",
+      },
+      value: "", label: "כתובת",
+      validation: {
+        required: true,
+        minLen: 10,
+      }
+    },
+    phone
+    , email,
+    about: { ...inputField, label: "אודות", elementType: 'textArea' },
+    domain
+  });
+  const [formIsValid, setFormIsValid] = useState(false);
+
+  // const changeLinks = (e: any, name: string) => {
+  //   const links = props.values.socialMediaLinks;
+  //   links[name] = e.target.value;
+  //   props.onChange(e, "socialMediaLinks", links);
+  // };
 
   // Checks the information in front of the server
   const onClickNext = () => {
-   // props.step('increment');
-    const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-    const url = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
-    if (!phone.test(props.values.businessPhone)) {
-      setError(language.phoneError[1]);
-    } else if (
-      (!url.test(props.values.socialMediaLinks["website"]) &&
-        props.values.socialMediaLinks["website"]) ||
-      (!url.test(props.values.socialMediaLinks["facebook"]) &&
-        props.values.socialMediaLinks["facebook"]) ||
-      (!url.test(props.values.socialMediaLinks["instagram"]) &&
-        props.values.socialMediaLinks["instagram"])
-    ) {
-      setError(language.urlError[1]);
-    } else {
-      setError("");
-      const form: BusinessDetails = {
-        name: props.values.businessName,
-        address: props.values.businessAddress,
-        phone: props.values.businessPhone,
-        email: props.values.businessEmail,
-        logo: props.values.logo,
-        links: props.values.socialMediaLinks,
-        about: props.values.about,
-        domain: props.values.domain,
-      };
-       props.postDetails(form);
-      nextPage = true;
-    }
+
+    let ansForm = Object.assign(
+      {},
+      ...Object.keys(Form).map((k) => ({ [k]: Form[k].value }))
+    );
+
+    console.log(ansForm);
+    //props.postDetails(ansForm);
+    // props.setNewPasswordEmployee(Form, token);
+
+    // props.step('increment');
+    // const phone = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+    // const url = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+
+    // if (!phone.test(props.values.businessPhone)) {
+    //   setError(language.phoneError[1]);
+    // } else if (
+    //   (!url.test(props.values.socialMediaLinks["website"]) &&
+    //     props.values.socialMediaLinks["website"]) ||
+    //   (!url.test(props.values.socialMediaLinks["facebook"]) &&
+    //     props.values.socialMediaLinks["facebook"]) ||
+    //   (!url.test(props.values.socialMediaLinks["instagram"]) &&
+    //     props.values.socialMediaLinks["instagram"])
+    // ) {
+    //   setError(language.urlError[1]);
+    // } else {
+    //   setError("");
+    //   props.postDetails(form);
+    //   nextPage = true;
+    // }
   };
+  const inputChangedHandler = (e: any, inputIdentifier: any) => {
+
+    const ans = inputChanged(Form, e, inputIdentifier);
+    setForm(ans.updatedForm);
+    setFormIsValid(ans.formIsValid);
+
+  };
+
+  const formElementsArray = Object.keys(Form).map((key) => {
+    return {
+      id: key,
+      config: Form[key],
+    };
+  });
 
   return (
     <div className={BusinessRegistrationStyle.Business}>
@@ -85,8 +139,24 @@ const BusinessRegistration: React.FC<Props> = (props) => {
       />
 
       <div className={ManagerRegistrationStyle.Body}>
+        {formElementsArray.map((formElement) => (
+          <Inp
+            key={formElement.id}
+            label={formElement.config.label}
+            style={formElement.config.style}
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            value={formElement.config.value}
+            invalid={!formElement.config.valid}
+            shouldValidate={formElement.config.validation}
+            touched={formElement.config.touched}
+            changed={(e) =>
+              inputChangedHandler(e, formElement.id)
+            }
+          />
+        ))}
         {/* Busniess Name */}
-        <Input
+        {/* <Input
           label={language.businessName[1]}
           name="businessname"
           type="text"
@@ -97,7 +167,7 @@ const BusinessRegistration: React.FC<Props> = (props) => {
         />
 
         {/* Address */}
-        <Input
+        {/* <Input
           label={language.address[1]}
           name="businessAddress"
           type="text"
@@ -105,10 +175,10 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           onChange={(e) => props.onChange(e, "businessAddress")}
           class="border"
           style={{ width: '40%' }}
-        />
+        /> */}
 
         {/* Business Phone */}
-        <Input
+        {/* <Input
           label={language.phone[1]}
           name="businessPhone"
           type="tel"
@@ -116,10 +186,10 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           onChange={(e) => props.onChange(e, "businessPhone")}
           class="border"
           style={{ width: '40%' }}
-        />
+        /> */}
 
         {/* Email */}
-        <Input
+        {/* <Input
           label={language.email[1]}
           name="businessEmail"
           type="email"
@@ -127,10 +197,10 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           onChange={(e) => props.onChange(e, "businessEmail")}
           class="border"
           style={{ width: '40%' }}
-        />
+        /> */}
 
         {/* About */}
-        <Input
+        {/* <Input
           label={language.about[1]}
           name="about"
           value={props.values.about}
@@ -139,10 +209,10 @@ const BusinessRegistration: React.FC<Props> = (props) => {
           class="border"
           type="text"
           textArea={true}
-        />
+        /> */}
 
         {/* Links */}
-        <SocialMediaLinks onChange={changeLinks} values={props.values.socialMediaLinks} style={{ marginTop: '-15px' }} />
+        {/* <SocialMediaLinks onChange={changeLinks} values={props.values.socialMediaLinks} style={{ marginTop: '-15px' }} /> */}
       </div>
 
       {!props.loading ? (

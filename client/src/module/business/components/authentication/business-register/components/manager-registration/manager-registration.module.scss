@@ -1,14 +1,12 @@
 @import "../../../../../../../models/style/main.scss";
 
 .Manager {
-  animation: fade .5s ease-in-out;
+  animation: fade 0.5s ease-in-out;
 }
 
 .Body {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
+  @include flexWarp;
+  margin-top: 30px;
 }
 
 .Buttons {
@@ -25,12 +23,10 @@
   margin: 0;
   margin-right: 30px;
   margin-top: 10px;
-  animation: fade-right .3s linear;
+  animation: fade-right 0.3s linear;
 
   &::before {
     content: "שגיאה: ";
     font-weight: 500;
   }
 }
-
-

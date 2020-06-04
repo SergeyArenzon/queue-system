@@ -1,5 +1,4 @@
 import validator from "validator";
-
 import * as language from "../../../../../assets/language/language";
 
 export const updateObject = (oldObject: any, updatedProperties: any) => {
@@ -19,10 +18,19 @@ export const checkValidity = (value: any, rules: any) => {
     isValid = value.trim() !== "" && isValid;
   }
 
+  if (rules.isEnglish) {
+    const pattern = /^[a-zA-Z]+$/;
+    isValid = pattern.test(value) && isValid;
+  }
+
   if (rules.maxLength) {
     isValid = value.length <= rules.maxLength && isValid;
   }
 
+  if (rules.isEmail) {
+    const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+    isValid = pattern.test(value) && isValid;
+  }
   if (rules.isEmail) {
     const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     isValid = pattern.test(value) && isValid;
@@ -56,10 +64,10 @@ export const inputChanged = (form: any, event: any, inputIdentifier: any) => {
     [inputIdentifier]: updatedFormElement,
   });
 
-  let formIsValid = true;
-  for (let inputIdentifier in updatedForm) {
-    formIsValid = updatedForm[inputIdentifier].valid && formIsValid;
-  }
+  const formIsValid = Object.keys(updatedForm).every(e =>
+    updatedForm[e].valid
+
+  );
   return { updatedForm, formIsValid };
 };
 
@@ -78,7 +86,7 @@ export const password = {
   },
   valid: false,
   touched: false,
-  style: { marginTop: "10px" },
+  style: {},
 };
 
 export const phone = {
@@ -96,10 +104,10 @@ export const phone = {
   },
   valid: false,
   touched: false,
-  style: { marginTop: "10px" },
+  style: {},
 };
 
-export const firstName = {
+export const inputField = {
   elementType: "input",
   elementConfig: {
     type: "text",
@@ -114,5 +122,42 @@ export const firstName = {
   },
   valid: false,
   touched: false,
-  style: { marginTop: "10px" },
+  style: {},
+};
+
+
+export const domain = {
+  elementType: "input",
+  elementConfig: {
+    type: "text",
+    placeholder: language.domainTitle[1],
+  },
+  value: "",
+  label: language.domainTitle[1],
+  name: language.domainTitle[1],
+  validation: {
+    required: true,
+    minLen: 2,
+    isEnglish: true
+  },
+  valid: false,
+  touched: false,
+  style: {},
+};
+
+
+export const email = {
+  elementType: "input",
+  elementConfig: {
+    type: "email",
+    placeholder: "Mail address",
+  },
+  value: "",
+  label:"אימיל",
+  validation: {
+    required: true,
+    isEmail: true,
+  },
+  valid: false,
+  touched: false,
 };
