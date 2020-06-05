@@ -121,6 +121,8 @@ const BusinessSettings = () => {
 
             <div className={BusinessSettingsStyle.BusinessSettings}>
                 <Breadcrumbs title="הגדרות עסק" />
+                {Error && <p className={BusinessSettingsStyle.Error}>{Error}</p>}
+
                 <div className={BusinessSettingsStyle.Body}>
                     <div className={BusinessSettingsStyle.Details}>
                         {formElementsArray.map((formElement) => (
@@ -137,7 +139,6 @@ const BusinessSettings = () => {
                                 changed={(e) => inputChangedHandler(e, formElement.id)}
                             />
                         ))}
-
 
                         <SocialMediaLinks onChange={changeLinks} values={BusinessDetails.links} iconColor="#7467ef" style={{ width: '300px' }} />
 

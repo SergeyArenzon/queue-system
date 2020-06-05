@@ -55,3 +55,16 @@
     }
   }
 }
+
+.Error {
+  color: $error;
+  margin: 0;
+  margin-right: 40px;
+  animation: fade-right .3s linear;
+
+  &::before {
+    content: "שגיאה: ";
+    font-weight: 500;
+  }
+}
+
