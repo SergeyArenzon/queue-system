@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import SerivcesSettingsStyle from './services.module.scss';
-import Header from '../../shared/header/header.shared';
+import SettingsHeader from '../../shared/header/settings-header.shared';
 import { Service } from '../../../../../models/system/service';
 import { MdDelete, MdModeEdit } from 'react-icons/md';
 import Button from '../../../../../models/ui/button/button';
 import Breadcrumbs from '../../../../../models/ui/breadcrumbs/breadcrumbs';
 import AddService from './components/add-service/add-service.services';
-import { validationService } from '../../../../../models/validation/service.validation';
 import { ArrowNext } from '../../../../../assets/icons/icons';
 
 export default function SerivcesSettings() {
@@ -58,11 +57,7 @@ export default function SerivcesSettings() {
     const [Modal, setModal] = useState(false);
 
     const addNewService = (service: Service) => {
-        const error = validationService(service)
-        if (error) {
-            console.log(error);
-        }
-        else {
+
             if (service.id) {
                 const s = Services.find(s => s.id === service.id);
                 if (s === undefined) return;
@@ -79,7 +74,7 @@ export default function SerivcesSettings() {
                 setServices(services);
             }
             setModal(false)
-        }
+        
     }
 
     const deleteService = (service: Service) => {
@@ -97,7 +92,7 @@ export default function SerivcesSettings() {
     return (
         <React.Fragment>
             {Modal && <AddService close={() => setModal(false)} addNewService={addNewService} categories={Categories} updateService={ServiceToUpdate} />}
-            <Header title="שירותיי העסק" sunTitle="בעמוד זה תוכלו לצפות ולערוך את שירותי העסק שלכם" />
+            <SettingsHeader title="שירותיי העסק" sunTitle="בעמוד זה תוכלו לצפות ולערוך את שירותי העסק שלכם" />
             <div className={SerivcesSettingsStyle.SerivcesSettings}>
                 <Breadcrumbs title="שירותיי העסק" />
                 <Button onClick={() => setModal(true)} color="purple"> הוסף שירות חדש</Button>

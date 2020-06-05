@@ -24,18 +24,7 @@ interface OwnProps {
 const Input: React.FC<OwnProps> = (props) => {
 
     let inputElement = null;
-    // const inputClasses = [classes.InputElement];
-    let error = null;
-
-    if (props.invalid && props.shouldValidate && props.touched) {
-        // console.log(props.invalid, props.shouldValidate, props.touched);
-
-        //inputClasses.push(classes.Invalid);
-        error = <p> בבקשה תרשום {props.label} כמו שצריך </p>;
-    }
-
     const scssFile = props.class === "line" ? InputLinetyle.Input : inputStyle.Input;
-
 
     switch (props.elementType) {
         case "input":
@@ -47,6 +36,7 @@ const Input: React.FC<OwnProps> = (props) => {
                         placeholder={props.label}
                         value={props.value}
                         onChange={props.changed}
+                        autoComplete="on"
                     />
                 );
             break;

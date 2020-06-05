@@ -16,7 +16,8 @@ export const password = {
   valid: false,
   touched: false,
   style: {},
-  error: language.confirmPasswordError[1],
+  error: '',
+  editable: true
 };
 
 export const phone = {
@@ -35,7 +36,8 @@ export const phone = {
   valid: false,
   touched: false,
   style: {},
-  error: language.phoneError[1],
+  error: '',
+  editable: true
 };
 
 export const plainText = {
@@ -54,7 +56,8 @@ export const plainText = {
   valid: false,
   touched: false,
   style: {},
-  error: language.generalError[1],
+  error: '',
+  editable: true
 };
 
 export const domain = {
@@ -74,7 +77,8 @@ export const domain = {
   valid: false,
   touched: false,
   style: {},
-  error: language.domainLengthError[1],
+  error: '', 
+  editable: true
 };
 
 export const email = {
@@ -92,5 +96,6 @@ export const email = {
   },
   valid: false,
   touched: false,
-  error: language.emailError[1],
+  error: '',
+  editable: true
 };

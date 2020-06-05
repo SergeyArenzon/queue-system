@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import HoursStyle from './opening-hours.module.scss';
 import * as days from '../../../../../assets/days/days';
 import * as hours from '../../../../../assets/hours/hours';
-import Header from '../../shared/header/header.shared';
+import SettingsHeader from '../../shared/header/settings-header.shared';
 import Breadcrumbs from '../../../../../models/ui/breadcrumbs/breadcrumbs';
 import SwitchButton from '../../../../../models/ui/switch-button/switch-button';
 import Options from '../../../../../models/ui/options/options';
@@ -79,7 +79,7 @@ const OpeningHours = () => {
 
     return (
         <React.Fragment>
-            <Header title="שעות פתיחה" sunTitle="כאן תוכל לערוך את ימי ושעות פתיחת העסק שלך" />
+            <SettingsHeader title="שעות פתיחה" sunTitle="כאן תוכל לערוך את ימי ושעות פתיחת העסק שלך" />
             <div className={HoursStyle.OpeningHours}>
                 <Breadcrumbs title="שעות פתיחה" />
 

@@ -8,9 +8,10 @@ export const updateObject = (oldObject: any, updatedProperties: any) => {
 };
 
 export const inputChanged = (form: any, e: any, inputIdentifier: any) => {
+  if(!form[inputIdentifier].editable) return false;
   const updatedFormElement = updateObject(form[inputIdentifier], {
     value: e.target.value,
-    valid: checkValidity(e.target.value, form[inputIdentifier].validation),
+    error: checkValidity(e.target.value, form[inputIdentifier].validation),
     touched: true,
   });
   const updatedForm = updateObject(form, {
@@ -18,9 +19,8 @@ export const inputChanged = (form: any, e: any, inputIdentifier: any) => {
   });
 
   const formIsValid = Object.keys(updatedForm).every(
-    (e) => updatedForm[e].valid
+    (e) => updatedForm[e].error
   );
-  let ans = "";
   // if (!formIsValid) console.log(updatedForm);
 
   return { updatedForm, formIsValid };

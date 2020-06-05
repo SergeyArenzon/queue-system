@@ -18,6 +18,7 @@
       width: 20%;
       float: right;
       position: relative;
+      transition: all 5s ease-in-out;
       
       &:before {
         content: counter(step);
@@ -55,6 +56,11 @@
         background: $purple-register;
         color: $white;
       }
+
+      // &::before {
+      //   content: "\2714";
+
+      // }
     }
   }
 }
