@@ -31,9 +31,7 @@ let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const ManagerRegistration: React.FC<Props> = (props) => {
-  const [timeOut, setTimeOut] = useState<any>(null);
 
-  const [Error, setError] = useState<string>("");
   // const [EmployeeDetails, setEmployeeDetails] = useState<Employee>({
   //   firstName: "",
   //   lastName: "",
@@ -67,6 +65,9 @@ const ManagerRegistration: React.FC<Props> = (props) => {
     password,
     confirmPassword: password
   });
+  const [timeOut, setTimeOut] = useState<any>(null);
+
+  const [error, setError] = useState<string>("");
   const [ValidPassword, setValidPassword] = useState<string>("");
   const [CheckPhoneValidation, setCheckPhoneValidation] = useState<boolean>(false);
 
@@ -103,7 +104,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
     // }
   };
 
-  if (!props.loading && nextPage && Error.length <= 1 && !props.error && !CheckPhoneValidation) {
+  if (!props.loading && nextPage && error.length <= 1 && !props.error && !CheckPhoneValidation) {
     setCheckPhoneValidation(true);
   }
   const inputChangedHandler = (e: any, inputIdentifier: any) => {
@@ -136,7 +137,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
       <AuthenticationHeadrer
         title={language.managerHeaderTitle[1]}
         subTitle={language.managerHeaderSubTitle[1]}
-        error={Error ? Error : props.error}
+        error={error ? error : props.error}
       />
       {
         CheckPhoneValidation ?

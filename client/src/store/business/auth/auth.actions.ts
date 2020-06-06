@@ -1,4 +1,4 @@
-import { AuthActionsEnum, } from "./auth.types";
+import { AuthActionsEnum } from "./auth.types";
 // import { loginEmployeeForm, employeeForm, AuthActionsEnum, setNewPasswordEmployeeForm } from "./auth.types";
 import API from "../../../models/axios/axios";
 import { serviceActionsEnum } from "../service/service.types";
@@ -12,14 +12,14 @@ export const setDomain = (domain: string) => {
     API.get("business/auth/check/" + domain)
       .then((res) => {
         localStorage.setItem("domain", domain);
-        console.log('domain sucsess');
-        
+        console.log("domain sucsess");
+
         return dispatch({ type: AuthActionsEnum.SUCESS_DOMAIN });
       })
       .catch((error: any) => {
         const msg = error.response.data.message;
         console.log(msg);
-        
+
         return dispatch({
           type: AuthActionsEnum.FALID_AUTH,
           error: msg,
@@ -50,7 +50,7 @@ export const registerEmployee = (employee: Employee) => {
   };
 };
 
-export const loginEmployee = (form: { phone: string, password: string }) => {
+export const loginEmployee = (form: { phone: string; password: string }) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_AUTH });
 
@@ -65,10 +65,13 @@ export const loginEmployee = (form: { phone: string, password: string }) => {
         return dispatch({ type: AuthActionsEnum.SUCCESS_LOGIN_AUTH });
       })
       .catch((error: any) => {
-        const msg = error.response.data.message;
+        const msg = error.response;
+        console.log(msg);
+
+        // const msg = error.response.data.message;
         return dispatch({
           type: AuthActionsEnum.FALID_AUTH,
-          error: msg,
+          error: "msg",
         });
       });
   };
@@ -87,9 +90,19 @@ export const signInCheck = () => {
         const employee = res.data.employee;
         const services = res.data.services;
 
-        dispatch({ type: AuthActionsEnum.SIGN_IN_CHECK, ans: true, isAdmin: employee.isAdmin });
-        dispatch({ type: serviceActionsEnum.SUCCESS_GET_ALL_SERVICES, services });
-        dispatch({ type: DetailsActionsEnum.GET_DETAILS, deatils: businessDeatails });
+        dispatch({
+          type: AuthActionsEnum.SIGN_IN_CHECK,
+          ans: true,
+          isAdmin: employee.isAdmin,
+        });
+        dispatch({
+          type: serviceActionsEnum.SUCCESS_GET_ALL_SERVICES,
+          services,
+        });
+        dispatch({
+          type: DetailsActionsEnum.GET_DETAILS,
+          deatils: businessDeatails,
+        });
         return;
       })
       .catch((error: any) => {
@@ -124,7 +137,10 @@ export const resetPasswordEmployee = (email: string) => {
   };
 };
 
-export const setNewPasswordEmployee = (form: { password: string }, token: string) => {
+export const setNewPasswordEmployee = (
+  form: { password: string },
+  token: string
+) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_AUTH });
 

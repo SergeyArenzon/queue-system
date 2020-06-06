@@ -10,8 +10,8 @@ COPY package.json package.json
 RUN apk add --no-cache make gcc g++ python && \
     npm install && \
     npm rebuild bcrypt --build-from-source && \
-    apk del make gcc g++ python
-
+    apk del make gcc g++ python  && \
+    npm install curl python build-essential git ca-certificates
 COPY . .
 
 CMD [ "/sbin/tini", "--", "node", "app.js" ]
