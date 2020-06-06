@@ -1,12 +1,12 @@
 import React from 'react';
-import HeaderStyle from './header.module.scss';
+import HeaderStyle from './settings-header.module.scss';
 
 interface OwnProps {
     title: string,
     sunTitle: string
 }
 
-const Header: React.FC<OwnProps> = (props) => {
+const SettingsHeader: React.FC<OwnProps> = (props) => {
     return (
         <div className={HeaderStyle.Header}>
             <p className={HeaderStyle.Title}>{props.title}</p>
@@ -15,4 +15,4 @@ const Header: React.FC<OwnProps> = (props) => {
     )
 }
 
-export default Header;
+export default SettingsHeader;

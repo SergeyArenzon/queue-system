@@ -7,7 +7,6 @@ import { getLoading, getError } from '../../../../../../../store/business/auth/a
 import { setDomain } from '../../../../../../../store/business/auth/auth.actions';
 import AuthenticationHeadrer from '../../../shared/authentication-header/authentication-headrer';
 import Input from '../../../../../../../models/ui/input/input';
-import { validationDomain } from '../../../../../../../models/validation/domain.validation';
 import { domain } from '../../../../../../../models/ui/input/utility/input-types.input';
 import { inputChanged } from '../../../../../../../models/ui/input/utility/update-Input.input';
 
@@ -29,24 +28,29 @@ let nextPage = false;
 
 type Props = DispatchProps & StateProps & OwnProps;
 const Domain: React.FC<Props> = (props) => {
-    const [Form, setForm] = useState<any>({ domain });
-    const [timeOut, setTimeOut] = useState<any>(null);
+    const [Form, setForm] = useState<any>({
+        domain: {
+            ...domain,
+            validation: {
+                required: true,
+                minLen: 2,
+                isEnglish: true
+            } 
+        }
+    }); 
     const [error, setError] = useState<string>("");
 
     const inputChangedHandler = (e: any, inputIdentifier: any) => {
         const ans = inputChanged(Form, e, inputIdentifier);
+        if (!ans) return;
         setForm(ans.updatedForm);
         setError("")
 
-
-        if (timeOut) clearTimeout(timeOut);
-        setTimeOut(setTimeout(() => {
-            if (!ans.formIsValid) {
-                const index = Object.keys(ans.updatedForm).
-                    filter(it => !ans.updatedForm[it].valid && ans.updatedForm[it].touched).pop();
-                !index ? setError("") : setError(ans.updatedForm[index].error)
-            }
-        }, 500))
+        if (ans.formIsValid) {
+            const index = Object.keys(ans.updatedForm).
+                filter(it => ans.updatedForm[it].error && ans.updatedForm[it].touched).pop();                
+            !index ? setError("") : setError(ans.updatedForm[index].error)
+        }
     };
 
     const formElementsArray = Object.keys(Form).map((key) => {
@@ -58,24 +62,16 @@ const Domain: React.FC<Props> = (props) => {
 
     // Checks the information in the server
     const onClickNext = () => {
-        props.step('increment');
-        let ansForm = Object.assign(
-            {},
-            ...Object.keys(Form).map((k) => ({ [k]: Form[k].value }))
-        );
+        //props.step('increment');
+        if (!error && !props.error) {
+            setError("");
+            //props.setDomain(Domain);
+            nextPage = true;
+        }
 
-        console.log(ansForm);
-
-        // const error = validationDomain(Domain);
-        // if (error || props.error) {
-        //     setError(error)
-        // }
-        // else {
-        //     setError("");
-        //     //props.setDomain(Domain);
-        //     nextPage = true;
-        // }
     };
+
+    if (!props.loading && !props.error && nextPage && Error.length <= 1) props.step('increment');
 
     return (
         <React.Fragment>
@@ -121,11 +117,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     setDomain: (domain: string) => dispatch(setDomain(domain))
 });
 
-export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(memo(Domain,
-    (prevProps, nextProps) => {
-        if (!nextProps.loading && !nextProps.error && nextPage && Error.length <= 1) {
-            nextProps.step('increment');
-            return true;
-        }
-        return false;
-    }));
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(Domain);

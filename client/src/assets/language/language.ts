@@ -55,14 +55,8 @@ export const timesHeaderSubTitle = [
 ];
 
 // Errors
-export const domainLengthError = [
-  "Add New Business",
-  "שם חייב להכיל לפחות 2 תווים",
-];
-export const englishOnlyError = [
-  "Add New Business",
-  "שם העסק חייב להכיל תווים באנגלית בלבד",
-];
+export const lengthError = ["Add New Business", "שדה חייב להכיל לפחות 2 תווים"];
+export const englishOnlyError = ["Add New Business", "שם העסק חייב להכיל תווים באנגלית בלבד"];
 export const confirmPasswordError = ["Add New Business", "סיסמאות לא תואמות"];
 export const phoneError = ["Add New Business", "מספר טלפון לא תקין"];
 export const urlError = ["Add New Business", "כתובת אתר לא תקינה"];
@@ -70,6 +64,9 @@ export const priceError = ["Add New Business", "לא הוזן מחיר"];
 export const durationError = ["Add New Business", "לא הוזן זמן"];
 export const generalError = ["Add New Business", "לא הוזן שדה"];
 export const emailError = ["Add New Business", "שגיאה באימיל"];
+export const maxLengthError = ["Add New Business", "טקסט ארוך מידי"];
+export const numberError = ["Add New Business", "שדה יכול להכיל מספרים בלבד"];
+
 
 // ** Buttons ** //
 export const next = ["Add New Business", "המשך"];

@@ -55,6 +55,8 @@ const BusinessLogin: React.FC<Props> = (props) => {
   const inputChangedHandler = (e: any, inputIdentifier: any) => {
 
     const ans = inputChanged(Form, e, inputIdentifier);
+    if (!ans) return;
+
     setForm(ans.updatedForm);
     setError("")
 

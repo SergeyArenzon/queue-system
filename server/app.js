@@ -76,6 +76,8 @@ app.post("/", async (req, res, next) => {
 
 
 app.get("/", async (req, res, next) => {
+  console.log("get only the address");
+
   res.status(200).json({ message: "get only the address" });
 });
 
