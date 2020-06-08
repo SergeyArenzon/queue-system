@@ -77,7 +77,7 @@ const ManagerRegistration: React.FC<Props> = (props) => {
         filter(it => ans.updatedForm[it].error && ans.updatedForm[it].touched).pop();
       !index ? setError("") : setError(ans.updatedForm[index].error)
     }
-    else if (ans.updatedForm.password !== ans.updatedForm.validPassword) {
+    else if (ans.updatedForm.password.value !== ans.updatedForm.validPassword.value) {
       setError(language.confirmPasswordError[1]);
     }
   };

@@ -15,7 +15,7 @@ const CalendarUser = () => {
     const [NewEvent, setNewEvent] = useState<{ date: string, hour: string }>({ date: "", hour: "" });
 
     const events: { [id: number]: { [id: string]: Event }[] } = helper.events;
-    const eventsWeek: { [id: string]: Event }[] = events[CurWeek]; // all the events of week i
+    const eventsWeek: { [id: string]: Event }[] = events[CurWeek] ? events[CurWeek] : []; // all the events of week i    
 
     const addNewEvent = (e: Event) => {
         const friday: { [id: string]: Event } = {};
@@ -25,7 +25,7 @@ const CalendarUser = () => {
 
     const onSlotClick = (hour: string, date: string) => {
         setOpenModal(true);
-        setNewEvent({ date: date, hour: hour });
+        setNewEvent({ date, hour });
         // Duration time of event - minutes
         // const durationOfEvent = moment.utc(moment(e, "YYYY-DD-MM HH:mm").diff(moment(s, "YYYY-DD-MM HH:mm"))).minutes();
         // const sMin = (moment(s).hour() * 60) + moment(s).minute();
@@ -65,7 +65,7 @@ const CalendarUser = () => {
                         allDaysWeek.map((day: any, i: number) => {
                             const e = cloneDeep(isEvents[i]);
                             if (isEvents[i]) { //If The is a event
-                                return ( 
+                                return (
                                     <td key={i * 10} className={CalendarStyle.Slot + " " + CalendarStyle.Event}
                                         onClick={() => onEventClick(hour, day, e)}>
                                         {isEvents[i].title}

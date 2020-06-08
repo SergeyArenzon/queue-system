@@ -20,7 +20,7 @@ interface DispatchProps {
 type Props = DispatchProps & StateProps;
 
 const BusinessRegister: React.FC<Props> = (props) => {
-    const [Step, setStep] = useState<number>(3);
+    const [Step, setStep] = useState<number>(2);
 
     const step = (step: 'decrement' | 'increment') => {
         if (step === "decrement") {
@@ -44,6 +44,7 @@ const BusinessRegister: React.FC<Props> = (props) => {
                 {Step === 2 && <ManagerRegistration step={step} />}
 
                 {Step === 3 && <BusinessRegistration step={step} />}
+                
                 {Step === 4 && <div> ברוכים הבאים לקיו </div>}
                 {/* 
                 {Step === 4 && <Times step={step} onChange={onChange} values={values} />}

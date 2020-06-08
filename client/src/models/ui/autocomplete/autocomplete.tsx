@@ -4,7 +4,7 @@ import AutocompleteStyle from './autocomplete.module.scss';
 interface OwnProps {
     wordsList: string[],
     word: string,
-    onCategoryClick: (name: string, value: string) => void
+    onCategoryClick: (e: any, value: any) => void
 }
 
 interface AutoCompleteState {
@@ -28,7 +28,6 @@ const Autocomplete: React.FC<OwnProps> = (props) => {
 
     // Initial filteredOptions array in options
     const onChange = () => {
-        console.log(AutoComplete.showOptions, 'change');
         const filteredOptions = props.wordsList.filter(
             (optionName) =>
                 optionName.toLowerCase().indexOf(props.word.toLowerCase()) > -1
@@ -44,13 +43,13 @@ const Autocomplete: React.FC<OwnProps> = (props) => {
     };
 
     // Invoke when user click on category name in autocomplete
-    const onCategoryClick = (title: string) => {
+    const onCategoryClick = (name: any, title: string) => {
         setAutoComplete({
             ...AutoComplete,
             showOptions: false,
             filteredOptions: []
         });
-        props.onCategoryClick('category', title);
+        props.onCategoryClick(name, 'category');
     };
 
     // AutoComplete Item
@@ -61,7 +60,7 @@ const Autocomplete: React.FC<OwnProps> = (props) => {
                 <div className={AutocompleteStyle.List}>
                     {AutoComplete.filteredOptions.map((optionName, index) => {
                         return (
-                            <p onClick={(e) => onCategoryClick(optionName)} key={optionName}>
+                            <p onClick={(e) => onCategoryClick(optionName, optionName)} key={optionName}>
                                 {optionName + " "}
                             </p>
                         );
@@ -71,6 +70,8 @@ const Autocomplete: React.FC<OwnProps> = (props) => {
         }
     }
     if (!props.word) optionList = undefined;
+    console.log(props.word);
+
 
     return (
         <div className={AutocompleteStyle.Options}>{optionList}</div>

@@ -4,6 +4,10 @@ import Modal from '../../../../../../models/ui/modal/modal';
 import Button from '../../../../../../models/ui/button/button';
 import { Event } from '../../../../../../models/system/event';
 import moment from 'moment';
+import * as language from '../../../../../../assets/language/language';
+import { plainText, phone } from '../../../../../../models/ui/input/utility/input-types.input';
+import { inputChanged } from '../../../../../../models/ui/input/utility/update-Input.input';
+import Input from '../../../../../../models/ui/input/input';
 
 interface OwnProps {
     close: () => void;
@@ -12,10 +16,44 @@ interface OwnProps {
 }
 
 const NewQueue: React.FC<OwnProps> = (props) => {
-    const [Form, setForm] = useState({
-        title: "",
-        phone: ""
+    const [Form, setForm] = useState<any>({
+        title: {
+            ...plainText, elementConfig: {
+                type: "text",
+                placeholder: language.eventTitle[1],
+            },
+            value: "",
+            label: language.eventTitle[1],
+        },
+        description: {
+            ...plainText, elementConfig: {
+                type: "text",
+                placeholder: language.description[1],
+            },
+            value: "", label: language.description[1],
+            validation: {
+                required: true,
+                minLen: 10,
+            }
+        },
+        clientPhone: {
+            ...phone, value: "", label: language.clientPhone[1]
+        }
     });
+    const [Error, setError] = useState<string>("");
+
+    const inputChangedHandler = (e: any, inputIdentifier: any) => {
+        const ans = inputChanged(Form, e, inputIdentifier);
+        if (!ans) return;
+        setForm(ans.updatedForm);
+        setError("")
+
+        if (!ans.formIsValid) {
+            const index = Object.keys(ans.updatedForm).
+                filter(it => ans.updatedForm[it].error && ans.updatedForm[it].touched).pop();
+            !index ? setError("") : setError(ans.updatedForm[index].error)
+        }
+    };
 
     const handleChange = (e: any, name: string) => {
         setForm({
@@ -23,54 +61,35 @@ const NewQueue: React.FC<OwnProps> = (props) => {
         });
     }
 
-    const onSubmit = (form: any) => {
-        console.log(form);
-        const newEvent: Event = {
-            employeeId: 2,
-            start: moment("2020-05-15 09:45").format("YYYY-MM-DD HH:mm"),
-            end: moment("2020-05-15 10:30").format("YYYY-MM-DD HH:mm"),
-            id: 5,
-            title: form.title,
-            userId: form.phone
+    const updateDetails = () => {
+        if (Error) return;
 
-        }
-        props.addNewQueue(newEvent);
-        props.close(); 
+        const copyForm = Form;
+        // copyForm['links'] = BusinessDetails.links;
+        let ansForm = Object.assign(
+            {},
+            ...Object.keys(copyForm).map((k) => {
+                if (k === 'links') {
+                    return ({ [k]: copyForm[k] })
+                }
+                return ({ [k]: copyForm[k].value })
+            }))
 
+        props.addNewQueue(ansForm);
+        props.close();
     }
 
-    const schild = (
-        <form onSubmit={onSubmit}>
-            {/* Title */}
-            <div className={NewQueueStyle.FormGroup}>
-                <input
-                    type="text"
-                    onChange={(e) => handleChange(e, 'title')}
-                    autoComplete="off"
-                    value={Form.title}
-                    required
-                    placeholder="כותרת"
-                />
-            </div>
-            {/* Client Phone */}
-            <div className={NewQueueStyle.FormGroup}>
-                <input
-                    type="tel"
-                    onChange={(e) => handleChange(e, 'phone')}
-                    autoComplete="off"
-                    value={Form.phone}
-                    required
-                    placeholder="טלפון הלקוח"
-                />
-            </div>
-
-        </form>
-    )
+    const formElementsArray = Object.keys(Form).map((key) => {
+        return {
+            id: key,
+            config: Form[key],
+        };
+    });
 
     const footer = (
         <div style={{ display: 'flex' }}>
-            <Button color="purple" onClick={() => onSubmit(Form)}>שמור</Button>
-            <Button color="purple" onClick={() => onSubmit(Form)}>בטל</Button>
+            <Button color="purple" onClick={() => updateDetails()}>שמור</Button>
+            <Button color="purple" onClick={() => updateDetails()}>בטל</Button>
         </div>
 
     )
@@ -79,7 +98,21 @@ const NewQueue: React.FC<OwnProps> = (props) => {
             <Modal title="קביעת תור" close={props.close} footer={footer} >
                 {props.event.date + " " + props.event.hour}
 
-                {schild}
+                {formElementsArray.map((formElement) => (
+                    <Input
+                        key={formElement.id}
+                        label={formElement.config.label}
+                        style={{ width: '300px' }}
+                        class="line"
+                        elementType={formElement.config.elementType}
+                        elementConfig={formElement.config.elementConfig}
+                        value={formElement.config.value}
+                        invalid={!formElement.config.valid}
+                        shouldValidate={formElement.config.validation}
+                        touched={formElement.config.touched}
+                        changed={(e) => inputChangedHandler(e, formElement.id)}
+                    />
+                ))}
             </Modal>
         </div>
     )

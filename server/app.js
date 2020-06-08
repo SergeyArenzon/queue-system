@@ -1,13 +1,4 @@
 const express = require("express");
-const fs = require('fs');
-
-var key = fs.readFileSync(__dirname + '/selfsigned.key');
-var cert = fs.readFileSync(__dirname + '/selfsigned.crt');
-var options = {
-  key: key,
-  cert: cert
-};
-
 // HTTP request logger
 const morgan = require("morgan");
 
@@ -18,8 +9,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const app = express();
-const https = require('https')
-const server = https.createServer(options, app);
+
 // Middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json());
@@ -34,7 +24,7 @@ mongoose
   })
   .then(() => {
     console.log("DB Connected");
-    server.listen(process.env.PORT);
+    app.listen(process.env.PORT);
     require("./routes/index.route")(app, mongoose);
   });
 
@@ -76,8 +66,6 @@ app.post("/", async (req, res, next) => {
 
 
 app.get("/", async (req, res, next) => {
-  console.log("get only the address");
-
   res.status(200).json({ message: "get only the address" });
 });
 

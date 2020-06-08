@@ -28,17 +28,15 @@ interface DispatchProps {
   loginEmployee: typeof loginEmployee;
 }
 
-
-
 type Props = DispatchProps & StateProps;
 const BusinessLogin: React.FC<Props> = (props) => {
   const [Form, setForm] = useState<any>({
     phone,
-    password,
+    password: {
+      ...password, validation: { required: true, minLen: 0 }
+    },
 
   });
-
-  const [timeOut, setTimeOut] = useState<any>(null);
 
   const [error, setError] = useState<string>("");
 
@@ -47,29 +45,23 @@ const BusinessLogin: React.FC<Props> = (props) => {
       {},
       ...Object.keys(Form).map((k) => ({ [k]: Form[k].value }))
     );
-
     props.loginEmployee(ansForm);
-
-
   };
-  const inputChangedHandler = (e: any, inputIdentifier: any) => {
 
+
+  const inputChangedHandler = (e: any, inputIdentifier: any) => {
     const ans = inputChanged(Form, e, inputIdentifier);
     if (!ans) return;
 
     setForm(ans.updatedForm);
     setError("")
-
-
-    if (timeOut) clearTimeout(timeOut);
-    setTimeOut(setTimeout(() => {
-      if (!ans.formIsValid) {
-        const index = Object.keys(ans.updatedForm).
-          filter(it => !ans.updatedForm[it].valid && ans.updatedForm[it].touched).pop();
-        !index ? setError("") : setError(ans.updatedForm[index].error)
-      }
-    }, 1000))
-
+    console.log(ans.formIsValid);
+    
+    if (!ans.formIsValid) {
+      const index = Object.keys(ans.updatedForm).
+        filter(it => ans.updatedForm[it].error && ans.updatedForm[it].touched).pop();
+      !index ? setError("") : setError(ans.updatedForm[index].error)
+    }
 
   };
 
@@ -105,9 +97,7 @@ const BusinessLogin: React.FC<Props> = (props) => {
                 invalid={!formElement.config.valid}
                 shouldValidate={formElement.config.validation}
                 touched={formElement.config.touched}
-                changed={(event) =>
-                  inputChangedHandler(event, formElement.id)
-                }
+                changed={(event) => inputChangedHandler(event, formElement.id)}
               />
             ))}
 
@@ -137,7 +127,4 @@ const mapDispatchToProps = (dispatch: any) => ({
   loginEmployee: (form: FormState) => dispatch(loginEmployee(form)),
 });
 
-export default connect<StateProps, DispatchProps>(
-  mapStateToProps,
-  mapDispatchToProps
-)(BusinessLogin);
+export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)(BusinessLogin);

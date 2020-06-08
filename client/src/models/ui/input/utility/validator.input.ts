@@ -9,7 +9,7 @@ const url = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\
 
 export const checkValidity = (value: any, rules: any) => {
   if (!rules) {
-    return true;
+    return '';
   }
 
   else if (rules.required && !(value.trim() !== "")) {
@@ -35,10 +35,14 @@ export const checkValidity = (value: any, rules: any) => {
   else if (rules.isNumeric && !(numberPattern.test(value))) {
     return language.numberError[1];
   }
+
   else if (rules.minLen && value.length < rules.minLen) {
     return "שדה חייב להכיל לפחות " + rules.minLen + " תווים";
   }
 
+  else if (rules.biggerThenZero && value <= 0) {
+    return "שדה חייב להיות גדול מ- 0";
+  }
   return '';
 };
 // export const validationEmployee = (employee: Employee, validPassword?: string) => {

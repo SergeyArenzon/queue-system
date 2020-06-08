@@ -19,31 +19,19 @@ export const instagram = ["Add New Business", "אינסטגרם"];
 // Domain
 export const domainTitle = ["Add New Business", "שם העסק (באנגלית)"];
 export const domainHeaderTitle = ["Add New Business", "הוספת עסק חדש"];
-export const domainHeaderSubTitle = [
-  "Add New Business",
-  "השם שתוסיף לכאן יהיה כתובת האתר שלך.",
-];
+export const domainHeaderSubTitle = ["Add New Business", "השם שתוסיף לכאן יהיה כתובת האתר שלך.",];
 
 // Manager
 export const managerHeaderTitle = ["Add New Business", "הרשמת מנהל"];
-export const managerHeaderSubTitle = [
-  "Add New Business",
-  "הפרטים שתמלא בדף זה, יהיו פרטי ההתחברות שלך למערכת בעתיד.",
-];
+export const managerHeaderSubTitle = ["Add New Business", "הפרטים שתמלא בדף זה, יהיו פרטי ההתחברות שלך למערכת בעתיד.",];
 
 // Business
 export const businessHeaderTitle = ["Add New Business", "הרשמת עסק"];
-export const businessHeaderSubTitle = [
-  "Add New Business",
-  "הפרטים בדף זה הם של העסק שלך.",
-];
+export const businessHeaderSubTitle = ["Add New Business", "הפרטים בדף זה הם של העסק שלך.",];
 
 // Services
 export const servicesHeaderTitle = ["Add New Business", "הוספת שירותים"];
-export const servicesHeaderSubTitle = [
-  "Add New Business",
-  " הוסף את כל השירותים שהעסק שלך מציע.",
-];
+export const servicesHeaderSubTitle = ["Add New Business", " הוסף את כל השירותים שהעסק שלך מציע.",];
 export const categoryName = ["Add New Business", "קטגוריה"];
 export const serviceName = ["Add New Business", "שם השירות"];
 
@@ -74,14 +62,20 @@ export const back = ["Add New Business", "חזור"];
 
 // ** Login ** //
 export const loginTitle = ["Add New Business", "התחברות עובד"];
-export const loginSubTitle = [
-  "Add New Business",
-  "ברוך שובך למערכת, נא הכנס את פרטי ההתחברות שלך.",
-];
+export const loginSubTitle = ["Add New Business", "ברוך שובך למערכת, נא הכנס את פרטי ההתחברות שלך."];
 
 // Reset Password
 export const restPasswordTitle = ["Add New Business", "שחזור סיסמא"];
-export const restPasswordSubTitle = [
-  "Add New Business",
-  "הכנס את מספר הטלפון שלך בכדי לקבל סיסמא חדשה - SMS",
-];
+export const restPasswordSubTitle = ["Add New Business", "הכנס את מספר הטלפון שלך בכדי לקבל סיסמא חדשה - SMS"];
+
+//Event
+export const eventTitle = ["Add New Business", "כותרת"];
+export const clientPhone = ["Add New Business", "טלפון לקוח"];
+export const description = ["Add New Business", "תיאור"];
+export const startTime = ["Add New Business", "שעת התחלה"];
+export const endTime = ["Add New Business", "שעת סיום"];
+export const date = ["Add New Business", "תאריך"];
+export const employee = ["Add New Business", "עובד"];
+export const client = ["Add New Business", "לקוח"];
+
+

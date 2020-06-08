@@ -79,7 +79,7 @@ export const monthNumberToHeb = (month: number): string => {
 // (0 - Sunday... 2 - thursday). Every day its a dictionary of events such that the key is the start hour and the value is the event.
 export const events: { [weekNumber: number]: { [startHour: string]: Event }[] } = {}
 
-events[20] = new Array(7)
+events[24] = new Array(7)
 events[21] = new Array(7)
 events[22] = new Array(7)
 events[23] = new Array(7)
@@ -92,41 +92,41 @@ sunday['14:45'] = {
     id: 1,
     title: 'תור ראשון',
     employeeId: 1,
-    userId: "0502243024",
-    start: moment("2020-05-10 14:45").format(eventFormat),
-    end: moment("2020-05-10 15:30").format(eventFormat)
+    clientId: "0502243024",
+    start: moment("2020-06-10 14:45").format(eventFormat),
+    end: moment("2020-06-10 15:30").format(eventFormat)
 }
 
 monday['07:45'] = {
     id: 2,
     title: 'תור שני',
     employeeId: 1,
-    userId: "0502243024",
-    start: moment("2020-05-11 07:45").format(eventFormat),
-    end: moment("2020-05-11 08:00").format(eventFormat)
+    clientId: "0502243024",
+    start: moment("2020-06-11 07:45").format(eventFormat),
+    end: moment("2020-06-11 08:00").format(eventFormat)
 }
 
 wensday['11:45'] = {
     id: 3,
     title: 'תור שלישי',
     employeeId: 1,
-    userId: "0502243024",
-    start: moment("2020-05-13 11:45").format(eventFormat),
-    end: moment("2020-05-13 12:45").format(eventFormat)
+    clientId: "0502243024",
+    start: moment("2020-06-12 11:45").format(eventFormat),
+    end: moment("2020-06-12 12:45").format(eventFormat)
 }
 
 wensday['13:45'] = {
     id: 3,
     title: 'תור רביעי',
     employeeId: 1,
-    userId: "0502243024",
-    start: moment("2020-05-13 13:45").format(eventFormat),
-    end: moment("2020-05-13 15:00").format(eventFormat)
+    clientId: "0502243024",
+    start: moment("2020-06-12 13:45").format(eventFormat),
+    end: moment("2020-06-12 15:00").format(eventFormat)
 }
 
-events[20][0] = sunday;
-events[20][1] = monday;
-events[20][3] = wensday;
+events[24][0] = sunday;
+events[24][1] = monday;
+events[24][3] = wensday;
 
 events[21] = new Array(7);
 const sundayWeek21: { [startHour: string]: Event } = {}; // All the events in sunday week 21
@@ -135,7 +135,7 @@ sundayWeek21['08:45'] = {
     id: 4,
     title: 'תור חמישי',
     employeeId: 1,
-    userId: "0502243024",
+    clientId: "0502243024",
     start: moment("2020-05-17 08:45").format(eventFormat),
     end: moment("2020-05-17 10:45").format(eventFormat)
 }

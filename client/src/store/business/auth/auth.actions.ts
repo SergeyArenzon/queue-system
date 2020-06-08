@@ -53,11 +53,14 @@ export const registerEmployee = (employee: Employee) => {
 export const loginEmployee = (form: { phone: string; password: string }) => {
   return (dispatch: any, getState: any) => {
     dispatch({ type: AuthActionsEnum.START_AUTH });
+    console.log(form);
 
     API.post("business/auth/login", form)
       .then((res) => {
         const token = res.data.token;
         const domain = res.data.domain;
+        console.log(token, domain);
+
         localStorage.setItem("token", token);
         localStorage.setItem("domain", domain);
       })
@@ -65,13 +68,10 @@ export const loginEmployee = (form: { phone: string; password: string }) => {
         return dispatch({ type: AuthActionsEnum.SUCCESS_LOGIN_AUTH });
       })
       .catch((error: any) => {
-        const msg = error.response;
-        console.log(msg);
-
-        // const msg = error.response.data.message;
+        const msg = error.response.data.message;
         return dispatch({
           type: AuthActionsEnum.FALID_AUTH,
-          error: "msg",
+          error: msg,
         });
       });
   };

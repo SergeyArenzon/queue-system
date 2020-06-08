@@ -1,16 +1,26 @@
-import React, { useState } from "react";
-import BusinessLoginStyle from "./business-login.module.scss";
+import React, { useState, useRef, useEffect } from "react";
+import { RouteComponentProps } from "react-router";
+
+import BusinessLoginStyle from "../busniess-login/business-login.module.scss"; 
 import BusinessRegisterStyle from "../business-register/business-register.module.scss";
 import ManagerRegistrationStyle from "../business-register/components/manager-registration/manager-registration.module.scss";
 import { connect } from "react-redux";
 import { getLoading, getError } from "../../../../../store/business/auth/auth.selectors";
+
 import Button from "../../../../../models/ui/button/button";
-import { resetPasswordEmployee } from "../../../../../store/business/auth/auth.actions";
+import { setNewPasswordEmployee } from "../../../../../store/business/auth/auth.actions";
 import AuthenticationHeadrer from "../shared/authentication-header/authentication-headrer";
 import * as language from "../../../../../assets/language/language";
+
 import Input from "../../../../../models/ui/input/input";
-import { phone } from "../../../../../models/ui/input/utility/input-types.input";
+
+import { password } from "../../../../../models/ui/input/utility/input-types.input";
 import { inputChanged } from "../../../../../models/ui/input/utility/update-Input.input";
+
+interface MatchParams {
+  token: string;
+}
+interface Params extends RouteComponentProps<MatchParams> { }
 
 interface StateProps {
   loading: boolean;
@@ -18,25 +28,30 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  resetPasswordEmployee: typeof resetPasswordEmployee;
+  setNewPasswordEmployee: typeof setNewPasswordEmployee;
 }
 
-type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps & Params;
 const ResetEmployeePassword: React.FC<Props> = (props) => {
   const [Form, setForm] = useState<any>({
-    phone
+    password,
+    confirmPassword: password
   });
+
   const [timeOut, setTimeOut] = useState<any>(null);
 
   const [error, setError] = useState<string>("");
   const onClickNext = () => {
+    const token = props.match.params.token;
+
     let ansForm = Object.assign(
       {},
       ...Object.keys(Form).map((k) => ({ [k]: Form[k].value }))
     );
 
     console.log(ansForm);
-    props.resetPasswordEmployee(ansForm.phone);
+
+    // props.setNewPasswordEmployee(Form, token);
   };
   const inputChangedHandler = (e: any, inputIdentifier: any) => {
 
@@ -82,6 +97,7 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
         {!props.loading && (
           <React.Fragment>
             {props.error}
+
             <div className={ManagerRegistrationStyle.Body}>
               {formElementsArray.map((formElement) => (
                 <Input
@@ -99,10 +115,13 @@ const ResetEmployeePassword: React.FC<Props> = (props) => {
                   }
                 />
               ))}
+
             </div>
 
             <div onClick={onClickNext} className={BusinessLoginStyle.Button}>
-              <Button color="purple-register">שלח קוד איפוס</Button>
+              <Button color="purple-register">
+                שלח קוד איפוס
+              </Button>
             </div>
           </React.Fragment>
         )}
@@ -117,7 +136,8 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  resetPasswordEmployee: (phone: string) => dispatch(resetPasswordEmployee(phone)),
+  setNewPasswordEmployee: (form: { password: string }, token: string) =>
+    dispatch(setNewPasswordEmployee(form, token)),
 });
 
 export default connect<StateProps, DispatchProps>(

@@ -23,8 +23,6 @@ const App: React.FC<Props> = (props) => {
     props.signInCheck();
   }, []);
   
-console.log(props.isSignIn);
-
 
   return (
     <BrowserRouter>

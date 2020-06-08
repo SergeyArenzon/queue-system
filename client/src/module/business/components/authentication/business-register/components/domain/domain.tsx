@@ -46,7 +46,7 @@ const Domain: React.FC<Props> = (props) => {
         setForm(ans.updatedForm);
         setError("")
 
-        if (ans.formIsValid) {
+        if (!ans.formIsValid) {
             const index = Object.keys(ans.updatedForm).
                 filter(it => ans.updatedForm[it].error && ans.updatedForm[it].touched).pop();                
             !index ? setError("") : setError(ans.updatedForm[index].error)
@@ -65,7 +65,7 @@ const Domain: React.FC<Props> = (props) => {
         //props.step('increment');
         if (!error && !props.error) {
             setError("");
-            //props.setDomain(Domain);
+            props.setDomain(Form.domain.value);
             nextPage = true;
         }
 

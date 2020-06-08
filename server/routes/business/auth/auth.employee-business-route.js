@@ -13,10 +13,6 @@ router.get("/check/:domain", authController.check);
 
 router.post("/register", employeeValidator, authController.register);
 
-
-
-
-
 //reset password
 router.get("/mail", resetPasswordController.mail);
 
